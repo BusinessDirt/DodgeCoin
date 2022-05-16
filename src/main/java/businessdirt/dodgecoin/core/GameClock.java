@@ -1,7 +1,6 @@
 package businessdirt.dodgecoin.core;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
@@ -75,8 +74,8 @@ public class GameClock extends Thread {
 
     private void loadCoins() {
         try {
-            bitcoin = FileHandler.get().getImageFromResource("Bitcoin.png");
-            dogecoin = FileHandler.get().getImageFromResource("DogecoinIcon.png");
+            bitcoin = FileHandler.get().getImageFromResource("coins/bitcoin.png");
+            dogecoin = FileHandler.get().getImageFromResource("coins/dogecoin.png");
         } catch (IOException e) {
             e.printStackTrace();
         }
