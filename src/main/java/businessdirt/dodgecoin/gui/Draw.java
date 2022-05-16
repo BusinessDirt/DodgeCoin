@@ -1,6 +1,7 @@
 package businessdirt.dodgecoin.gui;
 
 import businessdirt.dodgecoin.core.config.Config;
+import businessdirt.dodgecoin.core.game.GameClock;
 import businessdirt.dodgecoin.core.game.GameState;
 import businessdirt.dodgecoin.core.game.MouseHandler;
 import com.github.businessdirt.config.data.Property;
@@ -26,6 +27,8 @@ public class Draw extends JLabel {
     public static final int Y_OFFSET = 40;
     public static final int ICON_SIZE_MULTIPLIER = 6;
 
+
+
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
@@ -40,6 +43,7 @@ public class Draw extends JLabel {
             try {
                 for (Image coin : coins) {
                     if (coin.isDraw()) drawImage(g2d, coin);
+                    g2d.drawString("Score: " + GameClock.getScore(), X_OFFSET  + 50, Y_OFFSET + 50);
                 }
             } catch (ConcurrentModificationException ignored) {}
 
@@ -68,7 +72,11 @@ public class Draw extends JLabel {
 
             //start instructions
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Press Enter to start",X_OFFSET + 50, Y_OFFSET + 80);
+            g2d.drawString("Press [ENTER] to start",X_OFFSET + 50, Y_OFFSET + 80);
+
+            // reset score
+            GameClock.setScore(0);
+
             // shop icon
             try {
                 BufferedImage shopIcon = AssetPool.getImage("gui/shop.png");

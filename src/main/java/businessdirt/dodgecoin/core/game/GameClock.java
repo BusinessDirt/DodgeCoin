@@ -26,8 +26,15 @@ public class GameClock extends Thread {
     private BufferedImage imageBuffer;
     private Random random = new Random();
 
+    //TODO set coin value based on stock market API
+    private static int BitcoinValue = 10;
+
+    private static int DogecoinValue = 1;
+
+    private static int score = 0;
+
     private GameClock() {
-        this.COIN_DROP_SPEED = 5;
+        this.COIN_DROP_SPEED = 7;
         this.COIN_SPAWN_SPEED = 2000;
         this.running = false;
         this.loopCounter = 0;
@@ -36,6 +43,7 @@ public class GameClock extends Thread {
     }
 
     public void run() {
+
         while (true) {
             try {
                 sleep(GameClock.get().COIN_DROP_SPEED);
@@ -43,7 +51,6 @@ public class GameClock extends Thread {
                 e.printStackTrace();
             }
             if (running) {
-
                 // Spawn coin
                 if (loopCounter / COIN_DROP_SPEED == COIN_SPAWN_SPEED / COIN_DROP_SPEED && loopCounter % COIN_DROP_SPEED == 0) {
                     // load Image
@@ -66,10 +73,11 @@ public class GameClock extends Thread {
                 }
 
                 // Hit detection
-                // TODO Dogecoin und Botcoin detection / Gameover
+                // TODO Dogecoin und Bitcoin detection / Gameover; fix collision detection
                 for (Image coin : coins) {
                     if (coin.intersects(Window.getDraw().getPlayer())) {
                         coin.setDraw(false);
+                        score = score + DogecoinValue; //Collisions seem to be not properly resolved sometimes
                     }
                 }
 
@@ -100,4 +108,8 @@ public class GameClock extends Thread {
     public void setRunning(boolean running) {
         this.running = running;
     }
+
+    public static int getScore(){return score;}
+
+    public static void setScore(int i){score = i;}
 }
