@@ -9,11 +9,11 @@ public class Button {
     private static final JLabel listener = new JLabel();
 
     private Rectangle bounds;
-    private final String imageName;
+    private final String name;
 
-    public Button(int x, int y, int width, int height, String image) {
+    public Button(int x, int y, int width, int height, String name) {
         this.bounds = new Rectangle(x, y, width, height);
-        this.imageName = image;
+        this.name = name;
     }
 
     public boolean contains(Point point) {
@@ -28,13 +28,13 @@ public class Button {
         this.bounds = bounds;
     }
 
-    public String getImageName() {
-        return this.imageName;
+    public String getName() {
+        return this.name;
     }
 
     @Override
     public int hashCode() {
-        return this.imageName.hashCode();
+        return this.name.hashCode();
     }
 
     @Override
@@ -42,12 +42,12 @@ public class Button {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Button button = (Button) o;
-        return Objects.equals(imageName, button.imageName) && Objects.equals(bounds, button.bounds);
+        return Objects.equals(name, button.name) && Objects.equals(bounds, button.bounds);
     }
 
     @Override
     public String toString() {
         return "Button[" + "x=" + this.bounds.x + ", y=" + this.bounds.y +
-                ", width=" + this.bounds.width + ", height=" + this.bounds.height + ", hash=" + this.imageName + ']';
+                ", width=" + this.bounds.width + ", height=" + this.bounds.height + ", hash=" + this.name + ']';
     }
 }

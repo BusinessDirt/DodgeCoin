@@ -1,13 +1,19 @@
 package businessdirt.dodgecoin.gui;
 
+import businessdirt.dodgecoin.core.config.Config;
 import businessdirt.dodgecoin.core.game.GameState;
+import businessdirt.dodgecoin.core.game.MouseHandler;
+import com.github.businessdirt.config.data.Property;
+import com.github.businessdirt.config.data.PropertyType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.List;
 
 public class Draw extends JLabel {
@@ -79,32 +85,80 @@ public class Draw extends JLabel {
                         Window.getHeight() - Y_OFFSET - 25 - settingsIcon.getHeight() * ICON_SIZE_MULTIPLIER,
                         settingsIcon.getWidth() * ICON_SIZE_MULTIPLIER, settingsIcon.getHeight() * ICON_SIZE_MULTIPLIER, settingsIcon));
 
+                BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
+                drawImage(g2d, new Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
+                        Window.getHeight() - Draw.Y_OFFSET - 25 - cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER,
+                        cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon));
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             // play button
         } else if (Window.getGameState() == GameState.SHOP) { // Shop
-            drawShop(g2d);
+            try {
+                drawShop(g2d);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else if (Window.getGameState() == GameState.SETTINGS) { // Settings
-            drawSettings(g2d);
+            try {
+                drawSettings(g2d);
+            } catch (IllegalAccessException | IOException e) {
+                e.printStackTrace();
+            }
         }
 
         repaint();
     }
 
-    private void drawShop(Graphics2D g2d) {
+    private void drawShop(Graphics2D g2d) throws IOException {
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setColor(Color.WHITE);
         g2d.drawString("Shop", X_OFFSET + 50, Y_OFFSET + 50);
         g2d.drawString("Press [ESC] or [BACKSPACE] to return to main menu", X_OFFSET + 50, Y_OFFSET +80);
+
+        BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
+        drawImage(g2d, new Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
+                Window.getHeight() - Draw.Y_OFFSET - 25 - cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER,
+                cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon));
     }
 
-    private void drawSettings(Graphics2D g2d) {
+    private void drawSettings(Graphics2D g2d) throws IllegalAccessException, IOException {
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setColor(Color.WHITE);
-        g2d.drawString("Settings", X_OFFSET + 50, Y_OFFSET + 50);
-        g2d.drawString("Press [ESC] or [BACKSPACE] to return to main menu", X_OFFSET + 50, Y_OFFSET +80);
+        g2d.drawString("Settings", 75, 25);
+        g2d.drawString("Press [ESC] or [BACKSPACE] to return to main menu", 75, 50);
+        g2d.fillRect(50, Y_OFFSET + 50, Window.getWidth() - X_OFFSET - 100, 10);
+
+        BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
+        drawImage(g2d, new Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
+                Window.getHeight() - Draw.Y_OFFSET - 25 - cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER,
+                cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon));
+
+        int i = 0;
+        for (Field field : Config.class.getDeclaredFields()) {
+            int y = Y_OFFSET + 50 + i * 75;
+            if (field.isAnnotationPresent(Property.class)) {
+                Property property = field.getAnnotation(Property.class);
+
+                if (!property.hidden()) {
+                    g2d.drawRect(75, y, Window.getWidth() - X_OFFSET - 150, 75);
+                    g2d.drawString(property.description(), 110, y + 55);
+
+                    if (property.type() == PropertyType.SWITCH) {
+                        g2d.drawString(property.name() + "  " + field.getBoolean(Boolean.class), 100, y + 30);
+                    } else if (property.type() == PropertyType.NUMBER) {
+                        g2d.drawString(property.name() + "  " + field.getInt(Integer.class), 100, y + 30);
+                    } else if (property.type() == PropertyType.TEXT) {
+                        g2d.drawString(property.name() + "  " + field.get(String.class), 100, y + 30);
+                    } else if (property.type() == PropertyType.SLIDER) {
+                        g2d.drawString(property.name() + "  " + field.getDouble(Double.class), 100, y + 30);
+                    }
+                }
+            }
+            i++;
+        }
     }
 
     private void drawImage(Graphics2D g2d, Image image) {

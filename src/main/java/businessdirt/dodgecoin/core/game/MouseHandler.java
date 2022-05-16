@@ -17,6 +17,7 @@ public class MouseHandler extends MouseAdapter {
 
     private static MouseHandler instance;
     private List<Button> buttonList;
+    private int waitID = 0;
 
     private MouseHandler() {
         buttonList = new LinkedList<>();
@@ -40,26 +41,46 @@ public class MouseHandler extends MouseAdapter {
         buttonList.add(new Button(25, Window.getHeight() - Draw.Y_OFFSET - 25 - shopIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER,
                 shopIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER, shopIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER, "shop")
         );
+
+        // cancel
+        BufferedImage cancelIcon = AssetPool.getImage("gui/shop.png");
+        buttonList.add(new Button((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - Draw.X_OFFSET / 2,
+                Window.getHeight() - Draw.Y_OFFSET - 25 - cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER,
+                cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER, "cancel")
+        );
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {
         Point mouse = e.getPoint();
         for (Button button : buttonList) {
             if (button.contains(mouse)) {
-                switch (button.getImageName()) {
+                switch (button.getName()) {
                     case "settings":
-                        Window.setGameState(GameState.SETTINGS);
+                        if (Window.getGameState() == GameState.MAIN_MENU) Window.setGameState(GameState.SETTINGS);
                         break;
                     case "shop":
-                        Window.setGameState(GameState.SHOP);
+                        if (Window.getGameState() == GameState.MAIN_MENU) Window.setGameState(GameState.SHOP);
+                        break;
+                    case "cancel":
+                        if (Window.getGameState() == GameState.SHOP || Window.getGameState() == GameState.SETTINGS) {
+                            Window.setGameState(GameState.MAIN_MENU);
+                        } else if (Window.getGameState() == GameState.MAIN_MENU) {
+                            System.exit(0);
+                        }
                         break;
                     default:
                         break;
                 }
-                Util.logEvent("Mouse clicked on button " + button.hashCode() + ", image=" + button.getImageName());
+                Util.logEvent("Mouse clicked on button " + button.hashCode() + ", image=" + button.getName());
             }
         }
+        waitID++;
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        waitID = 0;
     }
 
     public static MouseHandler get() {

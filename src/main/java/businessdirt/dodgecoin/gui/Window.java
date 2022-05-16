@@ -13,7 +13,7 @@ import java.awt.event.MouseListener;
 public class Window {
 
     private static Window instance;
-    private static JFrame jf;
+    public static JFrame jf;
     private final int width, height;
     private static Draw draw;
 
