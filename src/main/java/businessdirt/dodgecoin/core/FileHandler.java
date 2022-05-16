@@ -1,7 +1,10 @@
 package businessdirt.dodgecoin.core;
 
+import businessdirt.dodgecoin.gui.AssetPool;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -29,6 +32,53 @@ public class FileHandler {
 
     public BufferedImage getImageFromResource(String fileName) throws IOException {
         return ImageIO.read(getFileFromResourceAsStream(fileName));
+    }
+
+    public String getPath(String resourceFolder) {
+        return getClass().getClassLoader().getResource(resourceFolder).getPath();
+    }
+
+    public static void loadAssets() throws IOException {
+
+        // coins
+        List<File> coinFiles = listf("coins/");
+        for (File file : coinFiles) {
+            AssetPool.getImage("coins/" + file.getName());
+        }
+
+        // gui
+        List<File> guiFiles = listf("gui/");
+        for (File file : guiFiles) {
+            AssetPool.getImage("gui/" + file.getName());
+        }
+
+        // players
+        List<File> playerFiles = listf("players/");
+        for (File file : playerFiles) {
+            AssetPool.getImage("players/" + file.getName());
+        }
+
+        // background
+        // TODO
+
+        Util.logEvent("Loaded " + coinFiles.size() + " coins, " + guiFiles.size() + " gui item, " + playerFiles.size() + " player skins");
+    }
+
+    public static List<File> listf(String directoryName) {
+        File directory = new File(FileHandler.get().getPath(directoryName));
+
+        List<File> resultList = new ArrayList<File>();
+
+        // get all the files from a directory
+        File[] fList = directory.listFiles();
+        resultList.addAll(Arrays.asList(fList));
+        for (File file : fList) {
+            if (file.isDirectory()) {
+                resultList.addAll(listf(file.getAbsolutePath()));
+            }
+        }
+        //System.out.println(fList);
+        return resultList;
     }
 
     private byte[] readNBytes(InputStream is, int len) throws IOException {
@@ -98,5 +148,4 @@ public class FileHandler {
         }
         return instance;
     }
-
 }

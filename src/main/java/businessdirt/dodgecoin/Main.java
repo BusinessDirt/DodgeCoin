@@ -1,9 +1,12 @@
 package businessdirt.dodgecoin;
 
+import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.core.FileHandler;
-import businessdirt.dodgecoin.core.GameClock;
-import businessdirt.dodgecoin.core.Image;
-import businessdirt.dodgecoin.core.Window;
+import businessdirt.dodgecoin.core.game.GameClock;
+import businessdirt.dodgecoin.gui.AssetPool;
+import businessdirt.dodgecoin.gui.Draw;
+import businessdirt.dodgecoin.gui.Image;
+import businessdirt.dodgecoin.gui.Window;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -11,13 +14,20 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        // player
-        BufferedImage image = FileHandler.get().getImageFromResource("player.png");
-        Window.getDraw().setPlayer(new Image(0, Window.get().getHeight() - 32 * 8 - 38 - 100, 16 * 8, 32 * 8, image));
+        // load Assets
+        FileHandler.loadAssets();
+        Config.getConfig();
 
+        // Player
+        BufferedImage image = AssetPool.getImage("players/player.png");
+        Image playerImage = new Image(0, Window.getHeight() - (image.getHeight() * 6) - Draw.Y_OFFSET - 100,
+                image.getWidth() * 6, image.getHeight() * 6, image);
+        Window.getDraw().setPlayer(playerImage);
+
+        // Create Window
         Window.start();
 
-        // gameclock
+        // GameClock
         GameClock clock = GameClock.get();
         clock.start();
     }
