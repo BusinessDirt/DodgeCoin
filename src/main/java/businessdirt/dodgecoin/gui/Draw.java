@@ -45,6 +45,7 @@ public class Draw extends JLabel {
                 g2d.fillRect(0, 0, getWidth(), getHeight());
                 g2d.setColor(Color.WHITE);
                 g2d.drawString("Pause", X_OFFSET + 50, Y_OFFSET + 50);
+                g2d.drawString("Press [SPACE] or [ENTER] to resume or [ESC] to quit to main menu", X_OFFSET + 50, Y_OFFSET + 80);
             } else if (Window.getGameState() == GameState.GAME_OVER) {
                 g2d.fillRect(0, 0, getWidth(), getHeight());
                 g2d.setColor(Color.WHITE);
@@ -59,6 +60,9 @@ public class Draw extends JLabel {
             g2d.setColor(Color.WHITE);
             g2d.drawString("Dodge Coin", X_OFFSET + 50, Y_OFFSET + 50);
 
+            //start instructions
+            g2d.setColor(Color.WHITE);
+            g2d.drawString("Press Enter to start",X_OFFSET + 50, Y_OFFSET + 80);
             // shop icon
             try {
                 BufferedImage shopIcon = AssetPool.getImage("gui/shop.png");
@@ -93,12 +97,14 @@ public class Draw extends JLabel {
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setColor(Color.WHITE);
         g2d.drawString("Shop", X_OFFSET + 50, Y_OFFSET + 50);
+        g2d.drawString("Press [ESC] or [BACKSPACE] to return to main menu", X_OFFSET + 50, Y_OFFSET +80);
     }
 
     private void drawSettings(Graphics2D g2d) {
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setColor(Color.WHITE);
         g2d.drawString("Settings", X_OFFSET + 50, Y_OFFSET + 50);
+        g2d.drawString("Press [ESC] or [BACKSPACE] to return to main menu", X_OFFSET + 50, Y_OFFSET +80);
     }
 
     private void drawImage(Graphics2D g2d, Image image) {
