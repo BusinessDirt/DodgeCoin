@@ -13,6 +13,8 @@ public class Window {
     private final int width, height;
     private static Draw draw;
 
+    public static final int MOVEMENT_SPEED = 10;
+
     private Window() {
         this.width = 720;
         this.height = 1080;
@@ -32,8 +34,8 @@ public class Window {
         registerKeyBindings();
 
         Window.getDraw().setVisible(true);
-        Window.getDraw().setLocation(0, 34);
-        Window.getDraw().setSize(Window.instance.width, Window.instance.height - 34);
+        Window.getDraw().setLocation(0 , 34);
+        Window.getDraw().setSize(Window.instance.width - 10, Window.instance.height - 34);
         jf.add(Window.getDraw());
 
         jf.setVisible(true);
@@ -46,7 +48,7 @@ public class Window {
             public void actionPerformed(ActionEvent e) {
                 Image player = Window.getDraw().getPlayer();
                 if (player.getX() > 0) {
-                    int newX = player.getX() - 25;
+                    int newX = player.getX() - MOVEMENT_SPEED;
                     player.setX(Math.max(newX, 0));
                 }
             }
@@ -56,10 +58,9 @@ public class Window {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Image player = Window.getDraw().getPlayer();
-                if (player.getX() < Window.get().getWidth() - player.getWidth()) {
-                    System.out.println("test");
-                    int newX = player.getX() - 25;
-                    player.setX(player.getX() + 25);
+                if (player.getX() < Window.get().getWidth() - player.getWidth() - 20) {
+                    int newX = player.getX() + MOVEMENT_SPEED;
+                    player.setX(Math.min(newX, Window.get().getWidth() - player.getWidth() - 20));
                 }
             }
         });
