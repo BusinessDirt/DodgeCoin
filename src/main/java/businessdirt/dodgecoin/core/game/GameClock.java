@@ -2,6 +2,7 @@ package businessdirt.dodgecoin.core.game;
 
 import businessdirt.dodgecoin.core.FileHandler;
 import businessdirt.dodgecoin.core.Util;
+import businessdirt.dodgecoin.gui.Draw;
 import businessdirt.dodgecoin.gui.Image;
 import businessdirt.dodgecoin.gui.Window;
 
@@ -57,7 +58,7 @@ public class GameClock extends Thread {
                     int tmp = random.nextInt(20);
                     imageBuffer = tmp <= 3 ? bitcoin : dogecoin;
 
-                    tmp = random.nextInt(Window.getWidth() - imageBuffer.getWidth() * 4);
+                    tmp = random.nextInt(Window.getWidth()- Draw.X_OFFSET - imageBuffer.getWidth() * 4);
                     Window.getDraw().addCoin(new Image(tmp, 0, imageBuffer.getWidth() * 4, imageBuffer.getHeight() * 4, imageBuffer));
                     loopCounter = 0;
                 }
@@ -77,7 +78,8 @@ public class GameClock extends Thread {
                 for (Image coin : coins) {
                     if (coin.intersects(Window.getDraw().getPlayer())) {
                         coin.setDraw(false);
-                        score = score + DogecoinValue; //Collisions seem to be not properly resolved sometimes
+                        coin.setX(69420);
+                        score = score + DogecoinValue;
                     }
                 }
 
