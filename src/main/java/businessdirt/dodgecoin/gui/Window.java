@@ -8,45 +8,44 @@ import businessdirt.dodgecoin.core.game.MouseHandler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseListener;
 
 public class Window {
 
     private static Window instance;
-    public static JFrame jf;
+    public final JFrame frame;
     private static int width, height;
     private static Draw draw;
 
     private static GameState gameState;
 
     private Window() {
-        this.width = 360;
-        this.height = 480;
+        Window.width = 720;
+        Window.height = 1080;
         Window.gameState = GameState.MAIN_MENU;
+        frame = new JFrame();
         Util.logEvent("Window initialized!");
     }
 
     public static void start() {
-        jf = new JFrame();
-        jf.setSize(Window.getWidth(), Window.getHeight());
-        jf.setResizable(true);
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jf.setLocationRelativeTo(null);
-        jf.setMinimumSize(new Dimension(Window.getWidth(), Window.getHeight()));
-        jf.setResizable(false);
-        jf.setTitle("DodgeCoin");
+        instance.frame.setSize(Window.getWidth(), Window.getHeight());
+        instance.frame.setResizable(true);
+        instance.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        instance.frame.setLocationRelativeTo(null);
+        instance.frame.setMinimumSize(new Dimension(Window.getWidth(), Window.getHeight()));
+        instance.frame.setResizable(false);
+        instance.frame.setTitle("DodgeCoin");
 
-        jf.add(KeyBinding.getKeyListener());
+        instance.frame.add(KeyBinding.getKeyListener());
         KeyboardHandler.get().registerKeyBindings();
 
         Window.getDraw().setVisible(true);
         Window.getDraw().setLocation(0 , 34);
-        Window.getDraw().setSize(Window.instance.width - 10, Window.instance.height - 34);
-        jf.add(Window.getDraw());
+        Window.getDraw().setSize(Window.width, Window.height);
+        instance.frame.add(Window.getDraw());
 
-        jf.getContentPane().addMouseListener(MouseHandler.get());
+        instance.frame.getContentPane().addMouseListener(MouseHandler.get());
 
-        jf.setVisible(true);
+        instance.frame.setVisible(true);
         Util.logEvent("Window created!");
     }
 
@@ -61,11 +60,11 @@ public class Window {
     }
 
     public static int getWidth() {
-        return get().width;
+        return Window.width;
     }
 
     public static int getHeight() {
-        return get().height;
+        return Window.height;
     }
 
     public static GameState getGameState() {
@@ -76,9 +75,12 @@ public class Window {
         Window.gameState = gameState;
     }
 
-    public static int setHeigt(int i){
-        height = i;
-        return height;
+    public static void setHeight(int height) {
+        Window.height = height;
+    }
+
+    public static void setWidth(int width) {
+        Window.width = width;
     }
 }
 

@@ -1,4 +1,4 @@
-package businessdirt.dodgecoin.core.game;
+package businessdirt.dodgecoin.gui.buttons;
 
 import javax.swing.*;
 import java.awt.*;

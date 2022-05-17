@@ -1,6 +1,7 @@
 package businessdirt.dodgecoin.core.game;
 
 import businessdirt.dodgecoin.core.Util;
+import businessdirt.dodgecoin.core.config.Constants;
 import businessdirt.dodgecoin.gui.images.Image;
 import businessdirt.dodgecoin.gui.Window;
 
@@ -51,7 +52,7 @@ public class KeyboardHandler {
     private void moveLeft() {
         Image player = Window.getDraw().getPlayer();
         if (player.getX() > 0) {
-            int newX = player.getX() - GameClock.get().MOVEMENT_SPEED;
+            int newX = player.getX() - Constants.MOVEMENT_SPEED;
             player.setX(Math.max(newX, 0));
         }
     }
@@ -59,7 +60,7 @@ public class KeyboardHandler {
     private void moveRight() {
         Image player = Window.getDraw().getPlayer();
         if (player.getX() < Window.getWidth() - player.getWidth() - 20) {
-            int newX = player.getX() + GameClock.get().MOVEMENT_SPEED;
+            int newX = player.getX() + Constants.MOVEMENT_SPEED;
             player.setX(Math.min(newX, Window.getWidth() - player.getWidth() - 20));
         }
     }

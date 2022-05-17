@@ -2,6 +2,7 @@ package businessdirt.dodgecoin.core.game;
 
 import businessdirt.dodgecoin.core.FileHandler;
 import businessdirt.dodgecoin.core.Util;
+import businessdirt.dodgecoin.core.config.Constants;
 import businessdirt.dodgecoin.gui.AssetPool;
 import businessdirt.dodgecoin.gui.Draw;
 import businessdirt.dodgecoin.gui.images.Coin;
@@ -16,10 +17,6 @@ import java.util.Random;
 public class GameClock extends Thread {
 
     private static GameClock instance;
-
-    public final int COIN_SPAWN_SPEED;
-    public final int COIN_DROP_SPEED;
-    public final int MOVEMENT_SPEED = 10;
 
     public static int BitcoinValue = 10;
 
@@ -38,9 +35,6 @@ public class GameClock extends Thread {
     private static int score = 0;
 
     private GameClock() {
-        this.COIN_DROP_SPEED = 7;
-        this.COIN_SPAWN_SPEED = 2000;
-
         this.running = false;
         this.loopCounter = 0;
         this.loadCoins();
@@ -48,21 +42,20 @@ public class GameClock extends Thread {
     }
 
     public void run() {
-
         while (true) {
             try {
-                sleep(GameClock.get().COIN_DROP_SPEED);
+                sleep(Constants.COIN_DROP_SPEED);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             if (running) {
                 // Spawn coin
-                if (loopCounter / COIN_DROP_SPEED == COIN_SPAWN_SPEED / COIN_DROP_SPEED && loopCounter % COIN_DROP_SPEED == 0) {
+                if (loopCounter >= Constants.COIN_SPAWN_SPEED) {
                     // load Image
                     int tmp = random.nextInt(20);
                     imageBuffer = tmp <= 3 ? bitcoin : dogecoin;
 
-                    int tmp2 = random.nextInt(Window.getWidth()- Draw.X_OFFSET - imageBuffer.getWidth() * 4);
+                    int tmp2 = random.nextInt(Window.getWidth()- Constants.X_OFFSET - imageBuffer.getWidth() * 4);
                     Window.getDraw().addCoin(new Coin(tmp2, 0, imageBuffer.getWidth() * 4, imageBuffer.getHeight() * 4, imageBuffer, tmp <= 3 ? Coin.CoinType.BITCOIN : Coin.CoinType.DOGECOIN));
                     loopCounter = 0;
                 }
@@ -88,7 +81,7 @@ public class GameClock extends Thread {
                 }
 
                 // increase loopCounter
-                this.loopCounter += COIN_DROP_SPEED;
+                this.loopCounter += Constants.COIN_DROP_SPEED;
             }
         }
     }
