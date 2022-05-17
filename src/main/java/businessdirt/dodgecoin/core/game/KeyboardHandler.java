@@ -1,7 +1,7 @@
 package businessdirt.dodgecoin.core.game;
 
 import businessdirt.dodgecoin.core.Util;
-import businessdirt.dodgecoin.gui.Image;
+import businessdirt.dodgecoin.gui.images.Image;
 import businessdirt.dodgecoin.gui.Window;
 
 import javax.swing.*;
@@ -73,6 +73,8 @@ public class KeyboardHandler {
             Window.setGameState(GameState.MAIN_MENU);
         } else if (Window.getGameState() == GameState.PAUSE) {
             Window.setGameState(GameState.MAIN_MENU);
+            Window.getDraw().getCoins().clear();
+            GameClock.setScore(0);
         } else return;
         GameClock.get().setRunning(false);
     }

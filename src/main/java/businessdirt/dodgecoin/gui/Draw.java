@@ -3,14 +3,13 @@ package businessdirt.dodgecoin.gui;
 import businessdirt.dodgecoin.core.config.Config;
 import businessdirt.dodgecoin.core.game.GameClock;
 import businessdirt.dodgecoin.core.game.GameState;
-import businessdirt.dodgecoin.core.game.MouseHandler;
+import businessdirt.dodgecoin.gui.images.Coin;
+import businessdirt.dodgecoin.gui.images.Image;
 import com.github.businessdirt.config.data.Property;
 import com.github.businessdirt.config.data.PropertyType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -19,9 +18,9 @@ import java.util.List;
 
 public class Draw extends JLabel {
 
-    private final List<Image> coins = new ArrayList<>();
-    private Image player;
-    private Image background;
+    private final List<Coin> coins = new ArrayList<>();
+    private businessdirt.dodgecoin.gui.images.Image player;
+    private businessdirt.dodgecoin.gui.images.Image background;
 
     public static final int X_OFFSET = 17;
     public static final int Y_OFFSET = 40;
@@ -41,14 +40,16 @@ public class Draw extends JLabel {
 
             // coins
             try {
-                for (Image coin : coins) {
+                for (businessdirt.dodgecoin.gui.images.Image coin : coins) {
                     if (coin.isDraw()) drawImage(g2d, coin);
-                    g2d.drawString("Score: " + GameClock.getScore(), X_OFFSET  + 50, Y_OFFSET + 50);
                 }
             } catch (ConcurrentModificationException ignored) {}
 
             // player
             if (player != null) drawImage(g2d, player);
+
+            // score
+            g2d.drawString("Score: " + GameClock.getScore(), X_OFFSET  + 50, Y_OFFSET + 50);
 
             // pause / game over TODO better screen overlay
             if (Window.getGameState() == GameState.PAUSE) {
@@ -80,7 +81,7 @@ public class Draw extends JLabel {
             // shop icon
             try {
                 BufferedImage shopIcon = AssetPool.getImage("gui/shop.png");
-                drawImage(g2d, new Image(25, Window.getHeight() - Y_OFFSET - 25 - shopIcon.getHeight() * ICON_SIZE_MULTIPLIER,
+                drawImage(g2d, new businessdirt.dodgecoin.gui.images.Image(25, Window.getHeight() - Y_OFFSET - 25 - shopIcon.getHeight() * ICON_SIZE_MULTIPLIER,
                         shopIcon.getWidth() * ICON_SIZE_MULTIPLIER, shopIcon.getHeight() * ICON_SIZE_MULTIPLIER, shopIcon));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -89,12 +90,12 @@ public class Draw extends JLabel {
             // settings icon
             try {
                 BufferedImage settingsIcon = AssetPool.getImage("gui/settings.png");
-                drawImage(g2d, new Image(Window.getWidth() - X_OFFSET - 25 - settingsIcon.getWidth() * ICON_SIZE_MULTIPLIER,
+                drawImage(g2d, new businessdirt.dodgecoin.gui.images.Image(Window.getWidth() - X_OFFSET - 25 - settingsIcon.getWidth() * ICON_SIZE_MULTIPLIER,
                         Window.getHeight() - Y_OFFSET - 25 - settingsIcon.getHeight() * ICON_SIZE_MULTIPLIER,
                         settingsIcon.getWidth() * ICON_SIZE_MULTIPLIER, settingsIcon.getHeight() * ICON_SIZE_MULTIPLIER, settingsIcon));
 
                 BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
-                drawImage(g2d, new Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
+                drawImage(g2d, new businessdirt.dodgecoin.gui.images.Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
                         Window.getHeight() - Draw.Y_OFFSET - 25 - cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER,
                         cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon));
 
@@ -127,7 +128,7 @@ public class Draw extends JLabel {
         g2d.drawString("Press [ESC] or [BACKSPACE] to return to main menu", X_OFFSET + 50, Y_OFFSET +80);
 
         BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
-        drawImage(g2d, new Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
+        drawImage(g2d, new businessdirt.dodgecoin.gui.images.Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
                 Window.getHeight() - Draw.Y_OFFSET - 25 - cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER,
                 cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon));
     }
@@ -140,7 +141,7 @@ public class Draw extends JLabel {
         g2d.fillRect(50, Y_OFFSET + 50, Window.getWidth() - X_OFFSET - 100, 10);
 
         BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
-        drawImage(g2d, new Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
+        drawImage(g2d, new businessdirt.dodgecoin.gui.images.Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
                 Window.getHeight() - Draw.Y_OFFSET - 25 - cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER,
                 cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon));
 
@@ -169,23 +170,23 @@ public class Draw extends JLabel {
         }
     }
 
-    private void drawImage(Graphics2D g2d, Image image) {
+    private void drawImage(Graphics2D g2d, businessdirt.dodgecoin.gui.images.Image image) {
         g2d.drawImage(image.getImage(), image.getX(), image.getY(), image.getWidth(), image.getHeight(), this);
     }
 
-    public void addCoin(Image coin) {
+    public void addCoin(Coin coin) {
         this.coins.add(coin);
     }
 
-    public List<Image> getCoins() {
+    public List<Coin> getCoins() {
         return coins;
     }
 
-    public void setPlayer(Image player) {
+    public void setPlayer(businessdirt.dodgecoin.gui.images.Image player) {
         this.player = player;
     }
 
-    public Image getPlayer() {
+    public businessdirt.dodgecoin.gui.images.Image getPlayer() {
         return this.player;
     }
 

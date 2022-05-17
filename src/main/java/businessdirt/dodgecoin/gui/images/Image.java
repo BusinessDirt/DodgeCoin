@@ -1,4 +1,4 @@
-package businessdirt.dodgecoin.gui;
+package businessdirt.dodgecoin.gui.images;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -89,7 +89,7 @@ public class Image {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Image image1 = (Image) o;
-        return x == image1.x && y == image1.y && width == image1.width && height == image1.height && draw == image1.draw && image.equals(image1.image);
+        return width == image1.width && height == image1.height && draw == image1.draw && image.equals(image1.image);
     }
 
     @Override
