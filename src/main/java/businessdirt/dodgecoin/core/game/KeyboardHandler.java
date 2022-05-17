@@ -2,6 +2,7 @@ package businessdirt.dodgecoin.core.game;
 
 import businessdirt.dodgecoin.core.Util;
 import businessdirt.dodgecoin.core.config.Constants;
+import businessdirt.dodgecoin.gui.buttons.ImageButton;
 import businessdirt.dodgecoin.gui.images.Image;
 import businessdirt.dodgecoin.gui.Window;
 
@@ -78,6 +79,10 @@ public class KeyboardHandler {
             GameClock.setScore(0);
         } else return;
         GameClock.get().setRunning(false);
+
+        if (Window.getGameState() != GameState.PAUSE) for (ImageButton b : Window.buttons) {
+            b.setEnabled(true);
+        }
     }
 
     private void start() {
@@ -87,6 +92,10 @@ public class KeyboardHandler {
             Window.setGameState(GameState.GAME);
         } else return;
         GameClock.get().setRunning(true);
+
+        for (ImageButton b : Window.buttons) {
+            b.setEnabled(false);
+        }
     }
 
     public static KeyboardHandler get() {

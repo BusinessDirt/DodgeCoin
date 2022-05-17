@@ -38,10 +38,10 @@ public class MouseHandler extends MouseAdapter {
         );
 
         // shop
-        BufferedImage shopIcon = AssetPool.getImage("gui/shop.png");
+        /*BufferedImage shopIcon = AssetPool.getImage("gui/shop.png");
         buttonList.add(new Button(25, Window.getHeight() - Constants.Y_OFFSET - 25 - shopIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
                 shopIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, shopIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, "shop")
-        );
+        );*/
 
         // cancel
         BufferedImage cancelIcon = AssetPool.getImage("gui/shop.png");
@@ -59,9 +59,6 @@ public class MouseHandler extends MouseAdapter {
                 switch (button.getName()) {
                     case "settings":
                         if (Window.getGameState() == GameState.MAIN_MENU) Window.setGameState(GameState.SETTINGS);
-                        break;
-                    case "shop":
-                        if (Window.getGameState() == GameState.MAIN_MENU) Window.setGameState(GameState.SHOP);
                         break;
                     case "cancel":
                         if (Window.getGameState() == GameState.SHOP || Window.getGameState() == GameState.SETTINGS) {

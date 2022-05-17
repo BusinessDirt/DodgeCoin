@@ -5,6 +5,7 @@ import businessdirt.dodgecoin.core.config.Config;
 import businessdirt.dodgecoin.core.config.Constants;
 import businessdirt.dodgecoin.core.game.GameClock;
 import businessdirt.dodgecoin.core.game.GameState;
+import businessdirt.dodgecoin.gui.buttons.ImageButton;
 import businessdirt.dodgecoin.gui.images.Coin;
 import businessdirt.dodgecoin.gui.images.Image;
 import com.github.businessdirt.config.data.Property;
@@ -12,6 +13,8 @@ import com.github.businessdirt.config.data.PropertyType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -65,11 +68,12 @@ public class Draw extends JLabel  {
 
             // pause / game over TODO better screen overlay
             if (Window.getGameState() == GameState.PAUSE) {
-                g2d.fillRect(0, 0, getWidth(), getHeight());
+                drawOverlay(g2d, new Color(255, 196, 0, 224));
                 g2d.setColor(Color.WHITE);
                 g2d.drawString("Pause", Constants.X_OFFSET + 50, Constants.Y_OFFSET + 50);
                 g2d.drawString("Press [SPACE] or [ENTER] to resume or [ESC] to quit to main menu", Constants.X_OFFSET + 50, Constants.Y_OFFSET + 80);
             } else if (Window.getGameState() == GameState.GAME_OVER) {
+                drawOverlay(g2d, new Color(255, 0, 0, 224));
                 g2d.fillRect(0, 0, getWidth(), getHeight());
                 g2d.setColor(Color.WHITE);
                 g2d.drawString("Game Over", Constants.X_OFFSET + 50, Constants.Y_OFFSET + 50);
@@ -89,33 +93,6 @@ public class Draw extends JLabel  {
 
             // reset score
             GameClock.setScore(0);
-
-            // shop icon
-            try {
-                BufferedImage shopIcon = AssetPool.getImage("gui/shop.png");
-                drawImage(g2d, new businessdirt.dodgecoin.gui.images.Image(25, Window.getHeight() - Constants.Y_OFFSET - 25 - shopIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
-                        shopIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, shopIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, shopIcon));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // settings icon
-            try {
-                BufferedImage settingsIcon = AssetPool.getImage("gui/settings.png");
-                drawImage(g2d, new businessdirt.dodgecoin.gui.images.Image(Window.getWidth() - Constants.X_OFFSET - 25 - settingsIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER,
-                        Window.getHeight() - Constants.Y_OFFSET - 25 - settingsIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
-                        settingsIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, settingsIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, settingsIcon));
-
-                BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
-                drawImage(g2d, new businessdirt.dodgecoin.gui.images.Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
-                        Window.getHeight() - Constants.Y_OFFSET - 25 - cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
-                        cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // play button
         } else if (Window.getGameState() == GameState.SHOP) { // Shop
             try {
                 drawShop(g2d);
@@ -131,6 +108,11 @@ public class Draw extends JLabel  {
         }
 
         repaint();
+    }
+
+    private void drawOverlay(Graphics2D g2d, Color color) {
+        g2d.setColor(color);
+        g2d.fillRect(Window.getWidth() / 4, Window.getHeight() / 4, Window.getWidth() / 2, Window.getHeight() / 2);
     }
 
     private void drawShop(Graphics2D g2d) throws IOException {

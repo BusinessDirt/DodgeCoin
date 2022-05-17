@@ -6,9 +6,16 @@ import businessdirt.dodgecoin.core.game.KeyBinding;
 import businessdirt.dodgecoin.core.game.KeyboardHandler;
 import businessdirt.dodgecoin.core.Util;
 import businessdirt.dodgecoin.core.game.MouseHandler;
+import businessdirt.dodgecoin.gui.buttons.ImageButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Window {
 
@@ -19,6 +26,7 @@ public class Window {
     private static int gameXStart;
 
     private static GameState gameState;
+    public static List<ImageButton> buttons;
 
     private Window() {
         Window.width = Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -40,14 +48,54 @@ public class Window {
         instance.frame.add(KeyBinding.getKeyListener());
         KeyboardHandler.get().registerKeyBindings();
 
+        try {
+            Window.buttons = get().createButtons();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Window.getDraw().setVisible(true);
         Window.getDraw().setBounds(0, 0, Window.width, Window.height);
         instance.frame.add(Window.getDraw());
 
-        instance.frame.getContentPane().addMouseListener(MouseHandler.get());
-
         instance.frame.setVisible(true);
         Util.logEvent("Window created!");
+    }
+
+    private List<ImageButton> createButtons() throws IOException {
+        List<ImageButton> list = new LinkedList<>();
+
+        BufferedImage shopIcon = AssetPool.getImage("gui/shop.png");
+        ImageButton shop = new ImageButton(25, Window.getHeight() - Constants.Y_OFFSET - 25 - shopIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
+                shopIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, shopIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, shopIcon, e -> {
+                    if (Window.getGameState() == GameState.MAIN_MENU || Window.getGameState() == GameState.SETTINGS) {
+                        Window.setGameState(GameState.SHOP);
+                    }
+                });
+        list.add(shop);
+
+        BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
+        ImageButton cancel = new ImageButton((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
+                Window.getHeight() - Constants.Y_OFFSET - 25 - cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
+                cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon, e -> {
+                    if (Window.getGameState() == GameState.MAIN_MENU) {
+                        System.exit(0);
+                    } else if (Window.getGameState() == GameState.SHOP || Window.getGameState() == GameState.SETTINGS) {
+                        Window.setGameState(GameState.MAIN_MENU);
+                    }
+                });
+        list.add(cancel);
+
+        BufferedImage settingsIcon = AssetPool.getImage("gui/settings.png");
+        ImageButton settings = new ImageButton(Window.getWidth() - Constants.X_OFFSET - 25 - settingsIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER,
+                Window.getHeight() - Constants.Y_OFFSET - 25 - settingsIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
+                settingsIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, settingsIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, settingsIcon, e -> {
+                    if (Window.getGameState() == GameState.MAIN_MENU || Window.getGameState() == GameState.SHOP) {
+                        Window.setGameState(GameState.SETTINGS);
+                    }
+                });
+        list.add(settings);
+        return list;
     }
 
     public static Window get() {
