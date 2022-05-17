@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.List;
 
-public class Draw extends JLabel {
+public class Draw extends JLabel  {
 
     private final List<Image> coins = new ArrayList<>();
     private Image player;
@@ -26,6 +26,15 @@ public class Draw extends JLabel {
     public static final int X_OFFSET = 17;
     public static final int Y_OFFSET = 40;
     public static final int ICON_SIZE_MULTIPLIER = 6;
+
+    //settings input
+    private static JTextField verticalResolution;
+
+    private static JFrame frame;
+
+    private static JButton button;
+
+    private static JLabel label;
 
 
 
@@ -138,6 +147,7 @@ public class Draw extends JLabel {
         g2d.drawString("Settings", 75, 25);
         g2d.drawString("Press [ESC] or [BACKSPACE] to return to main menu", 75, 50);
         g2d.fillRect(50, Y_OFFSET + 50, Window.getWidth() - X_OFFSET - 100, 10);
+        g2d.drawString("Vertical Resolution: " + Window.getHeight(), X_OFFSET + 50, Y_OFFSET + 80);
 
         BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
         drawImage(g2d, new Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
