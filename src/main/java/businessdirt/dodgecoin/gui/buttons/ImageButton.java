@@ -21,6 +21,7 @@ public class ImageButton {
         this.button.setSize(width, height);
         this.button.addActionListener(listener);
         this.button.setBackground(Color.BLACK);
+        this.button.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
         this.button.setVisible(true);
         Window.get().frame.add(this.button);
     }

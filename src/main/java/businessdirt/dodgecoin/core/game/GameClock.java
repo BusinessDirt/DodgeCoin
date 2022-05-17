@@ -2,6 +2,7 @@ package businessdirt.dodgecoin.core.game;
 
 import businessdirt.dodgecoin.core.FileHandler;
 import businessdirt.dodgecoin.core.Util;
+import businessdirt.dodgecoin.core.config.Config;
 import businessdirt.dodgecoin.core.config.Constants;
 import businessdirt.dodgecoin.gui.AssetPool;
 import businessdirt.dodgecoin.gui.Draw;
@@ -31,8 +32,6 @@ public class GameClock extends Thread {
     private Random random = new Random();
 
     //TODO set coin value based on stock market API
-
-    private static int score = 0;
 
     private GameClock() {
         this.running = false;
@@ -76,7 +75,9 @@ public class GameClock extends Thread {
                     if (coin.intersects(Window.getDraw().getPlayer())) {
                         coin.setDraw(false);
                         coin.setX(69420);
-                        score += coin.type == Coin.CoinType.DOGECOIN ? DogecoinValue : BitcoinValue;
+                        Config.money += coin.type == Coin.CoinType.DOGECOIN ? DogecoinValue : BitcoinValue;
+                        Config.getConfig().markDirty();
+                        Config.getConfig().writeData();
                     }
                 }
 
@@ -107,8 +108,4 @@ public class GameClock extends Thread {
     public void setRunning(boolean running) {
         this.running = running;
     }
-
-    public static int getScore(){return score;}
-
-    public static void setScore(int i){score = i;}
 }

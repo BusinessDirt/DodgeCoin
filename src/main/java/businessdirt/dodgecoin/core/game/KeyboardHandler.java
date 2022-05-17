@@ -76,7 +76,6 @@ public class KeyboardHandler {
         } else if (Window.getGameState() == GameState.PAUSE) {
             Window.setGameState(GameState.MAIN_MENU);
             Window.getDraw().getCoins().clear();
-            GameClock.setScore(0);
         } else return;
         GameClock.get().setRunning(false);
 

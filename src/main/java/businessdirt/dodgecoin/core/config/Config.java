@@ -12,36 +12,12 @@ public class Config extends ConfigHandler {
     private static Config instance;
 
     @Property(
-            type = PropertyType.SWITCH,
-            name = "Switch",
-            category = "Settings",
-            description = "description"
-    )
-    public static boolean switchs = true;
-
-    @Property(
             type = PropertyType.NUMBER,
-            name = "Number",
-            category = "Settings",
-            description = "description"
+            name = "Money",
+            category = "Hidden",
+            description = "Money"
     )
-    public static int number = 0;
-
-    @Property(
-            type = PropertyType.SLIDER,
-            name = "Slider",
-            category = "Settings",
-            description = "description"
-    )
-    public static double slider = 0;
-
-    @Property(
-            type = PropertyType.TEXT,
-            name = "Text",
-            category = "Settings",
-            description = "description"
-    )
-    public static String text = "test value";
+    public static int money = 0;
 
     public Config() {
         super(new File(Util.getConfigFolder(), "\\config.toml"));

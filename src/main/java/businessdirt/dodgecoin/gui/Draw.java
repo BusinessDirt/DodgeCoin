@@ -64,19 +64,13 @@ public class Draw extends JLabel  {
 
             // score
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Score: " + GameClock.getScore(), Constants.X_OFFSET  + 50, Constants.Y_OFFSET + 50);
+            g2d.drawString("Score: " + Config.money, Constants.X_OFFSET  + 50, Constants.Y_OFFSET + 50);
 
             // pause / game over TODO better screen overlay
             if (Window.getGameState() == GameState.PAUSE) {
-                drawOverlay(g2d, new Color(255, 196, 0, 224));
-                g2d.setColor(Color.WHITE);
-                g2d.drawString("Pause", Constants.X_OFFSET + 50, Constants.Y_OFFSET + 50);
-                g2d.drawString("Press [SPACE] or [ENTER] to resume or [ESC] to quit to main menu", Constants.X_OFFSET + 50, Constants.Y_OFFSET + 80);
+                drawOverlay(g2d, new Color(83, 159, 81, 224));
             } else if (Window.getGameState() == GameState.GAME_OVER) {
                 drawOverlay(g2d, new Color(255, 0, 0, 224));
-                g2d.fillRect(0, 0, getWidth(), getHeight());
-                g2d.setColor(Color.WHITE);
-                g2d.drawString("Game Over", Constants.X_OFFSET + 50, Constants.Y_OFFSET + 50);
             }
         } else if (Window.getGameState() == GameState.MAIN_MENU) { // Main Menu
             // background
@@ -90,9 +84,6 @@ public class Draw extends JLabel  {
             //start instructions
             g2d.setColor(Color.WHITE);
             g2d.drawString("Press [ENTER] to start",Constants.X_OFFSET + 50, Constants.Y_OFFSET + 80);
-
-            // reset score
-            GameClock.setScore(0);
         } else if (Window.getGameState() == GameState.SHOP) { // Shop
             try {
                 drawShop(g2d);
@@ -118,8 +109,7 @@ public class Draw extends JLabel  {
     private void drawShop(Graphics2D g2d) throws IOException {
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setColor(Color.WHITE);
-        g2d.drawString("Shop", Constants.X_OFFSET + 50, Constants.Y_OFFSET + 50);
-        g2d.drawString("Press [ESC] or [BACKSPACE] to return to main menu", Constants.X_OFFSET + 50, Constants.Y_OFFSET +80);
+        g2d.drawString("Shop", Constants.X_OFFSET + 50, Constants.Y_OFFSET + 25);
 
         BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
         drawImage(g2d, new businessdirt.dodgecoin.gui.images.Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
@@ -130,8 +120,7 @@ public class Draw extends JLabel  {
     private void drawSettings(Graphics2D g2d) throws IllegalAccessException, IOException {
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setColor(Color.WHITE);
-        g2d.drawString("Settings", 75, 25);
-        g2d.drawString("Press [ESC] or [BACKSPACE] to return to main menu", 75, 50);
+        g2d.drawString("Settings", 75, Constants.X_OFFSET + 25);
         g2d.fillRect(50, Constants.Y_OFFSET + 50, Window.getWidth() - Constants.X_OFFSET - 100, 10);
         g2d.drawString("Vertical Resolution: " + Window.getHeight(), Constants.X_OFFSET + 50, Constants.Y_OFFSET + 80);
 
