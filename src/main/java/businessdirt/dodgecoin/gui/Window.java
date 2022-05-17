@@ -14,14 +14,14 @@ public class Window {
 
     private static Window instance;
     public static JFrame jf;
-    private final int width, height;
+    private static int width, height;
     private static Draw draw;
 
     private static GameState gameState;
 
     private Window() {
-        this.width = 720;
-        this.height = 1080;
+        this.width = 360;
+        this.height = 480;
         Window.gameState = GameState.MAIN_MENU;
         Util.logEvent("Window initialized!");
     }
@@ -74,6 +74,11 @@ public class Window {
 
     public static void setGameState(GameState gameState) {
         Window.gameState = gameState;
+    }
+
+    public static int setHeigt(int i){
+        height = i;
+        return height;
     }
 }
 
