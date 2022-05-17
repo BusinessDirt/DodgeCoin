@@ -55,8 +55,8 @@ public class GameClock extends Thread {
                     int tmp = random.nextInt(20);
                     imageBuffer = tmp <= 3 ? bitcoin : dogecoin;
 
-                    int tmp2 = random.nextInt(Window.getWidth()- Constants.X_OFFSET - imageBuffer.getWidth() * 4);
-                    Window.getDraw().addCoin(new Coin(tmp2, 0, imageBuffer.getWidth() * 4, imageBuffer.getHeight() * 4, imageBuffer, tmp <= 3 ? Coin.CoinType.BITCOIN : Coin.CoinType.DOGECOIN));
+                    int tmp2 = random.nextInt(Constants.GAME_WIDTH - Constants.X_OFFSET - imageBuffer.getWidth() * 4);
+                    Window.getDraw().addCoin(new Coin((Window.getWidth() - Constants.GAME_WIDTH) / 2 + tmp2, 0, imageBuffer.getWidth() * 4, imageBuffer.getHeight() * 4, imageBuffer, tmp <= 3 ? Coin.CoinType.BITCOIN : Coin.CoinType.DOGECOIN));
                     loopCounter = 0;
                 }
 

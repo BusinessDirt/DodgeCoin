@@ -51,17 +51,17 @@ public class KeyboardHandler {
 
     private void moveLeft() {
         Image player = Window.getDraw().getPlayer();
-        if (player.getX() > 0) {
+        if (player.getX() > Window.getGameXStart()) {
             int newX = player.getX() - Constants.MOVEMENT_SPEED;
-            player.setX(Math.max(newX, 0));
+            player.setX(Math.max(newX, Window.getGameXStart()));
         }
     }
 
     private void moveRight() {
         Image player = Window.getDraw().getPlayer();
-        if (player.getX() < Window.getWidth() - player.getWidth() - 20) {
+        if (player.getX() < Window.getGameXStart() + Constants.GAME_WIDTH - player.getWidth()) {
             int newX = player.getX() + Constants.MOVEMENT_SPEED;
-            player.setX(Math.min(newX, Window.getWidth() - player.getWidth() - 20));
+            player.setX(Math.min(newX, Window.getGameXStart() + Constants.GAME_WIDTH));
         }
     }
 

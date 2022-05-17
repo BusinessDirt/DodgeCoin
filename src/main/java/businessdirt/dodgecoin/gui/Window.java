@@ -1,5 +1,6 @@
 package businessdirt.dodgecoin.gui;
 
+import businessdirt.dodgecoin.core.config.Constants;
 import businessdirt.dodgecoin.core.game.GameState;
 import businessdirt.dodgecoin.core.game.KeyBinding;
 import businessdirt.dodgecoin.core.game.KeyboardHandler;
@@ -15,12 +16,14 @@ public class Window {
     public final JFrame frame;
     private static int width, height;
     private static Draw draw;
+    private static int gameXStart;
 
     private static GameState gameState;
 
     private Window() {
-        Window.width = 720;
-        Window.height = 1080;
+        Window.width = Toolkit.getDefaultToolkit().getScreenSize().width;
+        Window.height = Toolkit.getDefaultToolkit().getScreenSize().height;
+        Window.gameXStart = (Window.getWidth() - Constants.GAME_WIDTH - Constants.X_OFFSET) / 2;
         Window.gameState = GameState.MAIN_MENU;
         frame = new JFrame();
         Util.logEvent("Window initialized!");
@@ -31,7 +34,6 @@ public class Window {
         instance.frame.setResizable(true);
         instance.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         instance.frame.setLocationRelativeTo(null);
-        instance.frame.setMinimumSize(new Dimension(Window.getWidth(), Window.getHeight()));
         instance.frame.setResizable(false);
         instance.frame.setTitle("DodgeCoin");
 
@@ -39,8 +41,7 @@ public class Window {
         KeyboardHandler.get().registerKeyBindings();
 
         Window.getDraw().setVisible(true);
-        Window.getDraw().setLocation(0 , 34);
-        Window.getDraw().setSize(Window.width, Window.height);
+        Window.getDraw().setBounds(0, 0, Window.width, Window.height);
         instance.frame.add(Window.getDraw());
 
         instance.frame.getContentPane().addMouseListener(MouseHandler.get());
@@ -81,6 +82,10 @@ public class Window {
 
     public static void setWidth(int width) {
         Window.width = width;
+    }
+
+    public static int getGameXStart() {
+        return gameXStart;
     }
 }
 

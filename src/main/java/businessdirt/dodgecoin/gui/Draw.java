@@ -41,7 +41,11 @@ public class Draw extends JLabel  {
         // game
         if (Window.getGameState() == GameState.GAME || Window.getGameState() == GameState.PAUSE || Window.getGameState() == GameState.GAME_OVER) {
             // background
-            if (background != null) this.drawImage(g2d, background);
+            if (background == null) {
+                //this.drawImage(g2d, background);
+                g2d.fillRect(0, 0, Window.getGameXStart(), Window.getHeight());
+                g2d.fillRect(Window.getGameXStart() + Constants.GAME_WIDTH, 0, Window.getGameXStart(), Window.getHeight());
+            }
 
             // coins
             try {
@@ -56,6 +60,7 @@ public class Draw extends JLabel  {
             }
 
             // score
+            g2d.setColor(Color.WHITE);
             g2d.drawString("Score: " + GameClock.getScore(), Constants.X_OFFSET  + 50, Constants.Y_OFFSET + 50);
 
             // pause / game over TODO better screen overlay

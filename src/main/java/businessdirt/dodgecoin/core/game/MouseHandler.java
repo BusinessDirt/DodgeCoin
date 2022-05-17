@@ -39,13 +39,13 @@ public class MouseHandler extends MouseAdapter {
 
         // shop
         BufferedImage shopIcon = AssetPool.getImage("gui/shop.png");
-        buttonList.add(new businessdirt.dodgecoin.gui.buttons.Button(25, Window.getHeight() - Constants.Y_OFFSET - 25 - shopIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
+        buttonList.add(new Button(25, Window.getHeight() - Constants.Y_OFFSET - 25 - shopIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
                 shopIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, shopIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, "shop")
         );
 
         // cancel
         BufferedImage cancelIcon = AssetPool.getImage("gui/shop.png");
-        buttonList.add(new businessdirt.dodgecoin.gui.buttons.Button((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
+        buttonList.add(new Button((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
                 Window.getHeight() - Constants.Y_OFFSET - 25 - cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
                 cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, "cancel")
         );
