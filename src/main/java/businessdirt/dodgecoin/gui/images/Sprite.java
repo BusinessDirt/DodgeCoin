@@ -4,14 +4,14 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
 
-public class Image {
+public class Sprite {
 
     private int x, y;
     private int width, height;
     private BufferedImage image;
     private boolean draw;
 
-    public Image(int x, int y, int width, int height, BufferedImage image) {
+    public Sprite(int x, int y, int width, int height, BufferedImage image) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -20,17 +20,17 @@ public class Image {
         this.draw = true;
     }
 
-    public Image(int x, int y, BufferedImage image) {
+    public Sprite(int x, int y, BufferedImage image) {
         this(x, y, image.getWidth(), image.getHeight(), image);
     }
 
-    public Image(Point position, Point size, BufferedImage image) {
+    public Sprite(Point position, Point size, BufferedImage image) {
         this(position.x, position.y, size.x, size.y, image);
     }
 
-    public boolean intersects(Image image) {
+    public boolean intersects(Sprite sprite) {
         Rectangle r1 = new Rectangle(this.x, this.y, this.width, this.height);
-        Rectangle r2 = new Rectangle(image.x, image.y, image.width, image.height);
+        Rectangle r2 = new Rectangle(sprite.x, sprite.y, sprite.width, sprite.height);
         return r1.intersects(r2);
     }
 
@@ -70,6 +70,10 @@ public class Image {
         return image;
     }
 
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
     public boolean isDraw() {
         return draw;
     }
@@ -88,8 +92,8 @@ public class Image {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Image image1 = (Image) o;
-        return width == image1.width && height == image1.height && draw == image1.draw && image.equals(image1.image);
+        Sprite sprite1 = (Sprite) o;
+        return width == sprite1.width && height == sprite1.height && draw == sprite1.draw && image.equals(sprite1.image);
     }
 
     @Override

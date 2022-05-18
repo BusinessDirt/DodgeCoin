@@ -1,20 +1,15 @@
 package businessdirt.dodgecoin.gui;
 
-import businessdirt.dodgecoin.core.Util;
 import businessdirt.dodgecoin.core.config.Config;
 import businessdirt.dodgecoin.core.config.Constants;
-import businessdirt.dodgecoin.core.game.GameClock;
 import businessdirt.dodgecoin.core.game.GameState;
-import businessdirt.dodgecoin.gui.buttons.ImageButton;
 import businessdirt.dodgecoin.gui.images.Coin;
-import businessdirt.dodgecoin.gui.images.Image;
+import businessdirt.dodgecoin.gui.images.Sprite;
 import com.github.businessdirt.config.data.Property;
 import com.github.businessdirt.config.data.PropertyType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -24,8 +19,8 @@ import java.util.List;
 public class Draw extends JLabel  {
 
     private final List<Coin> coins = new ArrayList<>();
-    private Image player;
-    private Image background;
+    private Sprite player;
+    private Sprite background;
 
     //settings input
     private static JTextField verticalResolution;
@@ -52,7 +47,7 @@ public class Draw extends JLabel  {
 
             // coins
             try {
-                for (Image coin : coins) {
+                for (Sprite coin : coins) {
                     if (coin.isDraw()) this.drawImage(g2d, coin);
                 }
             } catch (ConcurrentModificationException ignored) {}
@@ -83,7 +78,11 @@ public class Draw extends JLabel  {
 
             //start instructions
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Press [ENTER] to start",Constants.X_OFFSET + 50, Constants.Y_OFFSET + 80);
+            g2d.drawString("Press [ENTER] to start",Constants.X_OFFSET + 50, Constants.Y_OFFSET + 75);
+
+            // money
+            g2d.setColor(Color.WHITE);
+            g2d.drawString("Money: " + Config.money, Constants.X_OFFSET + 50, Constants.Y_OFFSET + 100);
         } else if (Window.getGameState() == GameState.SHOP) { // Shop
             try {
                 drawShop(g2d);
@@ -109,12 +108,8 @@ public class Draw extends JLabel  {
     private void drawShop(Graphics2D g2d) throws IOException {
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setColor(Color.WHITE);
-        g2d.drawString("Shop", Constants.X_OFFSET + 50, Constants.Y_OFFSET + 25);
-
-        BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
-        drawImage(g2d, new businessdirt.dodgecoin.gui.images.Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
-                Window.getHeight() - Constants.Y_OFFSET - 25 - cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
-                cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon));
+        g2d.drawString("Shop", 75, Constants.X_OFFSET + 25);
+        g2d.fillRect(50, Constants.Y_OFFSET + 50, Window.getWidth() - Constants.X_OFFSET - 100, 10);
     }
 
     private void drawSettings(Graphics2D g2d) throws IllegalAccessException, IOException {
@@ -122,10 +117,9 @@ public class Draw extends JLabel  {
         g2d.setColor(Color.WHITE);
         g2d.drawString("Settings", 75, Constants.X_OFFSET + 25);
         g2d.fillRect(50, Constants.Y_OFFSET + 50, Window.getWidth() - Constants.X_OFFSET - 100, 10);
-        g2d.drawString("Vertical Resolution: " + Window.getHeight(), Constants.X_OFFSET + 50, Constants.Y_OFFSET + 80);
 
         BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
-        drawImage(g2d, new businessdirt.dodgecoin.gui.images.Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
+        drawImage(g2d, new Sprite((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
                 Window.getHeight() - Constants.Y_OFFSET - 25 - cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
                 cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon));
 
@@ -154,8 +148,8 @@ public class Draw extends JLabel  {
         }
     }
 
-    public void drawImage(Graphics2D g2d, Image image) {
-        g2d.drawImage(image.getImage(), image.getX(), image.getY(), image.getWidth(), image.getHeight(), this);
+    public void drawImage(Graphics2D g2d, Sprite sprite) {
+        g2d.drawImage(sprite.getImage(), sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), this);
     }
 
     public void addCoin(Coin coin) {
@@ -166,15 +160,15 @@ public class Draw extends JLabel  {
         return coins;
     }
 
-    public void setPlayer(Image player) {
+    public void setPlayer(Sprite player) {
         this.player = player;
     }
 
-    public Image getPlayer() {
+    public Sprite getPlayer() {
         return this.player;
     }
 
-    public void setBackground(Image background) {
+    public void setBackground(Sprite background) {
         this.background = background;
     }
 }

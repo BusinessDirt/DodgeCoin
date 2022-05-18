@@ -15,8 +15,11 @@ public class Util {
     public static File getConfigFolder() {
         File configFolder = new File(System.getenv("Appdata"), "java\\applications\\dodgecoin");
         if (!configFolder.exists()) {
-            configFolder.mkdirs();
-            Util.logEvent("Created config folder: " + configFolder.getAbsolutePath());
+            if (configFolder.mkdirs()) {
+                Util.logEvent("Created config folder: " + configFolder.getAbsolutePath());
+            } else {
+                Util.logEvent("Couldn't create config folder!");
+            }
         }
         return configFolder;
     }

@@ -3,12 +3,13 @@ package businessdirt.dodgecoin.core.game;
 import businessdirt.dodgecoin.core.Util;
 import businessdirt.dodgecoin.core.config.Constants;
 import businessdirt.dodgecoin.gui.buttons.ImageButton;
-import businessdirt.dodgecoin.gui.images.Image;
+import businessdirt.dodgecoin.gui.images.Sprite;
 import businessdirt.dodgecoin.gui.Window;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Objects;
 
 public class KeyboardHandler {
 
@@ -36,7 +37,7 @@ public class KeyboardHandler {
         new KeyBinding(new int[] { KeyEvent.VK_ESCAPE, KeyEvent.VK_BACK_SPACE }, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                pauseBack();
+                cancel();
             }
         });
 
@@ -51,7 +52,7 @@ public class KeyboardHandler {
     }
 
     private void moveLeft() {
-        Image player = Window.getDraw().getPlayer();
+        Sprite player = Window.getDraw().getPlayer();
         if (player.getX() > Window.getGameXStart()) {
             int newX = player.getX() - Constants.MOVEMENT_SPEED;
             player.setX(Math.max(newX, Window.getGameXStart()));
@@ -59,16 +60,19 @@ public class KeyboardHandler {
     }
 
     private void moveRight() {
-        Image player = Window.getDraw().getPlayer();
+        Sprite player = Window.getDraw().getPlayer();
         if (player.getX() < Window.getGameXStart() + Constants.GAME_WIDTH - player.getWidth()) {
             int newX = player.getX() + Constants.MOVEMENT_SPEED;
             player.setX(Math.min(newX, Window.getGameXStart() + Constants.GAME_WIDTH));
         }
     }
 
-    private void pauseBack() {
+    public void cancel() {
         if (Window.getGameState() == GameState.GAME) {
             Window.setGameState(GameState.PAUSE);
+            for (ImageButton b : Window.buttons) {
+                if (Objects.equals(b.getName(), "cancel")) b.setEnabled(true);
+            }
         } else if (Window.getGameState() == GameState.SETTINGS) {
             Window.setGameState(GameState.MAIN_MENU);
         } else if (Window.getGameState() == GameState.SHOP) {

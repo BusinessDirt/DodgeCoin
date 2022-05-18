@@ -1,6 +1,5 @@
 package businessdirt.dodgecoin.gui.buttons;
 
-import businessdirt.dodgecoin.core.game.GameState;
 import businessdirt.dodgecoin.gui.Window;
 
 import javax.swing.*;
@@ -13,9 +12,13 @@ public class ImageButton {
     private final BufferedImage image;
     private final JButton button;
     private boolean enabled = true;
+    private final String name;
 
-    public ImageButton(int x, int y, int width, int height, BufferedImage image, ActionListener listener) {
+    public ImageButton(int x, int y, int width, int height, BufferedImage image, ActionListener listener, String name) {
         this.image = resize(image, width, height);
+        this.name = name;
+        this.enabled = true;
+
         this.button = new JButton(new ImageIcon(this.image));
         this.button.setLocation(x, y);
         this.button.setSize(width, height);
@@ -52,5 +55,9 @@ public class ImageButton {
     public void setEnabled(boolean enabled) {
         this.button.setVisible(enabled);
         this.enabled = enabled;
+    }
+
+    public String getName() {
+        return name;
     }
 }

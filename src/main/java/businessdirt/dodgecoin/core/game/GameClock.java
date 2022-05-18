@@ -4,10 +4,7 @@ import businessdirt.dodgecoin.core.FileHandler;
 import businessdirt.dodgecoin.core.Util;
 import businessdirt.dodgecoin.core.config.Config;
 import businessdirt.dodgecoin.core.config.Constants;
-import businessdirt.dodgecoin.gui.AssetPool;
-import businessdirt.dodgecoin.gui.Draw;
 import businessdirt.dodgecoin.gui.images.Coin;
-import businessdirt.dodgecoin.gui.images.Image;
 import businessdirt.dodgecoin.gui.Window;
 
 import java.awt.image.BufferedImage;

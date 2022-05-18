@@ -3,7 +3,7 @@ package businessdirt.dodgecoin.gui.images;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Coin extends Image {
+public class Coin extends Sprite {
 
     public final CoinType type;
 

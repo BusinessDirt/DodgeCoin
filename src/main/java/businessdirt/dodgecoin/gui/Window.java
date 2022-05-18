@@ -5,17 +5,15 @@ import businessdirt.dodgecoin.core.game.GameState;
 import businessdirt.dodgecoin.core.game.KeyBinding;
 import businessdirt.dodgecoin.core.game.KeyboardHandler;
 import businessdirt.dodgecoin.core.Util;
-import businessdirt.dodgecoin.core.game.MouseHandler;
 import businessdirt.dodgecoin.gui.buttons.ImageButton;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class Window {
 
@@ -70,20 +68,19 @@ public class Window {
                 shopIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, shopIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, shopIcon, e -> {
                     if (Window.getGameState() == GameState.MAIN_MENU || Window.getGameState() == GameState.SETTINGS) {
                         Window.setGameState(GameState.SHOP);
+                        for (ImageButton b : buttons) {
+                            if (!Objects.equals(b.getName(), "cancel")) b.setEnabled(false);
+                        }
                     }
-                });
+                }, "shop");
         list.add(shop);
 
         BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
         ImageButton cancel = new ImageButton((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
                 Window.getHeight() - Constants.Y_OFFSET - 25 - cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
                 cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon, e -> {
-                    if (Window.getGameState() == GameState.MAIN_MENU) {
-                        System.exit(0);
-                    } else if (Window.getGameState() == GameState.SHOP || Window.getGameState() == GameState.SETTINGS) {
-                        Window.setGameState(GameState.MAIN_MENU);
-                    }
-                });
+                    KeyboardHandler.get().cancel();
+                }, "cancel");
         list.add(cancel);
 
         BufferedImage settingsIcon = AssetPool.getImage("gui/settings.png");
@@ -92,8 +89,11 @@ public class Window {
                 settingsIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, settingsIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, settingsIcon, e -> {
                     if (Window.getGameState() == GameState.MAIN_MENU || Window.getGameState() == GameState.SHOP) {
                         Window.setGameState(GameState.SETTINGS);
+                        for (ImageButton b : buttons) {
+                            if (!Objects.equals(b.getName(), "cancel")) b.setEnabled(false);
+                        }
                     }
-                });
+                }, "settings");
         list.add(settings);
         return list;
     }

@@ -5,7 +5,7 @@ import businessdirt.dodgecoin.core.FileHandler;
 import businessdirt.dodgecoin.core.config.Constants;
 import businessdirt.dodgecoin.core.game.GameClock;
 import businessdirt.dodgecoin.gui.AssetPool;
-import businessdirt.dodgecoin.gui.images.Image;
+import businessdirt.dodgecoin.gui.images.Sprite;
 import businessdirt.dodgecoin.gui.Window;
 
 import java.awt.image.BufferedImage;
@@ -21,10 +21,10 @@ public class Main {
 
         // Player
         BufferedImage image = AssetPool.getImage("players/player.png");
-        Image playerImage = new Image(Window.getGameXStart() + Constants.GAME_WIDTH / 2 - image.getWidth() * 3,
+        Sprite playerSprite = new Sprite(Window.getGameXStart() + Constants.GAME_WIDTH / 2 - image.getWidth() * 3,
                 Window.getHeight() - (image.getHeight() * 6) - Constants.Y_OFFSET - 100,
                 image.getWidth() * 6, image.getHeight() * 6, image);
-        Window.getDraw().setPlayer(playerImage);
+        Window.getDraw().setPlayer(playerSprite);
 
         // Create Window
         Window.start();
