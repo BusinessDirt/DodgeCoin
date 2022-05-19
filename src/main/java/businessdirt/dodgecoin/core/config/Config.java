@@ -22,7 +22,7 @@ public class Config extends ConfigHandler {
     public Config() {
         super(new File(Util.getConfigFolder(), "\\config.toml"));
         initialize();
-        Util.logEvent("Configuration loaded!");
+        Util.logEvent("Configuration loaded! " + Util.getConfigFolder());
     }
 
     public static Config getConfig() {
