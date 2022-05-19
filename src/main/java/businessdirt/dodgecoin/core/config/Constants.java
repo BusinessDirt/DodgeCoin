@@ -10,6 +10,6 @@ public class Constants {
     public static final int MOVEMENT_SPEED = 10;
 
     public static final int X_OFFSET = 17;
-    public static final int Y_OFFSET = 40;
+    public static final int Y_OFFSET = 39;
     public static final int ICON_SIZE_MULTIPLIER = 6;
 }

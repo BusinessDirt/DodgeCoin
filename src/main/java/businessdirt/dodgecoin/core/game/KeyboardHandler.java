@@ -61,9 +61,9 @@ public class KeyboardHandler {
 
     private void moveRight() {
         Sprite player = Window.getDraw().getPlayer();
-        if (player.getX() < Window.getGameXStart() + Constants.GAME_WIDTH - player.getWidth()) {
+        if (player.getX() < Window.getGameXStart() + Constants.GAME_WIDTH - player.getWidth() - 7) {
             int newX = player.getX() + Constants.MOVEMENT_SPEED;
-            player.setX(Math.min(newX, Window.getGameXStart() + Constants.GAME_WIDTH));
+            player.setX(Math.min(newX, Window.getGameXStart() + Constants.GAME_WIDTH - 7));
         }
     }
 
@@ -77,7 +77,10 @@ public class KeyboardHandler {
             Window.setGameState(GameState.MAIN_MENU);
         } else if (Window.getGameState() == GameState.SHOP) {
             Window.setGameState(GameState.MAIN_MENU);
-        } else if (Window.getGameState() == GameState.PAUSE) {
+            for (ImageButton b : Window.shopButtons) {
+                b.setEnabled(false);
+            }
+        } else if (Window.getGameState() == GameState.GAME_OVER || Window.getGameState() == GameState.PAUSE) {
             Window.setGameState(GameState.MAIN_MENU);
             Window.getDraw().getCoins().clear();
         } else return;
@@ -91,7 +94,7 @@ public class KeyboardHandler {
     private void start() {
         if (Window.getGameState() == GameState.MAIN_MENU) {
             Window.setGameState(GameState.GAME);
-        } else if (Window.getGameState() == GameState.PAUSE) {
+        } else if (Window.getGameState() == GameState.PAUSE || Window.getGameState() == GameState.GAME_OVER) {
             Window.setGameState(GameState.GAME);
         } else return;
         GameClock.get().setRunning(true);

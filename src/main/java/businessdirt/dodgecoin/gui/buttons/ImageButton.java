@@ -15,11 +15,15 @@ public class ImageButton {
     private final String name;
 
     public ImageButton(int x, int y, int width, int height, BufferedImage image, ActionListener listener, String name) {
-        this.image = resize(image, width, height);
+        this.image = image == null ? null : resize(image, width, height);
         this.name = name;
         this.enabled = true;
 
-        this.button = new JButton(new ImageIcon(this.image));
+        if (this.image != null) {
+            this.button = new JButton(new ImageIcon(this.image));
+        } else {
+            this.button = new JButton(name);
+        }
         this.button.setLocation(x, y);
         this.button.setSize(width, height);
         this.button.addActionListener(listener);

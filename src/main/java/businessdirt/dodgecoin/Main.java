@@ -17,17 +17,22 @@ public class Main {
         // load Assets
         FileHandler.loadAssets();
         Config.getConfig();
-        Window.get();
-
-        // Player
-        BufferedImage image = AssetPool.getImage("players/player.png");
-        Sprite playerSprite = new Sprite(Window.getGameXStart() + Constants.GAME_WIDTH / 2 - image.getWidth() * 3,
-                Window.getHeight() - (image.getHeight() * 6) - Constants.Y_OFFSET - 100,
-                image.getWidth() * 6, image.getHeight() * 6, image);
-        Window.getDraw().setPlayer(playerSprite);
 
         // Create Window
+        Window.get();
         Window.start();
+
+        // Player
+        BufferedImage playerImage = AssetPool.getImage("players/default.png");
+        Sprite playerSprite = new Sprite(Window.getGameXStart() + Constants.GAME_WIDTH / 2 - playerImage.getWidth() * 3,
+                Window.getHeight() - (playerImage.getHeight() * 6) - Constants.Y_OFFSET - 100,
+                playerImage.getWidth() * 6, playerImage.getHeight() * 6, playerImage);
+        Window.getDraw().setPlayer(playerSprite);
+
+        // Background
+        BufferedImage backgroundImage = AssetPool.getImage("backgrounds/default.png");
+        Sprite backgroundSprite = new Sprite(Window.getGameXStart(), -Constants.Y_OFFSET, Constants.GAME_WIDTH, Window.getHeight(), backgroundImage);
+        Window.getDraw().setBackground(backgroundSprite);
 
         // GameClock
         GameClock clock = GameClock.get();

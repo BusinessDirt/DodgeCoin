@@ -17,7 +17,7 @@ public class Config extends ConfigHandler {
             category = "Hidden",
             description = "Money"
     )
-    public static int money = 0;
+    public static float money = 0;
 
     public Config() {
         super(new File(Util.getConfigFolder(), "\\config.toml"));

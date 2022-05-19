@@ -10,6 +10,7 @@ import com.github.businessdirt.config.data.PropertyType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -39,8 +40,8 @@ public class Draw extends JLabel  {
         // game
         if (Window.getGameState() == GameState.GAME || Window.getGameState() == GameState.PAUSE || Window.getGameState() == GameState.GAME_OVER) {
             // background
-            if (background == null) {
-                //this.drawImage(g2d, background);
+            if (background != null) {
+                this.drawImage(g2d, background);
                 g2d.fillRect(0, 0, Window.getGameXStart(), Window.getHeight());
                 g2d.fillRect(Window.getGameXStart() + Constants.GAME_WIDTH, 0, Window.getGameXStart(), Window.getHeight());
             }
@@ -49,17 +50,19 @@ public class Draw extends JLabel  {
             try {
                 for (Sprite coin : coins) {
                     if (coin.isDraw()) this.drawImage(g2d, coin);
+                    // g2d.drawRect(coin.getX(), coin.getY(), coin.getWidth(), coin.getHeight());
                 }
             } catch (ConcurrentModificationException ignored) {}
 
             // player
             if (player != null) {
                 this.drawImage(g2d, player);
+                // g2d.drawRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
             }
 
             // score
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Score: " + Config.money, Constants.X_OFFSET  + 50, Constants.Y_OFFSET + 50);
+            g2d.drawString("Money: " + Config.money, Constants.X_OFFSET  + 50, Constants.Y_OFFSET + 50);
 
             // pause / game over TODO better screen overlay
             if (Window.getGameState() == GameState.PAUSE) {
@@ -108,14 +111,15 @@ public class Draw extends JLabel  {
     private void drawShop(Graphics2D g2d) throws IOException {
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setColor(Color.WHITE);
-        g2d.drawString("Shop", 75, Constants.X_OFFSET + 25);
+        drawCenteredStringX(g2d, "Shop", Constants.Y_OFFSET + 15);
         g2d.fillRect(50, Constants.Y_OFFSET + 50, Window.getWidth() - Constants.X_OFFSET - 100, 10);
+        drawCenteredStringX(g2d, "Money: " + Config.money, Constants.Y_OFFSET + 115);
     }
 
     private void drawSettings(Graphics2D g2d) throws IllegalAccessException, IOException {
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.setColor(Color.WHITE);
-        g2d.drawString("Settings", 75, Constants.X_OFFSET + 25);
+        drawCenteredStringX(g2d, "Settings", Constants.X_OFFSET + 25);
         g2d.fillRect(50, Constants.Y_OFFSET + 50, Window.getWidth() - Constants.X_OFFSET - 100, 10);
 
         BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
@@ -150,6 +154,10 @@ public class Draw extends JLabel  {
 
     public void drawImage(Graphics2D g2d, Sprite sprite) {
         g2d.drawImage(sprite.getImage(), sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), this);
+    }
+
+    private void drawCenteredStringX(Graphics2D g2d, String str, int y) {
+        g2d.drawString(str, (Window.getWidth() - Constants.X_OFFSET - g2d.getFontMetrics().stringWidth(str)) / 2, y);
     }
 
     public void addCoin(Coin coin) {

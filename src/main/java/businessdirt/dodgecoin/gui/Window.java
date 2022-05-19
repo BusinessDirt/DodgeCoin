@@ -9,6 +9,8 @@ import businessdirt.dodgecoin.gui.buttons.ImageButton;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -25,6 +27,7 @@ public class Window {
 
     private static GameState gameState;
     public static List<ImageButton> buttons;
+    public static List<ImageButton> shopButtons;
 
     private Window() {
         Window.width = Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -48,6 +51,7 @@ public class Window {
 
         try {
             Window.buttons = get().createButtons();
+            Window.shopButtons = get().createShopButtons();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,8 +72,18 @@ public class Window {
                 shopIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, shopIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, shopIcon, e -> {
                     if (Window.getGameState() == GameState.MAIN_MENU || Window.getGameState() == GameState.SETTINGS) {
                         Window.setGameState(GameState.SHOP);
+                        // disable all buttons except the cancel button
                         for (ImageButton b : buttons) {
                             if (!Objects.equals(b.getName(), "cancel")) b.setEnabled(false);
+                        }
+
+                        // enable shop buttons
+                        for (ImageButton b : Window.shopButtons) {
+                            if (!b.getName().equals("left") && !b.getName().equals("right")) {
+                                b.setEnabled(true);
+                            } else {
+                                if (Shop.getPages() > 1) b.setEnabled(true);
+                            }
                         }
                     }
                 }, "shop");
@@ -96,6 +110,52 @@ public class Window {
                 }, "settings");
         list.add(settings);
         return list;
+    }
+
+    private List<ImageButton> createShopButtons() throws IOException {
+        List<ImageButton> buttons = new LinkedList<>();
+        int x = Window.getWidth() / 5;
+        int y = Window.getHeight() / 4;
+
+        for (int i = 0; i < 3; i++) {
+            ImageButton button = new ImageButton(x * (i + 1) - 15 + 15 * i, y - 7, x, y, null, e -> {
+                Util.logEvent(e.toString());
+            }, "shop" + i);
+            button.getButton().setMargin(new Insets(5, 5, 5, 5));
+            button.setEnabled(false);
+            buttons.add(button);
+        }
+
+        for (int i = 3; i < 6; i++) {
+            ImageButton button = new ImageButton(x  * (i - 2) - 15 + 15 * (i - 3), y * 2 + 8, x, y, null, e -> {
+                Util.logEvent(e.getActionCommand());
+            }, "shop" + i);
+            button.getButton().setMargin(new Insets(5, 5, 5, 5));
+            button.setEnabled(false);
+            buttons.add(button);
+        }
+
+        BufferedImage leftArrowIcon = AssetPool.getImage("gui/arrow_left.png");
+        BufferedImage rightArrowIcon = AssetPool.getImage("gui/arrow_right.png");
+
+        int arrowY = (Window.getHeight() - Constants.Y_OFFSET - leftArrowIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER) / 2;
+
+        ImageButton leftArrow = new ImageButton(25, arrowY, leftArrowIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER,
+                leftArrowIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, leftArrowIcon, e -> {
+            Util.logEvent("Set shop page to " + Shop.decreasePage());
+        }, "left");
+        leftArrow.setEnabled(false);
+        buttons.add(leftArrow);
+
+        ImageButton rightArrow = new ImageButton(Window.getWidth() - Constants.X_OFFSET - 25 - rightArrowIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, arrowY,
+                rightArrowIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER,
+                rightArrowIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, rightArrowIcon, e -> {
+            Util.logEvent("Set shop page to " + Shop.increasePage());
+        }, "right");
+        rightArrow.setEnabled(false);
+        buttons.add(rightArrow);
+
+        return buttons;
     }
 
     public static Window get() {

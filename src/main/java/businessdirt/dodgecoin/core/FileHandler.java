@@ -1,6 +1,7 @@
 package businessdirt.dodgecoin.core;
 
 import businessdirt.dodgecoin.gui.AssetPool;
+import businessdirt.dodgecoin.gui.Shop;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -56,7 +57,15 @@ public class FileHandler {
         }
 
         // background
-        // TODO
+        List<File> backgroundFiles = FileHandler.listFiles("backgrounds/");
+        for (File file : backgroundFiles) {
+            AssetPool.getImage("backgrounds/" + file.getName());
+        }
+
+        // set shop pages; subtract 1 from each for default skins
+        int shopItems = playerFiles.size() + backgroundFiles.size() - 2;
+        int shopPages = shopItems / 6;
+        Shop.setPages(shopPages == 0 ? 1 : shopPages);
 
         Util.logEvent("Loaded " + coinFiles.size() + " coins, " + guiFiles.size() + " gui items, " + playerFiles.size() + " player skins");
     }
