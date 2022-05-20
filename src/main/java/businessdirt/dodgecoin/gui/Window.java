@@ -100,6 +100,7 @@ public class Window {
         ImageButton cancel = new ImageButton((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
                 Window.getHeight() - Constants.Y_OFFSET - 25 - cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
                 cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon, e -> {
+                    if (Window.getGameState() == GameState.MAIN_MENU) System.exit(0);
                     KeyboardHandler.get().cancel();
                 }, "cancel");
         list.add(cancel);
@@ -331,4 +332,3 @@ public class Window {
         return gameXStart;
     }
 }
-

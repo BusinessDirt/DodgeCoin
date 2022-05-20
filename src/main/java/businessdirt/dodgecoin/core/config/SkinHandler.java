@@ -74,8 +74,9 @@ public class SkinHandler {
     }
 
     public static void init() {
-        unlockedSkinFile = new File(Util.getConfigFolder(), "\\unlockedSkins.json");
-        skinPriceFile = new File(Util.getConfigFolder(), "\\skinPrices.json");
+        if (!new File(Util.getConfigFolder() + "\\skins").mkdirs()) Util.logEvent("Failed to create skin config folder!");
+        unlockedSkinFile = new File(Util.getConfigFolder() + "\\skins", "\\unlockedSkins.json");
+        skinPriceFile = new File(Util.getConfigFolder() + "\\skins", "\\skinPrices.json");
         load();
     }
 }

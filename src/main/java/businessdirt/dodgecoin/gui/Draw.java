@@ -63,9 +63,10 @@ public class Draw extends JLabel  {
                 if (hitboxes) g2d.drawRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
             }
 
-            // score
+            // money
+            g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(20.0f));
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Money: " + Config.money, Constants.X_OFFSET  + 50, Constants.Y_OFFSET + 50);
+            g2d.drawString("Money: " + (int) Config.money, Constants.X_OFFSET  + 50, Constants.Y_OFFSET + 50);
 
             // pause / game over TODO better screen overlay
             if (Window.getGameState() == GameState.PAUSE) {
@@ -91,7 +92,7 @@ public class Draw extends JLabel  {
             // money
             g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(34.0f));
             g2d.setColor(Color.WHITE);
-            drawCenteredStringX(g2d, "Money: " + Config.money, Constants.Y_OFFSET + 90 - g2d.getFontMetrics(g2d.getFont()).getHeight());
+            drawCenteredStringX(g2d, "Money: " + (int) Config.money, Constants.Y_OFFSET + 90 - g2d.getFontMetrics(g2d.getFont()).getHeight());
         } else if (Window.getGameState() == GameState.SHOP) { // Shop
             try {
                 drawShop(g2d);
