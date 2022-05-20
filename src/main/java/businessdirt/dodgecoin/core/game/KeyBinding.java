@@ -41,7 +41,7 @@ public class KeyBinding {
      * @param action from {@code javax.swing.AbstractAction}
      * @param modifier from {@code java.awt.event.InputEvent}
      */
-    private KeyBinding(int keyCode, AbstractAction action, int modifier) {
+    public KeyBinding(int keyCode, AbstractAction action, int modifier) {
         this.keyCodes = new int[] { keyCode };
         this.modifier = modifier;
         listener.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(keyCode, modifier), keyCode);

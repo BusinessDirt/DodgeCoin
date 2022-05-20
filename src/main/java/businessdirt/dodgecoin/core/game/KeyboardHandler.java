@@ -1,6 +1,7 @@
 package businessdirt.dodgecoin.core.game;
 
 import businessdirt.dodgecoin.core.Util;
+import businessdirt.dodgecoin.core.config.Config;
 import businessdirt.dodgecoin.core.config.Constants;
 import businessdirt.dodgecoin.gui.buttons.ImageButton;
 import businessdirt.dodgecoin.gui.images.Sprite;
@@ -8,6 +9,7 @@ import businessdirt.dodgecoin.gui.Window;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
 
@@ -24,13 +26,29 @@ public class KeyboardHandler {
         // Move left
         new KeyBinding(new int[] { KeyEvent.VK_A, KeyEvent.VK_LEFT }, new AbstractAction() {
             @Override
-            public void actionPerformed(ActionEvent e) { moveLeft(); }
+            public void actionPerformed(ActionEvent e) {
+                if (Config.hardMode) {
+                    GameClock.playerVelocity = -1;
+                } else {
+                    GameClock.playerVelocity = 0;
+                    int newX = Window.getDraw().getPlayer().getX() - Constants.MOVEMENT_SPEED;
+                    Window.getDraw().getPlayer().setX(Math.max(newX, Window.getGameXStart()));
+                }
+            }
         });
 
         // Move right
         new KeyBinding(new int[] { KeyEvent.VK_D, KeyEvent.VK_RIGHT }, new AbstractAction() {
             @Override
-            public void actionPerformed(ActionEvent e) { moveRight(); }
+            public void actionPerformed(ActionEvent e) {
+                if (Config.hardMode) {
+                    GameClock.playerVelocity = 1;
+                } else {
+                    GameClock.playerVelocity = 0;
+                    int newX = Window.getDraw().getPlayer().getX() + Constants.MOVEMENT_SPEED;
+                    Window.getDraw().getPlayer().setX(Math.min(newX, Window.getGameXStart() + Constants.GAME_WIDTH - Window.getDraw().getPlayer().getWidth()));
+                }
+            }
         });
 
         // Pause / back
@@ -47,29 +65,21 @@ public class KeyboardHandler {
             public void actionPerformed(ActionEvent e) { start(); }
         });
 
+        // Toggle Hitboxes
+        new KeyBinding(KeyEvent.VK_F3, new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) { Window.getDraw().toggleHitboxes(); }
+        }, InputEvent.SHIFT_DOWN_MASK);
+
         // Log Keybinding registration
         Util.logEvent("Keybindings registered!");
-    }
-
-    private void moveLeft() {
-        Sprite player = Window.getDraw().getPlayer();
-        if (player.getX() > Window.getGameXStart()) {
-            int newX = player.getX() - Constants.MOVEMENT_SPEED;
-            player.setX(Math.max(newX, Window.getGameXStart()));
-        }
-    }
-
-    private void moveRight() {
-        Sprite player = Window.getDraw().getPlayer();
-        if (player.getX() < Window.getGameXStart() + Constants.GAME_WIDTH - player.getWidth() - 7) {
-            int newX = player.getX() + Constants.MOVEMENT_SPEED;
-            player.setX(Math.min(newX, Window.getGameXStart() + Constants.GAME_WIDTH - 7));
-        }
     }
 
     public void cancel() {
         if (Window.getGameState() == GameState.GAME) {
             Window.setGameState(GameState.PAUSE);
+            GameClock.playerVelocity = 0;
+
             for (ImageButton b : Window.buttons) {
                 if (Objects.equals(b.getName(), "cancel")) b.setEnabled(true);
             }

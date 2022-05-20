@@ -1,17 +1,19 @@
 package businessdirt.dodgecoin.core;
 
+import businessdirt.dodgecoin.core.config.SkinHandler;
 import businessdirt.dodgecoin.gui.AssetPool;
 import businessdirt.dodgecoin.gui.Shop;
+import com.google.gson.JsonObject;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 public class FileHandler {
 
@@ -28,6 +30,15 @@ public class FileHandler {
         }
     }
 
+    public Font getFontFromResource(String fileName) {
+        try {
+            return Font.createFont(Font.TRUETYPE_FONT , get().getFileFromResourceAsStream(fileName));
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public BufferedImage getImageFromResource(String fileName) throws IOException {
         return ImageIO.read(getFileFromResourceAsStream(fileName));
     }
@@ -38,36 +49,63 @@ public class FileHandler {
 
     public static void loadAssets() throws IOException {
 
-        // coins
-        List<File> coinFiles = listFiles("coins/");
+        // load all coin sprites
+        List<File> coinFiles = listFiles("textures/coins/");
         for (File file : coinFiles) {
-            AssetPool.getImage("coins/" + file.getName());
+            AssetPool.getImage("textures/coins/" + file.getName());
         }
 
-        // gui
-        List<File> guiFiles = listFiles("gui/");
+        // load all gui-item sprites
+        List<File> guiFiles = listFiles("textures/gui/");
         for (File file : guiFiles) {
-            AssetPool.getImage("gui/" + file.getName());
+            AssetPool.getImage("textures/gui/" + file.getName());
         }
 
-        // players
-        List<File> playerFiles = listFiles("players/");
+        // load all player-skin sprites
+        List<File> playerFiles = listFiles("textures/players/");
         for (File file : playerFiles) {
-            AssetPool.getImage("players/" + file.getName());
+            String name = "textures/players/".concat(file.getName());
+            AssetPool.getImage(name);
+
+            // add the skin to it's corresponding save-file if it is not already in it
+            if (!file.getName().equals("default.png") && !SkinHandler.unlockedSkins.containsKey(name)) {
+                SkinHandler.unlockedSkins.put(name, false);
+                SkinHandler.save();
+            }
+
+            // add the price of the skin to it's corresponding save-file; default = 1.000.000
+            if (!file.getName().equals("default.png") && !SkinHandler.skinPrices.containsKey(name)) {
+                SkinHandler.skinPrices.put(name, 1000000);
+                SkinHandler.savePrices();
+            }
         }
 
-        // background
-        List<File> backgroundFiles = FileHandler.listFiles("backgrounds/");
+        // load all background sprites
+        List<File> backgroundFiles = FileHandler.listFiles("textures/backgrounds/");
         for (File file : backgroundFiles) {
-            AssetPool.getImage("backgrounds/" + file.getName());
+            String name = "textures/backgrounds/".concat(file.getName());
+            AssetPool.getImage(name);
+
+            // add the skin to it's corresponding save-file if it is not already in it
+            if (!file.getName().equals("default.png") && !SkinHandler.unlockedSkins.containsKey(name)) {
+                SkinHandler.unlockedSkins.put(name, false);
+                SkinHandler.save();
+            }
+
+            // add the price of the skin to it's corresponding save-file; default = 100.000
+            if (!file.getName().equals("default.png") && !SkinHandler.skinPrices.containsKey(name)) {
+                SkinHandler.skinPrices.put(name, 100000);
+                SkinHandler.savePrices();
+            }
         }
 
-        // set shop pages; subtract 1 from each for default skins
-        int shopItems = playerFiles.size() + backgroundFiles.size() - 2;
-        int shopPages = shopItems / 6;
+        // set the shop pages to match the amount of skins available
+        int shopItems = playerFiles.size() + backgroundFiles.size();
+        int shopPages = (int) Math.ceil((double) shopItems / 6);
         Shop.setPages(shopPages == 0 ? 1 : shopPages);
 
-        Util.logEvent("Loaded " + coinFiles.size() + " coins, " + guiFiles.size() + " gui items, " + playerFiles.size() + " player skins");
+        // log how many sprites where loaded
+        Util.logEvent("Loaded " + coinFiles.size() + " coins, " + guiFiles.size() + " gui items, " + playerFiles.size() + " player skins and " + backgroundFiles.size() + " backgrounds");
     }
 
     public static List<File> listFiles(String directoryName) {

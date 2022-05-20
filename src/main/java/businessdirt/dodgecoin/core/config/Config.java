@@ -15,9 +15,37 @@ public class Config extends ConfigHandler {
             type = PropertyType.NUMBER,
             name = "Money",
             category = "Hidden",
-            description = "Money"
+            description = "Money",
+            hidden = true
     )
-    public static float money = 0;
+    public static double money = 0;
+
+    @Property(
+            type = PropertyType.TEXT,
+            name = "Player Skin",
+            category = "Hidden",
+            description = "Player Skin for the game",
+            hidden = true
+    )
+    public static String playerSkin = "textures/players/default.png";
+
+    @Property(
+            type = PropertyType.TEXT,
+            name = "Background Skin",
+            category = "Hidden",
+            description = "Background Skin for the game",
+            hidden = true
+    )
+    public static String backgroundSkin = "textures/backgrounds/default.png";
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Hard Mode",
+            category = "Hidden",
+            description = "Adds a hard mode. Movement is faster and you can't stop.",
+            hidden = true
+    )
+    public static boolean hardMode = false;
 
     public Config() {
         super(new File(Util.getConfigFolder(), "\\config.toml"));

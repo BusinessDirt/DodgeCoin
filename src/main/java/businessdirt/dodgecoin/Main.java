@@ -3,8 +3,10 @@ package businessdirt.dodgecoin;
 import businessdirt.dodgecoin.core.config.Config;
 import businessdirt.dodgecoin.core.FileHandler;
 import businessdirt.dodgecoin.core.config.Constants;
+import businessdirt.dodgecoin.core.config.SkinHandler;
 import businessdirt.dodgecoin.core.game.GameClock;
 import businessdirt.dodgecoin.gui.AssetPool;
+import businessdirt.dodgecoin.gui.Shop;
 import businessdirt.dodgecoin.gui.images.Sprite;
 import businessdirt.dodgecoin.gui.Window;
 
@@ -15,7 +17,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         // load Assets
+        SkinHandler.init();
         FileHandler.loadAssets();
+        Shop.loadShopItems();
         Config.getConfig();
 
         // Create Window
@@ -23,14 +27,14 @@ public class Main {
         Window.start();
 
         // Player
-        BufferedImage playerImage = AssetPool.getImage("players/default.png");
+        BufferedImage playerImage = AssetPool.getImage(Config.playerSkin);
         Sprite playerSprite = new Sprite(Window.getGameXStart() + Constants.GAME_WIDTH / 2 - playerImage.getWidth() * 3,
                 Window.getHeight() - (playerImage.getHeight() * 6) - Constants.Y_OFFSET - 100,
                 playerImage.getWidth() * 6, playerImage.getHeight() * 6, playerImage);
         Window.getDraw().setPlayer(playerSprite);
 
         // Background
-        BufferedImage backgroundImage = AssetPool.getImage("backgrounds/default.png");
+        BufferedImage backgroundImage = AssetPool.getImage(Config.backgroundSkin);
         Sprite backgroundSprite = new Sprite(Window.getGameXStart(), -Constants.Y_OFFSET, Constants.GAME_WIDTH, Window.getHeight(), backgroundImage);
         Window.getDraw().setBackground(backgroundSprite);
 

@@ -1,7 +1,9 @@
 package businessdirt.dodgecoin.gui;
 
+import businessdirt.dodgecoin.core.FileHandler;
 import businessdirt.dodgecoin.core.config.Config;
 import businessdirt.dodgecoin.core.config.Constants;
+import businessdirt.dodgecoin.core.config.SkinHandler;
 import businessdirt.dodgecoin.core.game.GameState;
 import businessdirt.dodgecoin.gui.images.Coin;
 import businessdirt.dodgecoin.gui.images.Sprite;
@@ -10,10 +12,10 @@ import com.github.businessdirt.config.data.PropertyType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class Draw extends JLabel  {
     private final List<Coin> coins = new ArrayList<>();
     private Sprite player;
     private Sprite background;
+    private boolean hitboxes = false;
 
     //settings input
     private static JTextField verticalResolution;
@@ -50,14 +53,14 @@ public class Draw extends JLabel  {
             try {
                 for (Sprite coin : coins) {
                     if (coin.isDraw()) this.drawImage(g2d, coin);
-                    // g2d.drawRect(coin.getX(), coin.getY(), coin.getWidth(), coin.getHeight());
+                    if (hitboxes) g2d.drawRect(coin.getX(), coin.getY(), coin.getWidth(), coin.getHeight());
                 }
             } catch (ConcurrentModificationException ignored) {}
 
             // player
             if (player != null) {
                 this.drawImage(g2d, player);
-                // g2d.drawRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+                if (hitboxes) g2d.drawRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
             }
 
             // score
@@ -76,16 +79,19 @@ public class Draw extends JLabel  {
             g2d.fillRect(0, 0, getWidth(), getHeight());
 
             // logo
+            g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(34.0f));
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Dodge Coin", Constants.X_OFFSET + 50, Constants.Y_OFFSET + 50);
+            drawCenteredStringX(g2d, "DodgeCoin", (Window.getHeight() - g2d.getFontMetrics(g2d.getFont()).getHeight()) / 2);
 
             //start instructions
+            g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(34.0f));
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Press [ENTER] to start",Constants.X_OFFSET + 50, Constants.Y_OFFSET + 75);
+            drawCenteredStringX(g2d, "Press [ENTER] to start", (int) (Window.getHeight() * (3f / 4f)));
 
             // money
+            g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(34.0f));
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Money: " + Config.money, Constants.X_OFFSET + 50, Constants.Y_OFFSET + 100);
+            drawCenteredStringX(g2d, "Money: " + Config.money, Constants.Y_OFFSET + 90 - g2d.getFontMetrics(g2d.getFont()).getHeight());
         } else if (Window.getGameState() == GameState.SHOP) { // Shop
             try {
                 drawShop(g2d);
@@ -110,19 +116,49 @@ public class Draw extends JLabel  {
 
     private void drawShop(Graphics2D g2d) throws IOException {
         g2d.fillRect(0, 0, getWidth(), getHeight());
+
+        g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(34.0f));
         g2d.setColor(Color.WHITE);
-        drawCenteredStringX(g2d, "Shop", Constants.Y_OFFSET + 15);
+
+        drawCenteredStringX(g2d, "Shop", Constants.Y_OFFSET + 90 - g2d.getFontMetrics().getHeight());
         g2d.fillRect(50, Constants.Y_OFFSET + 50, Window.getWidth() - Constants.X_OFFSET - 100, 10);
-        drawCenteredStringX(g2d, "Money: " + Config.money, Constants.Y_OFFSET + 115);
+        drawCenteredStringX(g2d, "Money: " + Config.money, Constants.Y_OFFSET + 160);
+
+        // draw Item prices
+        g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(16.0f));
+        int x = Window.getWidth() / 5;
+        int y = Window.getHeight() / 4;
+
+        List<String> items = Shop.getShopItems();
+        for (int i = 0; i < items.size(); i++) {
+            int xPos = 0, yPos = 0;
+            if (i < 3) {
+                xPos = x * (i + 1) - 10 + 15 * i;
+                yPos = y - 15;
+            } else {
+                xPos = x * (i - 2) - 10 + 15 * (i - 3);
+                yPos = (y * 3 + 35);
+            }
+
+            // format the price for better reading
+            if (!items.get(i).endsWith("/default.png") || (SkinHandler.skinPrices.containsKey(items.get(i)) && !SkinHandler.unlockedSkins.get(items.get(i)))) {
+                NumberFormat nf = NumberFormat.getInstance(new Locale("de", "DE"));
+                int price = SkinHandler.skinPrices.get(items.get(i));
+                g2d.drawString(nf.format(price), xPos, yPos);
+            }
+        }
     }
 
     private void drawSettings(Graphics2D g2d) throws IllegalAccessException, IOException {
         g2d.fillRect(0, 0, getWidth(), getHeight());
+
+        g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(34.0f));
         g2d.setColor(Color.WHITE);
-        drawCenteredStringX(g2d, "Settings", Constants.X_OFFSET + 25);
+
+        drawCenteredStringX(g2d, "Settings", Constants.Y_OFFSET + 90 - g2d.getFontMetrics().getHeight());
         g2d.fillRect(50, Constants.Y_OFFSET + 50, Window.getWidth() - Constants.X_OFFSET - 100, 10);
 
-        BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
+        BufferedImage cancelIcon = AssetPool.getImage("textures/gui/cancel.png");
         drawImage(g2d, new Sprite((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
                 Window.getHeight() - Constants.Y_OFFSET - 25 - cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
                 cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon));
@@ -160,6 +196,10 @@ public class Draw extends JLabel  {
         g2d.drawString(str, (Window.getWidth() - Constants.X_OFFSET - g2d.getFontMetrics().stringWidth(str)) / 2, y);
     }
 
+    public void toggleHitboxes() {
+        this.hitboxes = !this.hitboxes;
+    }
+
     public void addCoin(Coin coin) {
         this.coins.add(coin);
     }
@@ -178,5 +218,9 @@ public class Draw extends JLabel  {
 
     public void setBackground(Sprite background) {
         this.background = background;
+    }
+
+    public Sprite getBackgroundS() {
+        return background;
     }
 }
