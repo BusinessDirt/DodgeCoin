@@ -20,8 +20,8 @@ public class Window {
     private static GameState gameState;
 
     private Window() {
-        this.width = 720;
-        this.height = 1080;
+        this.width = 480;
+        this.height = 760;
         Window.gameState = GameState.MAIN_MENU;
         Util.logEvent("Window initialized!");
     }
