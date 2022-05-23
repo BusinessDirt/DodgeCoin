@@ -44,6 +44,7 @@ public class GameClock extends Thread {
     }
 
     public void run() {
+        int addValue = 0;
         while (true) {
             try {
                 sleep(1);
@@ -90,6 +91,7 @@ public class GameClock extends Thread {
                             this.loopCounter = 0;
                             playerVelocity = 0;
                             downset = 1;
+                            combo = 10;
                             Window.getDraw().getCoins().clear();
 
                             for (ImageButton b : Window.buttons) {
@@ -98,14 +100,17 @@ public class GameClock extends Thread {
 
                             //set combo
                         } else if (coin.type == Coin.CoinType.BITCOIN) {
-                            //TODO: Dial in Values for combo
                             combo += 1;
-                            downset +=1;
-                            bitcoinValue *= combo;
+                            addValue = bitcoinValue*combo;
+                            if (combo % 3== 0) {
+                                if (Constants.COIN_DROP_SPEED > 1) {
+                                    Constants.COIN_DROP_SPEED -= 1;
+                                }
+                            }
                         }
 
 
-                        Config.money += coin.type == Coin.CoinType.DOGECOIN ? dogecoinValue : bitcoinValue;
+                        Config.money += coin.type == Coin.CoinType.DOGECOIN ? dogecoinValue : addValue;
                         Config.getConfig().markDirty();
                         Config.getConfig().writeData();
 

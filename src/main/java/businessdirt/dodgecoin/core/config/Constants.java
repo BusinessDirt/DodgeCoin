@@ -8,7 +8,7 @@ public class Constants {
     public static final int GAME_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width / 3;
 
     public static final int COIN_SPAWN_SPEED = 1000;
-    public static final int COIN_DROP_SPEED = 4;
+    public static int COIN_DROP_SPEED = 4;
     public static final int MOVEMENT_SPEED = Toolkit.getDefaultToolkit().getScreenSize().width / 96;
 
     public static final int X_OFFSET = 17;

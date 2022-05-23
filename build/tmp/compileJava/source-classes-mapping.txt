@@ -2,8 +2,8 @@ businessdirt/dodgecoin/gui/Draw.java
  businessdirt.dodgecoin.gui.Draw
 businessdirt/dodgecoin/gui/AssetPool.java
  businessdirt.dodgecoin.gui.AssetPool
-businessdirt/dodgecoin/core/config/Constants.java
- businessdirt.dodgecoin.core.config.Constants
+businessdirt/dodgecoin/core/config/SkinHandler.java
+ businessdirt.dodgecoin.core.config.SkinHandler
 businessdirt/dodgecoin/core/Util.java
  businessdirt.dodgecoin.core.Util
 businessdirt/dodgecoin/gui/buttons/ImageButton.java
@@ -13,12 +13,12 @@ businessdirt/dodgecoin/core/config/Config.java
 businessdirt/dodgecoin/gui/images/Coin.java
  businessdirt.dodgecoin.gui.images.Coin
  businessdirt.dodgecoin.gui.images.Coin$CoinType
-businessdirt/dodgecoin/core/game/GameState.java
- businessdirt.dodgecoin.core.game.GameState
+businessdirt/dodgecoin/core/APIHandler.java
+ businessdirt.dodgecoin.core.APIHandler
 businessdirt/dodgecoin/core/FileHandler.java
  businessdirt.dodgecoin.core.FileHandler
-businessdirt/dodgecoin/core/config/SkinHandler.java
- businessdirt.dodgecoin.core.config.SkinHandler
+businessdirt/dodgecoin/core/game/GameState.java
+ businessdirt.dodgecoin.core.game.GameState
 businessdirt/dodgecoin/gui/Shop.java
  businessdirt.dodgecoin.gui.Shop
 businessdirt/dodgecoin/core/game/KeyBinding.java
@@ -28,6 +28,8 @@ businessdirt/dodgecoin/gui/images/Sprite.java
 businessdirt/dodgecoin/gui/Window.java
  businessdirt.dodgecoin.gui.Window
  businessdirt.dodgecoin.gui.Window$1
+businessdirt/dodgecoin/core/config/Constants.java
+ businessdirt.dodgecoin.core.config.Constants
 businessdirt/dodgecoin/core/game/GameClock.java
  businessdirt.dodgecoin.core.game.GameClock
 businessdirt/dodgecoin/Main.java
