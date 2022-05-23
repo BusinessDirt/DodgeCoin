@@ -4,6 +4,7 @@ import businessdirt.dodgecoin.core.FileHandler;
 import businessdirt.dodgecoin.core.config.Config;
 import businessdirt.dodgecoin.core.config.Constants;
 import businessdirt.dodgecoin.core.config.SkinHandler;
+import businessdirt.dodgecoin.core.game.GameClock;
 import businessdirt.dodgecoin.core.game.GameState;
 import businessdirt.dodgecoin.gui.images.Coin;
 import businessdirt.dodgecoin.gui.images.Sprite;
@@ -68,11 +69,21 @@ public class Draw extends JLabel  {
             g2d.setColor(Color.WHITE);
             g2d.drawString("Money: " + (int) Config.money, Constants.X_OFFSET  + 50, Constants.Y_OFFSET + 50);
 
+            //Combo
+            g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(20.0f));
+            g2d.setColor(Color.WHITE);
+            g2d.drawString("Combo: " + (float) GameClock.combo/10, Constants.X_OFFSET  + 50, Constants.Y_OFFSET + 90);
             // pause / game over TODO better screen overlay
             if (Window.getGameState() == GameState.PAUSE) {
-                drawOverlay(g2d, new Color(83, 159, 81, 224));
+                drawOverlay(g2d, new Color(8, 255, 0, 224));
+                g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(20.0f));
+                g2d.setColor(Color.WHITE);
+                g2d.drawString("Paused", Constants.X_OFFSET  + 570, Constants.Y_OFFSET + 320);
             } else if (Window.getGameState() == GameState.GAME_OVER) {
                 drawOverlay(g2d, new Color(255, 0, 0, 224));
+                g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(20.0f));
+                g2d.setColor(Color.WHITE);
+                g2d.drawString("GAME OVER", Constants.X_OFFSET  + 520, Constants.Y_OFFSET + 320);
             }
         } else if (Window.getGameState() == GameState.MAIN_MENU) { // Main Menu
             // background

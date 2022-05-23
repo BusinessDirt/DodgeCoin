@@ -22,7 +22,7 @@ public class GameClock extends Thread {
 
     private static int bitcoinValue = 10;
     private static int dogecoinValue = 1;
-    private static int combo = 10;
+    public static int combo = 10;
     public static int playerVelocity = 0;
     private static final int coinSizeMultiplier = (int) (Constants.ICON_SIZE_MULTIPLIER * ((float) 2 / 3));
 
@@ -90,8 +90,9 @@ public class GameClock extends Thread {
                             this.running = false;
                             this.loopCounter = 0;
                             playerVelocity = 0;
-                            downset = 1;
                             combo = 10;
+                            Constants.COIN_DROP_SPEED = 4;
+                            addValue = bitcoinValue;
                             Window.getDraw().getCoins().clear();
 
                             for (ImageButton b : Window.buttons) {
