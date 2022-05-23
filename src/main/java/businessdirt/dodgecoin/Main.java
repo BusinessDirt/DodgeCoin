@@ -29,8 +29,8 @@ public class Main {
         // Player
         BufferedImage playerImage = AssetPool.getImage(Config.playerSkin);
         Sprite playerSprite = new Sprite(Window.getGameXStart() + Constants.GAME_WIDTH / 2 - playerImage.getWidth() * 3,
-                Window.getHeight() - (playerImage.getHeight() * 6) - Constants.Y_OFFSET - 100,
-                playerImage.getWidth() * 6, playerImage.getHeight() * 6, playerImage);
+                Window.getHeight() - (playerImage.getHeight() * Constants.ICON_SIZE_MULTIPLIER) - Constants.Y_OFFSET - Window.getHeight() / 10,
+                playerImage.getWidth() * Constants.ICON_SIZE_MULTIPLIER, playerImage.getHeight() * Constants.ICON_SIZE_MULTIPLIER, playerImage);
         Window.getDraw().setPlayer(playerSprite);
 
         // Background

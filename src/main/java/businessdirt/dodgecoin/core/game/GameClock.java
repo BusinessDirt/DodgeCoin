@@ -24,6 +24,7 @@ public class GameClock extends Thread {
     private static int dogecoinValue = 1;
     private static int combo = 10;
     public static int playerVelocity = 0;
+    private static final int coinSizeMultiplier = (int) (Constants.ICON_SIZE_MULTIPLIER * ((float) 2 / 3));
 
     private boolean running;
     private int loopCounter;
@@ -57,7 +58,8 @@ public class GameClock extends Thread {
                     BufferedImage imageBuffer = tmp <= 3 ? bitcoin : dogecoin;
 
                     int tmp2 = random.nextInt(Constants.GAME_WIDTH - Constants.X_OFFSET - imageBuffer.getWidth() * 4);
-                    Window.getDraw().addCoin(new Coin((Window.getWidth() - Constants.GAME_WIDTH) / 2 + tmp2, -imageBuffer.getHeight() * 4, imageBuffer.getWidth() * 4, imageBuffer.getHeight() * 4, imageBuffer, tmp <= 3 ? Coin.CoinType.BITCOIN : Coin.CoinType.DOGECOIN));
+                    System.out.println(coinSizeMultiplier);
+                    Window.getDraw().addCoin(new Coin((Window.getWidth() - Constants.GAME_WIDTH) / 2 + tmp2, -imageBuffer.getHeight() * coinSizeMultiplier, imageBuffer.getWidth() * coinSizeMultiplier, imageBuffer.getHeight() * coinSizeMultiplier, imageBuffer, tmp <= 3 ? Coin.CoinType.BITCOIN : Coin.CoinType.DOGECOIN));
                     loopCounter = 0;
                 }
 
