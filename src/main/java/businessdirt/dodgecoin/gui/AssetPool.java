@@ -20,9 +20,4 @@ public class AssetPool {
             return image;
         }
     }
-
-    public static BufferedImage getImage(Integer hashCode) {
-        if (AssetPool.images.containsKey(hashCode)) return AssetPool.images.get(hashCode);
-        return null;
-    }
 }

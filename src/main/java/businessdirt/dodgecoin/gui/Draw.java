@@ -1,33 +1,39 @@
 package businessdirt.dodgecoin.gui;
 
+import businessdirt.dodgecoin.core.FileHandler;
 import businessdirt.dodgecoin.core.config.Config;
-import businessdirt.dodgecoin.core.game.GameClock;
+import businessdirt.dodgecoin.core.config.Constants;
+import businessdirt.dodgecoin.core.config.SkinHandler;
 import businessdirt.dodgecoin.core.game.GameState;
-import businessdirt.dodgecoin.core.game.MouseHandler;
+import businessdirt.dodgecoin.gui.images.Coin;
+import businessdirt.dodgecoin.gui.images.Sprite;
 import com.github.businessdirt.config.data.Property;
 import com.github.businessdirt.config.data.PropertyType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
 
-public class Draw extends JLabel {
+public class Draw extends JLabel  {
 
-    private final List<Image> coins = new ArrayList<>();
-    private Image player;
-    private Image background;
+    private final List<Coin> coins = new ArrayList<>();
+    private Sprite player;
+    private Sprite background;
+    private boolean hitboxes = false;
 
-    public static final int X_OFFSET = 17;
-    public static final int Y_OFFSET = 40;
-    public static final int ICON_SIZE_MULTIPLIER = 6;
+    //settings input
+    private static JTextField verticalResolution;
 
+    private static JFrame frame;
 
+    private static JButton button;
+
+    private static JLabel label;
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -37,29 +43,36 @@ public class Draw extends JLabel {
         // game
         if (Window.getGameState() == GameState.GAME || Window.getGameState() == GameState.PAUSE || Window.getGameState() == GameState.GAME_OVER) {
             // background
-            if (background != null) drawImage(g2d, background);
+            if (background != null) {
+                this.drawImage(g2d, background);
+                g2d.fillRect(0, 0, Window.getGameXStart(), Window.getHeight());
+                g2d.fillRect(Window.getGameXStart() + Constants.GAME_WIDTH, 0, Window.getGameXStart(), Window.getHeight());
+            }
 
             // coins
             try {
-                for (Image coin : coins) {
-                    if (coin.isDraw()) drawImage(g2d, coin);
-                    g2d.drawString("Score: " + GameClock.getScore(), X_OFFSET  + 50, Y_OFFSET + 50);
+                for (Sprite coin : coins) {
+                    if (coin.isDraw()) this.drawImage(g2d, coin);
+                    if (hitboxes) g2d.drawRect(coin.getX(), coin.getY(), coin.getWidth(), coin.getHeight());
                 }
             } catch (ConcurrentModificationException ignored) {}
 
             // player
-            if (player != null) drawImage(g2d, player);
+            if (player != null) {
+                this.drawImage(g2d, player);
+                if (hitboxes) g2d.drawRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+            }
+
+            // money
+            g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(20.0f));
+            g2d.setColor(Color.WHITE);
+            g2d.drawString("Money: " + (int) Config.money, Constants.X_OFFSET  + 50, Constants.Y_OFFSET + 50);
 
             // pause / game over TODO better screen overlay
             if (Window.getGameState() == GameState.PAUSE) {
-                g2d.fillRect(0, 0, getWidth(), getHeight());
-                g2d.setColor(Color.WHITE);
-                g2d.drawString("Pause", X_OFFSET + 50, Y_OFFSET + 50);
-                g2d.drawString("Press [SPACE] or [ENTER] to resume or [ESC] to quit to main menu", X_OFFSET + 50, Y_OFFSET + 80);
+                drawOverlay(g2d, new Color(83, 159, 81, 224));
             } else if (Window.getGameState() == GameState.GAME_OVER) {
-                g2d.fillRect(0, 0, getWidth(), getHeight());
-                g2d.setColor(Color.WHITE);
-                g2d.drawString("Game Over", X_OFFSET + 50, Y_OFFSET + 50);
+                drawOverlay(g2d, new Color(255, 0, 0, 224));
             }
         } else if (Window.getGameState() == GameState.MAIN_MENU) { // Main Menu
             // background
@@ -67,42 +80,19 @@ public class Draw extends JLabel {
             g2d.fillRect(0, 0, getWidth(), getHeight());
 
             // logo
+            g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(34.0f));
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Dodge Coin", X_OFFSET + 50, Y_OFFSET + 50);
+            drawCenteredStringX(g2d, "DodgeCoin", (Window.getHeight() - g2d.getFontMetrics(g2d.getFont()).getHeight()) / 2);
 
             //start instructions
+            g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(34.0f));
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Press [ENTER] to start",X_OFFSET + 50, Y_OFFSET + 80);
+            drawCenteredStringX(g2d, "Press [ENTER] to start", (int) (Window.getHeight() * (3f / 4f)));
 
-            // reset score
-            GameClock.setScore(0);
-
-            // shop icon
-            try {
-                BufferedImage shopIcon = AssetPool.getImage("gui/shop.png");
-                drawImage(g2d, new Image(25, Window.getHeight() - Y_OFFSET - 25 - shopIcon.getHeight() * ICON_SIZE_MULTIPLIER,
-                        shopIcon.getWidth() * ICON_SIZE_MULTIPLIER, shopIcon.getHeight() * ICON_SIZE_MULTIPLIER, shopIcon));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // settings icon
-            try {
-                BufferedImage settingsIcon = AssetPool.getImage("gui/settings.png");
-                drawImage(g2d, new Image(Window.getWidth() - X_OFFSET - 25 - settingsIcon.getWidth() * ICON_SIZE_MULTIPLIER,
-                        Window.getHeight() - Y_OFFSET - 25 - settingsIcon.getHeight() * ICON_SIZE_MULTIPLIER,
-                        settingsIcon.getWidth() * ICON_SIZE_MULTIPLIER, settingsIcon.getHeight() * ICON_SIZE_MULTIPLIER, settingsIcon));
-
-                BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
-                drawImage(g2d, new Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
-                        Window.getHeight() - Draw.Y_OFFSET - 25 - cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER,
-                        cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            // play button
+            // money
+            g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(34.0f));
+            g2d.setColor(Color.WHITE);
+            drawCenteredStringX(g2d, "Money: " + (int) Config.money, Constants.Y_OFFSET + 90 - g2d.getFontMetrics(g2d.getFont()).getHeight());
         } else if (Window.getGameState() == GameState.SHOP) { // Shop
             try {
                 drawShop(g2d);
@@ -120,38 +110,68 @@ public class Draw extends JLabel {
         repaint();
     }
 
+    private void drawOverlay(Graphics2D g2d, Color color) {
+        g2d.setColor(color);
+        g2d.fillRect(Window.getWidth() / 4, Window.getHeight() / 4, Window.getWidth() / 2, Window.getHeight() / 2);
+    }
+
     private void drawShop(Graphics2D g2d) throws IOException {
         g2d.fillRect(0, 0, getWidth(), getHeight());
-        g2d.setColor(Color.WHITE);
-        g2d.drawString("Shop", X_OFFSET + 50, Y_OFFSET + 50);
-        g2d.drawString("Press [ESC] or [BACKSPACE] to return to main menu", X_OFFSET + 50, Y_OFFSET +80);
 
-        BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
-        drawImage(g2d, new Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
-                Window.getHeight() - Draw.Y_OFFSET - 25 - cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER,
-                cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon));
+        g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(34.0f));
+        g2d.setColor(Color.WHITE);
+
+        drawCenteredStringX(g2d, "Shop", Constants.Y_OFFSET + 90 - g2d.getFontMetrics().getHeight());
+        g2d.fillRect(50, Constants.Y_OFFSET + 50, Window.getWidth() - Constants.X_OFFSET - 100, 10);
+        drawCenteredStringX(g2d, "Money: " + Config.money, Constants.Y_OFFSET + 160);
+
+        // draw Item prices
+        g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(16.0f));
+        int x = Window.getWidth() / 5;
+        int y = Window.getHeight() / 4;
+
+        List<String> items = Shop.getShopItems();
+        for (int i = 0; i < items.size(); i++) {
+            int xPos = 0, yPos = 0;
+            if (i < 3) {
+                xPos = x * (i + 1) - 10 + 15 * i;
+                yPos = y - 15;
+            } else {
+                xPos = x * (i - 2) - 10 + 15 * (i - 3);
+                yPos = (y * 3 + 35);
+            }
+
+            // format the price for better reading
+            if (!items.get(i).endsWith("/default.png") || (SkinHandler.skinPrices.containsKey(items.get(i)) && !SkinHandler.unlockedSkins.get(items.get(i)))) {
+                NumberFormat nf = NumberFormat.getInstance(new Locale("de", "DE"));
+                int price = SkinHandler.skinPrices.get(items.get(i));
+                g2d.drawString(nf.format(price), xPos, yPos);
+            }
+        }
     }
 
     private void drawSettings(Graphics2D g2d) throws IllegalAccessException, IOException {
         g2d.fillRect(0, 0, getWidth(), getHeight());
-        g2d.setColor(Color.WHITE);
-        g2d.drawString("Settings", 75, 25);
-        g2d.drawString("Press [ESC] or [BACKSPACE] to return to main menu", 75, 50);
-        g2d.fillRect(50, Y_OFFSET + 50, Window.getWidth() - X_OFFSET - 100, 10);
 
-        BufferedImage cancelIcon = AssetPool.getImage("gui/cancel.png");
-        drawImage(g2d, new Image((Window.getWidth() / 2) - (cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER / 2) - X_OFFSET / 2,
-                Window.getHeight() - Draw.Y_OFFSET - 25 - cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER,
-                cancelIcon.getWidth() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Draw.ICON_SIZE_MULTIPLIER, cancelIcon));
+        g2d.setFont(FileHandler.get().getFontFromResource("fonts/8-bit.ttf").deriveFont(34.0f));
+        g2d.setColor(Color.WHITE);
+
+        drawCenteredStringX(g2d, "Settings", Constants.Y_OFFSET + 90 - g2d.getFontMetrics().getHeight());
+        g2d.fillRect(50, Constants.Y_OFFSET + 50, Window.getWidth() - Constants.X_OFFSET - 100, 10);
+
+        BufferedImage cancelIcon = AssetPool.getImage("textures/gui/cancel.png");
+        drawImage(g2d, new Sprite((Window.getWidth() / 2) - (cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER / 2) - Constants.X_OFFSET / 2,
+                Window.getHeight() - Constants.Y_OFFSET - 25 - cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER,
+                cancelIcon.getWidth() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon.getHeight() * Constants.ICON_SIZE_MULTIPLIER, cancelIcon));
 
         int i = 0;
         for (Field field : Config.class.getDeclaredFields()) {
-            int y = Y_OFFSET + 50 + i * 75;
+            int y = Constants.Y_OFFSET + 50 + i * 75;
             if (field.isAnnotationPresent(Property.class)) {
                 Property property = field.getAnnotation(Property.class);
 
                 if (!property.hidden()) {
-                    g2d.drawRect(75, y, Window.getWidth() - X_OFFSET - 150, 75);
+                    g2d.drawRect(75, y, Window.getWidth() - Constants.X_OFFSET - 150, 75);
                     g2d.drawString(property.description(), 110, y + 55);
 
                     if (property.type() == PropertyType.SWITCH) {
@@ -169,27 +189,39 @@ public class Draw extends JLabel {
         }
     }
 
-    private void drawImage(Graphics2D g2d, Image image) {
-        g2d.drawImage(image.getImage(), image.getX(), image.getY(), image.getWidth(), image.getHeight(), this);
+    public void drawImage(Graphics2D g2d, Sprite sprite) {
+        g2d.drawImage(sprite.getImage(), sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight(), this);
     }
 
-    public void addCoin(Image coin) {
+    private void drawCenteredStringX(Graphics2D g2d, String str, int y) {
+        g2d.drawString(str, (Window.getWidth() - Constants.X_OFFSET - g2d.getFontMetrics().stringWidth(str)) / 2, y);
+    }
+
+    public void toggleHitboxes() {
+        this.hitboxes = !this.hitboxes;
+    }
+
+    public void addCoin(Coin coin) {
         this.coins.add(coin);
     }
 
-    public List<Image> getCoins() {
+    public List<Coin> getCoins() {
         return coins;
     }
 
-    public void setPlayer(Image player) {
+    public void setPlayer(Sprite player) {
         this.player = player;
     }
 
-    public Image getPlayer() {
+    public Sprite getPlayer() {
         return this.player;
     }
 
-    public void setBackground(Image background) {
+    public void setBackground(Sprite background) {
         this.background = background;
+    }
+
+    public Sprite getBackgroundS() {
+        return background;
     }
 }

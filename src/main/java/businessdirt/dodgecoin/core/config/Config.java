@@ -12,41 +12,45 @@ public class Config extends ConfigHandler {
     private static Config instance;
 
     @Property(
-            type = PropertyType.SWITCH,
-            name = "Switch",
-            category = "Settings",
-            description = "description"
-    )
-    public static boolean switchs = true;
-
-    @Property(
             type = PropertyType.NUMBER,
-            name = "Number",
-            category = "Settings",
-            description = "description"
+            name = "Money",
+            category = "Hidden",
+            description = "Money",
+            hidden = true
     )
-    public static int number = 0;
-
-    @Property(
-            type = PropertyType.SLIDER,
-            name = "Slider",
-            category = "Settings",
-            description = "description"
-    )
-    public static double slider = 0;
+    public static double money = 0;
 
     @Property(
             type = PropertyType.TEXT,
-            name = "Text",
-            category = "Settings",
-            description = "description"
+            name = "Player Skin",
+            category = "Hidden",
+            description = "Player Skin for the game",
+            hidden = true
     )
-    public static String text = "test value";
+    public static String playerSkin = "textures/players/default.png";
+
+    @Property(
+            type = PropertyType.TEXT,
+            name = "Background Skin",
+            category = "Hidden",
+            description = "Background Skin for the game",
+            hidden = true
+    )
+    public static String backgroundSkin = "textures/backgrounds/default.png";
+
+    @Property(
+            type = PropertyType.SWITCH,
+            name = "Hard Mode",
+            category = "Hidden",
+            description = "Adds a hard mode. Movement is faster and you can't stop.",
+            hidden = true
+    )
+    public static boolean hardMode = false;
 
     public Config() {
         super(new File(Util.getConfigFolder(), "\\config.toml"));
         initialize();
-        Util.logEvent("Configuration loaded!");
+        Util.logEvent("Configuration loaded! " + Util.getConfigFolder());
     }
 
     public static Config getConfig() {

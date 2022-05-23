@@ -2,11 +2,12 @@ package businessdirt.dodgecoin;
 
 import businessdirt.dodgecoin.core.config.Config;
 import businessdirt.dodgecoin.core.FileHandler;
+import businessdirt.dodgecoin.core.config.Constants;
+import businessdirt.dodgecoin.core.config.SkinHandler;
 import businessdirt.dodgecoin.core.game.GameClock;
-import businessdirt.dodgecoin.core.game.MouseHandler;
 import businessdirt.dodgecoin.gui.AssetPool;
-import businessdirt.dodgecoin.gui.Draw;
-import businessdirt.dodgecoin.gui.Image;
+import businessdirt.dodgecoin.gui.Shop;
+import businessdirt.dodgecoin.gui.images.Sprite;
 import businessdirt.dodgecoin.gui.Window;
 
 import java.awt.image.BufferedImage;
@@ -16,17 +17,26 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         // load Assets
+        SkinHandler.init();
         FileHandler.loadAssets();
+        Shop.loadShopItems();
         Config.getConfig();
 
-        // Player
-        BufferedImage image = AssetPool.getImage("players/player.png");
-        Image playerImage = new Image(0, Window.getHeight() - (image.getHeight() * 6) - Draw.Y_OFFSET - 100,
-                image.getWidth() * 6, image.getHeight() * 6, image);
-        Window.getDraw().setPlayer(playerImage);
-
         // Create Window
+        Window.get();
         Window.start();
+
+        // Player
+        BufferedImage playerImage = AssetPool.getImage(Config.playerSkin);
+        Sprite playerSprite = new Sprite(Window.getGameXStart() + Constants.GAME_WIDTH / 2 - playerImage.getWidth() * 3,
+                Window.getHeight() - (playerImage.getHeight() * 6) - Constants.Y_OFFSET - 100,
+                playerImage.getWidth() * 6, playerImage.getHeight() * 6, playerImage);
+        Window.getDraw().setPlayer(playerSprite);
+
+        // Background
+        BufferedImage backgroundImage = AssetPool.getImage(Config.backgroundSkin);
+        Sprite backgroundSprite = new Sprite(Window.getGameXStart(), -Constants.Y_OFFSET, Constants.GAME_WIDTH, Window.getHeight(), backgroundImage);
+        Window.getDraw().setBackground(backgroundSprite);
 
         // GameClock
         GameClock clock = GameClock.get();

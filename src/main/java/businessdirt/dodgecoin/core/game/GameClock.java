@@ -2,41 +2,37 @@ package businessdirt.dodgecoin.core.game;
 
 import businessdirt.dodgecoin.core.FileHandler;
 import businessdirt.dodgecoin.core.Util;
-import businessdirt.dodgecoin.gui.Draw;
-import businessdirt.dodgecoin.gui.Image;
+import businessdirt.dodgecoin.core.config.Config;
+import businessdirt.dodgecoin.core.config.Constants;
+import businessdirt.dodgecoin.gui.buttons.ImageButton;
+import businessdirt.dodgecoin.gui.images.Coin;
 import businessdirt.dodgecoin.gui.Window;
+import businessdirt.dodgecoin.gui.images.Sprite;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ConcurrentModificationException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class GameClock extends Thread {
 
     private static GameClock instance;
 
-    public final int COIN_SPAWN_SPEED;
-    public final int COIN_DROP_SPEED;
-    public final int MOVEMENT_SPEED = 10;
+    public static int bitcoinValue = 100;
+    public static int dogecoinValue = 1;
+    public static int playerVelocity = 0;
 
     private boolean running;
     private int loopCounter;
 
-    private BufferedImage bitcoin;
-    private BufferedImage dogecoin;
-    private BufferedImage imageBuffer;
-    private Random random = new Random();
+    private BufferedImage bitcoin, dogecoin;
+    private final Random random = new Random();
 
     //TODO set coin value based on stock market API
-    private static int BitcoinValue = 10;
-
-    private static int DogecoinValue = 1;
-
-    private static int score = 0;
 
     private GameClock() {
-        this.COIN_DROP_SPEED = 7;
-        this.COIN_SPAWN_SPEED = 2000;
         this.running = false;
         this.loopCounter = 0;
         this.loadCoins();
@@ -44,55 +40,94 @@ public class GameClock extends Thread {
     }
 
     public void run() {
-
         while (true) {
             try {
-                sleep(GameClock.get().COIN_DROP_SPEED);
+                sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             if (running) {
                 // Spawn coin
-                if (loopCounter / COIN_DROP_SPEED == COIN_SPAWN_SPEED / COIN_DROP_SPEED && loopCounter % COIN_DROP_SPEED == 0) {
+                if (loopCounter >= Constants.COIN_SPAWN_SPEED) {
                     // load Image
                     int tmp = random.nextInt(20);
-                    imageBuffer = tmp <= 3 ? bitcoin : dogecoin;
+                    BufferedImage imageBuffer = tmp <= 3 ? bitcoin : dogecoin;
 
-                    tmp = random.nextInt(Window.getWidth()- Draw.X_OFFSET - imageBuffer.getWidth() * 4);
-                    Window.getDraw().addCoin(new Image(tmp, 0, imageBuffer.getWidth() * 4, imageBuffer.getHeight() * 4, imageBuffer));
+                    int tmp2 = random.nextInt(Constants.GAME_WIDTH - Constants.X_OFFSET - imageBuffer.getWidth() * 4);
+                    Window.getDraw().addCoin(new Coin((Window.getWidth() - Constants.GAME_WIDTH) / 2 + tmp2, -imageBuffer.getHeight() * 4, imageBuffer.getWidth() * 4, imageBuffer.getHeight() * 4, imageBuffer, tmp <= 3 ? Coin.CoinType.BITCOIN : Coin.CoinType.DOGECOIN));
                     loopCounter = 0;
                 }
 
                 // Move coins
-                List<Image> coins = Window.getDraw().getCoins();
-                for (Image coin : coins) {
-                    if (coin.getY() == Window.getHeight() - coin.getHeight() - 100 && coin.isDraw()) {
-                        coin.setDraw(false);
-                    } else if (coin.isDraw()) {
-                        coin.setY(coin.getY() + 1);
-                    }
+                List<Coin> coins = Window.getDraw().getCoins();
+                if (loopCounter % Constants.COIN_DROP_SPEED == 0) {
+                    try {
+                        for (Coin coin : coins) {
+                            if (coin.getY() == Window.getHeight() - Constants.Y_OFFSET - coin.getHeight() - 100 && coin.isDraw()) {
+                                coin.setDraw(false);
+                                Window.getDraw().getCoins().remove(coin);
+                            } else if (coin.isDraw()) {
+                                coin.setY(coin.getY() + 1);
+                            }
+                        }
+                    } catch (ConcurrentModificationException ignored) {}
                 }
 
                 // Hit detection
-                // TODO Dogecoin und Bitcoin detection / Gameover; fix collision detection
-                for (Image coin : coins) {
-                    if (coin.intersects(Window.getDraw().getPlayer())) {
+                try { for (Coin coin : coins) {
+                    if (coin.intersects(Window.getDraw().getPlayer()) && coin.isDraw()) {
                         coin.setDraw(false);
-                        coin.setX(69420);
-                        score = score + DogecoinValue;
+
+                        // Game-over mechanic
+                        if (coin.type == Coin.CoinType.DOGECOIN) {
+                            Window.setGameState(GameState.GAME_OVER);
+                            this.running = false;
+                            this.loopCounter = 0;
+                            playerVelocity = 0;
+                            Window.getDraw().getCoins().clear();
+
+                            for (ImageButton b : Window.buttons) {
+                                if (Objects.equals(b.getName(), "cancel")) b.setEnabled(true);
+                            }
+                        }
+
+                        Config.money += coin.type == Coin.CoinType.DOGECOIN ? dogecoinValue : bitcoinValue;
+                        Config.getConfig().markDirty();
+                        Config.getConfig().writeData();
+
+                        Window.getDraw().getCoins().remove(coin);
+                    }
+                }} catch (ConcurrentModificationException ignore) {}
+
+                // Move player
+                Sprite player = Window.getDraw().getPlayer();
+                if (playerVelocity < 0 && loopCounter % 2 == 0) {
+                    int newX = player.getX() + playerVelocity * (Config.hardMode ? 1 : Constants.MOVEMENT_SPEED);
+                    if (!Config.hardMode) {
+                        player.setX(Math.max(newX, Window.getGameXStart()));
+                    } else {
+                        player.setX(newX < Window.getGameXStart() ? (Window.getGameXStart() + Constants.GAME_WIDTH - player.getWidth()) : newX);
+                    }
+                } else if (playerVelocity > 0 && loopCounter % 2 == 0) {
+                    int newX = player.getX() + playerVelocity * (Config.hardMode ? 1 : Constants.MOVEMENT_SPEED);
+                    if (!Config.hardMode) {
+                        player.setX(Math.min(newX, Window.getGameXStart() + Constants.GAME_WIDTH - player.getWidth()));
+                    } else {
+                        player.setX(newX > Window.getGameXStart() + Constants.GAME_WIDTH - player.getWidth() ? Window.getGameXStart() : newX);
                     }
                 }
+                if (!Config.hardMode) playerVelocity = 0;
 
                 // increase loopCounter
-                this.loopCounter += COIN_DROP_SPEED;
+                this.loopCounter++;
             }
         }
     }
 
     private void loadCoins() {
         try {
-            bitcoin = FileHandler.get().getImageFromResource("coins/bitcoin.png");
-            dogecoin = FileHandler.get().getImageFromResource("coins/dogecoin.png");
+            bitcoin = FileHandler.get().getImageFromResource("textures/coins/bitcoin.png");
+            dogecoin = FileHandler.get().getImageFromResource("textures/coins/dogecoin.png");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -110,8 +145,4 @@ public class GameClock extends Thread {
     public void setRunning(boolean running) {
         this.running = running;
     }
-
-    public static int getScore(){return score;}
-
-    public static void setScore(int i){score = i;}
 }

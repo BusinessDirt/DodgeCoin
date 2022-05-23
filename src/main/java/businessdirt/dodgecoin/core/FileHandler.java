@@ -1,23 +1,23 @@
 package businessdirt.dodgecoin.core;
 
+import businessdirt.dodgecoin.core.config.SkinHandler;
 import businessdirt.dodgecoin.gui.AssetPool;
+import businessdirt.dodgecoin.gui.Shop;
+import com.google.gson.JsonObject;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 
 public class FileHandler {
 
     private static FileHandler instance;
-
-    private static final int DEFAULT_BUFFER_SIZE = 8192;
-
-    private static final int MAX_BUFFER_SIZE = Integer.MAX_VALUE - 8;
 
     public InputStream getFileFromResourceAsStream(String fileName) {
         ClassLoader classLoader = getClass().getClassLoader();
@@ -30,116 +30,94 @@ public class FileHandler {
         }
     }
 
+    public Font getFontFromResource(String fileName) {
+        try {
+            return Font.createFont(Font.TRUETYPE_FONT , get().getFileFromResourceAsStream(fileName));
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public BufferedImage getImageFromResource(String fileName) throws IOException {
         return ImageIO.read(getFileFromResourceAsStream(fileName));
     }
 
     public String getPath(String resourceFolder) {
-        return getClass().getClassLoader().getResource(resourceFolder).getPath();
+        return Objects.requireNonNull(getClass().getClassLoader().getResource(resourceFolder)).getPath();
     }
 
     public static void loadAssets() throws IOException {
 
-        // coins
-        List<File> coinFiles = listf("coins/");
+        // load all coin sprites
+        List<File> coinFiles = listFiles("textures/coins/");
         for (File file : coinFiles) {
-            AssetPool.getImage("coins/" + file.getName());
+            AssetPool.getImage("textures/coins/" + file.getName());
         }
 
-        // gui
-        List<File> guiFiles = listf("gui/");
+        // load all gui-item sprites
+        List<File> guiFiles = listFiles("textures/gui/");
         for (File file : guiFiles) {
-            AssetPool.getImage("gui/" + file.getName());
+            AssetPool.getImage("textures/gui/" + file.getName());
         }
 
-        // players
-        List<File> playerFiles = listf("players/");
+        // load all player-skin sprites
+        List<File> playerFiles = listFiles("textures/players/");
         for (File file : playerFiles) {
-            AssetPool.getImage("players/" + file.getName());
+            String name = "textures/players/".concat(file.getName());
+            AssetPool.getImage(name);
+
+            // add the skin to it's corresponding save-file if it is not already in it
+            if (!file.getName().equals("default.png") && !SkinHandler.unlockedSkins.containsKey(name)) {
+                SkinHandler.unlockedSkins.put(name, false);
+                SkinHandler.save();
+            }
+
+            // add the price of the skin to it's corresponding save-file; default = 1.000.000
+            if (!file.getName().equals("default.png") && !SkinHandler.skinPrices.containsKey(name)) {
+                SkinHandler.skinPrices.put(name, 1000000);
+                SkinHandler.savePrices();
+            }
         }
 
-        // background
-        // TODO
+        // load all background sprites
+        List<File> backgroundFiles = FileHandler.listFiles("textures/backgrounds/");
+        for (File file : backgroundFiles) {
+            String name = "textures/backgrounds/".concat(file.getName());
+            AssetPool.getImage(name);
 
-        Util.logEvent("Loaded " + coinFiles.size() + " coins, " + guiFiles.size() + " gui item, " + playerFiles.size() + " player skins");
+            // add the skin to it's corresponding save-file if it is not already in it
+            if (!file.getName().equals("default.png") && !SkinHandler.unlockedSkins.containsKey(name)) {
+                SkinHandler.unlockedSkins.put(name, false);
+                SkinHandler.save();
+            }
+
+            // add the price of the skin to it's corresponding save-file; default = 100.000
+            if (!file.getName().equals("default.png") && !SkinHandler.skinPrices.containsKey(name)) {
+                SkinHandler.skinPrices.put(name, 100000);
+                SkinHandler.savePrices();
+            }
+        }
+
+        // set the shop pages to match the amount of skins available
+        int shopItems = playerFiles.size() + backgroundFiles.size();
+        int shopPages = (int) Math.ceil((double) shopItems / 6);
+        Shop.setPages(shopPages == 0 ? 1 : shopPages);
+
+        // log how many sprites where loaded
+        Util.logEvent("Loaded " + coinFiles.size() + " coins, " + guiFiles.size() + " gui items, " + playerFiles.size() + " player skins and " + backgroundFiles.size() + " backgrounds");
     }
 
-    public static List<File> listf(String directoryName) {
+    public static List<File> listFiles(String directoryName) {
         File directory = new File(FileHandler.get().getPath(directoryName));
 
-        List<File> resultList = new ArrayList<File>();
-
         // get all the files from a directory
-        File[] fList = directory.listFiles();
-        resultList.addAll(Arrays.asList(fList));
-        for (File file : fList) {
-            if (file.isDirectory()) {
-                resultList.addAll(listf(file.getAbsolutePath()));
-            }
+        File[] files = directory.listFiles();
+        List<File> resultList = new ArrayList<>(Arrays.asList(Objects.requireNonNull(files)));
+        for (File file : files) {
+            if (file.isDirectory()) resultList.addAll(listFiles(file.getAbsolutePath()));
         }
-        //System.out.println(fList);
         return resultList;
-    }
-
-    private byte[] readNBytes(InputStream is, int len) throws IOException {
-        if (len < 0) {
-            throw new IllegalArgumentException("len < 0");
-        }
-
-        List<byte[]> bufs = null;
-        byte[] result = null;
-        int total = 0;
-        int remaining = len;
-        int n;
-        do {
-            byte[] buf = new byte[Math.min(remaining, DEFAULT_BUFFER_SIZE)];
-            int nread = 0;
-
-            // read to EOF which may read more or less than buffer size
-            while ((n = is.read(buf, nread,
-                    Math.min(buf.length - nread, remaining))) > 0) {
-                nread += n;
-                remaining -= n;
-            }
-
-            if (nread > 0) {
-                if (MAX_BUFFER_SIZE - total < nread) {
-                    throw new OutOfMemoryError("Required array size too large");
-                }
-                total += nread;
-                if (result == null) {
-                    result = buf;
-                } else {
-                    if (bufs == null) {
-                        bufs = new ArrayList<>();
-                        bufs.add(result);
-                    }
-                    bufs.add(buf);
-                }
-            }
-            // if the last call to read returned -1 or the number of bytes
-            // requested have been read then break
-        } while (n >= 0 && remaining > 0);
-
-        if (bufs == null) {
-            if (result == null) {
-                return new byte[0];
-            }
-            return result.length == total ?
-                    result : Arrays.copyOf(result, total);
-        }
-
-        result = new byte[total];
-        int offset = 0;
-        remaining = total;
-        for (byte[] b : bufs) {
-            int count = Math.min(b.length, remaining);
-            System.arraycopy(b, 0, result, offset, count);
-            offset += count;
-            remaining -= count;
-        }
-
-        return result;
     }
 
     public static FileHandler get() {
