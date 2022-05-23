@@ -20,12 +20,15 @@ public class GameClock extends Thread {
 
     private static GameClock instance;
 
-    public static int bitcoinValue = 100;
-    public static int dogecoinValue = 1;
+    private static int bitcoinValue = 10;
+    private static int dogecoinValue = 1;
+    private static int combo = 10;
     public static int playerVelocity = 0;
 
     private boolean running;
     private int loopCounter;
+
+    private int downset = 1;
 
     private BufferedImage bitcoin, dogecoin;
     private final Random random = new Random();
@@ -67,7 +70,7 @@ public class GameClock extends Thread {
                                 coin.setDraw(false);
                                 Window.getDraw().getCoins().remove(coin);
                             } else if (coin.isDraw()) {
-                                coin.setY(coin.getY() + 1);
+                                coin.setY(coin.getY() + downset);
                             }
                         }
                     } catch (ConcurrentModificationException ignored) {}
@@ -84,12 +87,21 @@ public class GameClock extends Thread {
                             this.running = false;
                             this.loopCounter = 0;
                             playerVelocity = 0;
+                            downset = 1;
                             Window.getDraw().getCoins().clear();
 
                             for (ImageButton b : Window.buttons) {
                                 if (Objects.equals(b.getName(), "cancel")) b.setEnabled(true);
                             }
+
+                            //set combo
+                        } else if (coin.type == Coin.CoinType.BITCOIN) {
+                            //TODO: Dial in Values for combo
+                            combo += 1;
+                            downset +=1;
+                            bitcoinValue *= combo;
                         }
+
 
                         Config.money += coin.type == Coin.CoinType.DOGECOIN ? dogecoinValue : bitcoinValue;
                         Config.getConfig().markDirty();
