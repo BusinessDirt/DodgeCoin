@@ -1,9 +1,10 @@
 package businessdirt.dodgecoin.game.objects;
 
 import businessdirt.dodgecoin.DodgeCoin;
+import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.game.Constants;
-import businessdirt.dodgecoin.input.Keyboard;
-import businessdirt.dodgecoin.renderer.Renderer;
+import businessdirt.dodgecoin.core.input.Keyboard;
+import businessdirt.dodgecoin.core.renderer.Renderer;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,7 +20,7 @@ public class Player extends GameObject {
     }
 
     private Player(boolean animated) {
-        super("textures/players/default.png", Constants.CENTER_X - 8 * Constants.PLAYER_SIZE_MULTIPLIER, Constants.PLAYER_Y_START,
+        super(Config.playerSkin, Constants.CENTER_X - 8 * Constants.PLAYER_SIZE_MULTIPLIER, Constants.PLAYER_Y_START,
                 16 * Constants.PLAYER_SIZE_MULTIPLIER, 32 * Constants.PLAYER_SIZE_MULTIPLIER);
 
         // whether the player texture is animated or not
@@ -74,6 +75,10 @@ public class Player extends GameObject {
     @Override
     public void draw() {
         Renderer.get().drawImage(this.animationFrame, this.x, this.y, this.width, this.height);
+    }
+
+    public void setTexture(String path) {
+        this.animationFrame.setTexture(DodgeCoin.assets.get(path, Texture.class));
     }
 
     public static Player get() {

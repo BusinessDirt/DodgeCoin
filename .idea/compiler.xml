@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="1.7">
-      <module name="DodgeCoin.desktop" target="1.8" />
-      <module name="DodgeCoin.desktop.main" target="1.8" />
-      <module name="DodgeCoin.desktop.test" target="1.8" />
+    <bytecodeTargetLevel target="1.8">
       <module name="LibGDXGame.desktop" target="1.8" />
       <module name="LibGDXGame.desktop.main" target="1.8" />
       <module name="LibGDXGame.desktop.test" target="1.8" />

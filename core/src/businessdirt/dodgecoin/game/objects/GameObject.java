@@ -1,7 +1,7 @@
 package businessdirt.dodgecoin.game.objects;
 
 import businessdirt.dodgecoin.DodgeCoin;
-import businessdirt.dodgecoin.renderer.Renderer;
+import businessdirt.dodgecoin.core.renderer.Renderer;
 import com.badlogic.gdx.graphics.Texture;
 
 public class GameObject {
