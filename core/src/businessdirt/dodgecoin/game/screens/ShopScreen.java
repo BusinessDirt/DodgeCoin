@@ -22,18 +22,18 @@ import java.util.Objects;
 
 public class ShopScreen extends ScreenAdapter {
 
-    private static int playerSkinID, backgroundSkinID;
-    private Renderer renderer;
-    private ImageButton left, right;
-    private ShopButton[] shop;
+    private final ImageButton left, right;
+    private final ShopButton[] shop;
 
     // used for the actual shop
     public static List<String> shopItems = new ArrayList<>();
-    private int pages, page;
+    private final int pages;
+    private int page;
 
+    @SuppressWarnings("all")
     public ShopScreen() {
 
-        renderer = Renderer.newInstance();
+        Renderer.newInstance();
         left = new ImageButton("textures/gui/arrow_left.png", 50, Constants.CENTER_Y - 50, 100, 100);
         right = new ImageButton("textures/gui/arrow_right.png", Constants.VIEWPORT_WIDTH - 150, Constants.CENTER_Y - 50, 100, 100);
 
@@ -44,8 +44,8 @@ public class ShopScreen extends ScreenAdapter {
         int y = Constants.VIEWPORT_HEIGHT / 4;
 
         for (int i = 0; i < shop.length; i++) {
-            int xPos = 50;
-            int yPos = 50;
+            int xPos;
+            int yPos;
             if (i < 3) {
                 xPos = x * (i + 1) - 15 + 15 * i;
                 yPos = Constants.VIEWPORT_HEIGHT - (x * 2 - y + 20);
@@ -127,8 +127,8 @@ public class ShopScreen extends ScreenAdapter {
         int x = Constants.VIEWPORT_WIDTH / 5;
         int y = Constants.VIEWPORT_HEIGHT / 4;
         for (int i = 0; i < shop.length; i++) {
-            int xPos = 50;
-            int yPos = 50;
+            int xPos;
+            int yPos;
             if (i < 3) {
                 xPos = x * (i + 1) - 15 + 15 * i;
                 yPos = Constants.VIEWPORT_HEIGHT - (x - y - 20);
@@ -153,16 +153,10 @@ public class ShopScreen extends ScreenAdapter {
         }
 
         // IMPORTANT: if this is removed, nothing will be drawn to the screen
-        renderer.render(delta);
+        Renderer.get().render();
     }
 
     private void setSkin(String skin) {
-        // Set color for buttons
-        /*shop.forEach(button -> {
-            if (!Objects.equals(button.getName(), "left") && !Objects.equals(button.getName(), "right"))
-                button.getButton().setBorder(BorderFactory.createLineBorder(Color.RED, 4));
-        });*/
-
         if (skin.startsWith("textures/players")) Player.get().setTexture(skin);
         else if (skin.startsWith("textures/backgrounds")) Background.get().setTexture(skin);
 
@@ -200,6 +194,6 @@ public class ShopScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        renderer.dispose();
+        Renderer.get().dispose();
     }
 }

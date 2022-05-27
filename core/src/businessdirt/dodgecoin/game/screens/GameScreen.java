@@ -17,8 +17,8 @@ import com.badlogic.gdx.graphics.GL20;
 public class GameScreen extends ScreenAdapter {
 
     private final Renderer renderer;
-    private Player player;
-    private Background background;
+    private final Player player;
+    private final Background background;
     private static GameState state;
 
     public GameScreen() {
@@ -81,7 +81,7 @@ public class GameScreen extends ScreenAdapter {
         }
 
         // IMPORTANT: if this is removed, nothing will be drawn to the screen
-        renderer.render(delta);
+        renderer.render();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class GameScreen extends ScreenAdapter {
         renderer.dispose();
     }
 
-    public static enum GameState {
+    public enum GameState {
         GAME, PAUSE, OVER
     }
 

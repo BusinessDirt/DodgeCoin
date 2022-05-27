@@ -15,9 +15,6 @@ public class DodgeCoin extends Game {
 	public static AssetFinder assets;
 	public static Config config;
 
-	private DodgeCoin() {
-	}
-
 	@Override
 	public void create() {
 		setScreen(new LoadingScreen());

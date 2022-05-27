@@ -8,10 +8,10 @@ import com.badlogic.gdx.math.Vector2;
 
 public class TextureComponent {
 
-    private Vector2 position;
-    private Vector2 size;
-    private Texture texture;
-    private TextureRegion region;
+    private final Vector2 position;
+    private final Vector2 size;
+    private final Texture texture;
+    private final TextureRegion region;
 
     public TextureComponent(Texture texture, int x, int y, int width, int height) {
         this.texture = texture;

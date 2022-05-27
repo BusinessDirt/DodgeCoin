@@ -12,10 +12,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Player extends GameObject {
 
     private static Player instance;
-    private boolean animated;
-    private TextureRegion animationFrame;
+    private final TextureRegion animationFrame;
 
-    public static enum AnimationFrame {
+    public enum AnimationFrame {
         LEFT, NONE, RIGHT
     }
 
@@ -24,11 +23,10 @@ public class Player extends GameObject {
                 16 * Constants.PLAYER_SIZE_MULTIPLIER, 32 * Constants.PLAYER_SIZE_MULTIPLIER);
 
         // whether the player texture is animated or not
-        this.animated = animated;
 
         // initialize the animation
         this.animationFrame = new TextureRegion(DodgeCoin.assets.get(this.texturePath, Texture.class));
-        if (this.animated) {
+        if (animated) {
             setAnimationFrame(AnimationFrame.NONE);
         }
     }

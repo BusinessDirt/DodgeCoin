@@ -19,7 +19,7 @@ public class GameObject {
     }
 
     public void draw() {
-        Renderer.get().drawImage(DodgeCoin.assets.get(this.texturePath, Texture.class), (int) this.x, (int) this.y, this.width, this.height);
+        Renderer.get().drawImage(DodgeCoin.assets.get(this.texturePath, Texture.class), this.x, this.y, this.width, this.height);
     }
 
     public boolean intersects(GameObject gameObject) {

@@ -15,7 +15,6 @@ import java.util.Map;
 public class SkinHandler {
 
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private static SkinHandler instance;
 
     private static File unlockedSkinFile;
     private static File skinPriceFile;

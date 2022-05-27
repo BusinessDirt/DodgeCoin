@@ -9,18 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 
 import java.awt.*;
 
-import static businessdirt.dodgecoin.core.renderer.Renderer.USE_DEFAULT_FONT;
-import static businessdirt.dodgecoin.core.renderer.Renderer.USE_DEFAULT_FONT_SIZE;
-
 public class TextButton {
 
-    private Vector2 position;
-    private Vector2 size;
-    private String text;
-    private Button button;
-
-    private String fontPath;
-    private int fontSize;
+    private final Vector2 position;
+    private final Vector2 size;
+    private final String text;
     private Sound clickSound;
     private BorderDescriptor border;
     private Color backgroundColor;
@@ -30,12 +23,10 @@ public class TextButton {
         this.position = new Vector2(x, y);
         this.size = new Vector2(width, height);
 
-        this.button = new Button();
-        this.button.setPosition(position.x, position.y);
-        this.button.setSize(size.x, size.y);
+        Button button = new Button();
+        button.setPosition(position.x, position.y);
+        button.setSize(size.x, size.y);
 
-        this.fontPath = USE_DEFAULT_FONT;
-        this.fontSize = USE_DEFAULT_FONT_SIZE;
         this.clickSound = null;
         this.border = new BorderDescriptor(3, Color.WHITE);
         this.backgroundColor = Color.BLACK;
@@ -67,10 +58,5 @@ public class TextButton {
 
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
-    }
-
-    public void setFont(String fontPath, int fontSize) {
-        this.fontPath = fontPath;
-        this.fontSize = fontSize;
     }
 }

@@ -24,18 +24,15 @@ public class Renderer {
 
     // instantiation
     private static Renderer instance;
-    private OrthographicCamera camera;
-    private Viewport viewport;
+    private final OrthographicCamera camera;
 
     // qol constants
     public static int USE_ORIGINAL_SIZE = -1;
-    public static String USE_DEFAULT_FONT = "$default$";
-    public static int USE_DEFAULT_FONT_SIZE = 24;
 
     // sub renderer objects
     private final SpriteBatch spriteBatch;
     private final ShapeRenderer shapeRenderer;
-    private BitmapFont font;
+    private final BitmapFont font;
 
     // Arrays to store the objects that shall be rendered
     private final Array<TextureComponent> textures;
@@ -45,7 +42,7 @@ public class Renderer {
     private Renderer() {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
-        viewport = new FillViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, camera);
+        new FillViewport(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT, camera);
 
         font = DodgeCoin.assets.get("fonts/8-bit.fnt", BitmapFont.class);
         spriteBatch = new SpriteBatch();
@@ -57,7 +54,7 @@ public class Renderer {
         strings = new Array<>();
     }
 
-    public void render(float dt) {
+    public void render() {
 
         // update the camera
         camera.update();

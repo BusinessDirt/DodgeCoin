@@ -5,11 +5,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class RectangleComponent {
 
-    private Vector2 position;
-    private Vector2 size;
-    private int thickness;
-    private Color color;
-    private boolean fill;
+    private final Vector2 position;
+    private final Vector2 size;
+    private final int thickness;
+    private final Color color;
+    private final boolean fill;
 
     public RectangleComponent(int x, int y, int width, int height, int thickness, boolean fill, Color color) {
         this.position = new Vector2(x, y);

@@ -15,10 +15,10 @@ import java.util.Objects;
 
 public class AssetFinder {
 
-    private AssetManager assetManager;
-    private String path;
+    private final AssetManager assetManager;
+    private final String path;
 
-    public class AssetDescriptor {
+    public static class AssetDescriptor {
         public String folder;
         public Class<?> assetType;
 
@@ -28,7 +28,7 @@ public class AssetFinder {
         }
     }
 
-    private Array<AssetDescriptor> assets = new Array<AssetDescriptor>();
+    private final Array<AssetDescriptor> assets = new Array<>();
 
     public AssetFinder(AssetManager assetManager) {
         this.assetManager = assetManager;

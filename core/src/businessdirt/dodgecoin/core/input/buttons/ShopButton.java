@@ -3,7 +3,6 @@ package businessdirt.dodgecoin.core.input.buttons;
 import businessdirt.dodgecoin.DodgeCoin;
 import businessdirt.dodgecoin.core.input.Mouse;
 import businessdirt.dodgecoin.core.renderer.Renderer;
-import businessdirt.dodgecoin.game.AssetFinder;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,11 +15,10 @@ import java.util.Objects;
 
 public class ShopButton {
 
-    private Vector2 position;
-    private Vector2 size;
+    private final Vector2 position;
+    private final Vector2 size;
     private TextureRegion region;
     private String texture;
-    private Button button;
 
     private Sound clickSound;
     private BorderDescriptor border;
@@ -32,9 +30,9 @@ public class ShopButton {
         this.position = new Vector2(x, y);
         this.size = new Vector2(width, height);
 
-        this.button = new Button();
-        this.button.setPosition(position.x, position.y);
-        this.button.setSize(size.x, size.y);
+        Button button = new Button();
+        button.setPosition(position.x, position.y);
+        button.setSize(size.x, size.y);
 
         this.clickSound = null;
         this.border = new BorderDescriptor(3, Color.WHITE);

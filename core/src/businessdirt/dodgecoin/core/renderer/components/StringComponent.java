@@ -5,11 +5,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class StringComponent {
 
-    private Vector2 position;
-    private Vector2 size;
+    private final Vector2 position;
+    private final Vector2 size;
     private boolean centered;
-    private Color color;
-    private String string;
+    private final Color color;
+    private final String string;
 
     public StringComponent(String string, int x, int y, Color color) {
         this.position = new Vector2(x, y);

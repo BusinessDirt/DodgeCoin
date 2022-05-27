@@ -14,14 +14,9 @@ import java.util.Random;
 
 public class Coin extends GameObject {
 
-    private static Array<Coin> coins = new Array<>();
+    private static final Array<Coin> coins = new Array<>();
     private static long lastSpawn = 0;
     private static boolean noSpawn = true;
-
-    public Coin() {
-        super("textures/coins/dogecoin.png", Constants.GAME_X_START + new Random().nextInt(Constants.GAME_WIDTH - 16 * Constants.ICON_SIZE_MULTIPLIER),
-                Constants.VIEWPORT_HEIGHT, 16 * Constants.ICON_SIZE_MULTIPLIER, 16 * Constants.ICON_SIZE_MULTIPLIER);
-    }
 
     private Coin(String type) {
         super(type, Constants.GAME_X_START + new Random().nextInt(Constants.GAME_WIDTH - 16 * Constants.ICON_SIZE_MULTIPLIER),

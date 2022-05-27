@@ -14,14 +14,13 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class MenuScreen extends ScreenAdapter {
 
-    private Renderer renderer;
-    private ImageButton shopButton, settingsButton;
-    private TextButton playButton;
+    private final ImageButton shopButton, settingsButton;
+    private final TextButton playButton;
 
     public MenuScreen() {
-        renderer = Renderer.newInstance();
+        Renderer.newInstance();
         shopButton = new ImageButton("textures/gui/shop.png", 75, 75, 100, 100);
-        settingsButton = new ImageButton("textures/gui/settings.png", (int) (renderer.getWidth() - 225), 75, 100, 100);
+        settingsButton = new ImageButton("textures/gui/settings.png", (int) (Renderer.get().getWidth() - 225), 75, 100, 100);
         playButton = new TextButton("PLAY", Constants.CENTER_X - 300, 50, 600, 150);
         playButton.setBackgroundColor(Color.RED);
     }
@@ -49,7 +48,7 @@ public class MenuScreen extends ScreenAdapter {
         playButton.draw();
 
         // IMPORTANT: if this is removed, nothing will be drawn to the screen
-        renderer.render(delta);
+        Renderer.get().render();
     }
 
     @Override
@@ -59,6 +58,6 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        renderer.dispose();
+        Renderer.get().dispose();
     }
 }

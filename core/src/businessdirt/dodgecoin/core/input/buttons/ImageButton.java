@@ -12,10 +12,9 @@ import java.util.Objects;
 
 public class ImageButton {
 
-    private Vector2 position;
-    private Vector2 size;
+    private final Vector2 position;
+    private final Vector2 size;
     private String texture;
-    private Button button;
 
     private Sound clickSound;
     private BorderDescriptor border;
@@ -27,9 +26,9 @@ public class ImageButton {
         this.position = new Vector2(x, y);
         this.size = new Vector2(width, height);
 
-        this.button = new Button();
-        this.button.setPosition(position.x, position.y);
-        this.button.setSize(size.x, size.y);
+        Button button = new Button();
+        button.setPosition(position.x, position.y);
+        button.setSize(size.x, size.y);
 
         this.clickSound = null;
         this.border = new BorderDescriptor(3, Color.WHITE);
