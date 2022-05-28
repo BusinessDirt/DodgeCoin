@@ -86,7 +86,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        renderer.resize(width, height);
+        Renderer.get().resize(width, height);
     }
 
     @Override

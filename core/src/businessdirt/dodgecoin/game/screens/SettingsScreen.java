@@ -10,9 +10,10 @@ import com.badlogic.gdx.graphics.GL20;
 
 public class SettingsScreen extends ScreenAdapter {
 
+    private final Renderer renderer;
 
     public SettingsScreen() {
-        Renderer.newInstance();
+        renderer = Renderer.newInstance();
     }
 
     @Override
@@ -29,7 +30,7 @@ public class SettingsScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // IMPORTANT: if this is removed, nothing will be drawn to the screen
-        Renderer.get().render();
+        renderer.render();
     }
 
     @Override
@@ -39,6 +40,6 @@ public class SettingsScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        Renderer.get().dispose();
+        renderer.dispose();
     }
 }

@@ -77,5 +77,4 @@ public class SkinHandler {
         skinPriceFile = new File(DodgeCoin.getConfigFolder() + "\\skins", "\\skinPrices.json");
         load();
     }
-
 }

@@ -22,6 +22,7 @@ import java.util.Objects;
 
 public class ShopScreen extends ScreenAdapter {
 
+    private final Renderer renderer;
     private final ImageButton left, right;
     private final ShopButton[] shop;
 
@@ -33,7 +34,7 @@ public class ShopScreen extends ScreenAdapter {
     @SuppressWarnings("all")
     public ShopScreen() {
 
-        Renderer.newInstance();
+        renderer = Renderer.newInstance();
         left = new ImageButton("textures/gui/arrow_left.png", 50, Constants.CENTER_Y - 50, 100, 100);
         right = new ImageButton("textures/gui/arrow_right.png", Constants.VIEWPORT_WIDTH - 150, Constants.CENTER_Y - 50, 100, 100);
 
@@ -56,7 +57,9 @@ public class ShopScreen extends ScreenAdapter {
 
             shop[i] = new ShopButton("", xPos, yPos, x, x);
             shop[i].setBackgroundColor(Color.DARK_GRAY);
+        }
 
+        for (int i = 0; i < shopItems.size(); i++) {
             String skinName = shopItems.get(i + (page - 1) * shop.length);
             if (!SkinHandler.unlockedSkins.containsKey(skinName)) {
                 SkinHandler.unlockedSkins.put(skinName, skinName.contains("default.png"));
@@ -153,7 +156,7 @@ public class ShopScreen extends ScreenAdapter {
         }
 
         // IMPORTANT: if this is removed, nothing will be drawn to the screen
-        Renderer.get().render();
+        renderer.render();
     }
 
     private void setSkin(String skin) {
@@ -194,6 +197,6 @@ public class ShopScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        Renderer.get().dispose();
+        renderer.dispose();
     }
 }
