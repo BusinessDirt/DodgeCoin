@@ -1,25 +1,68 @@
-plugins {
-    id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
+buildscript {
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        google()
+    }
+
+    dependencies {
+    }
 }
 
-group 'businessdirt.dodgecoin'
-version '1.0-pre1'
+allprojects {
+    apply plugin: "eclipse"
 
-repositories {
-    mavenCentral()
+    version = '1.0'
+    ext {
+        appName = "LibGDXGame"
+        gdxVersion = '1.11.0'
+        roboVMVersion = '2.3.16'
+        box2DLightsVersion = '1.5'
+        ashleyVersion = '1.7.4'
+        aiVersion = '1.8.2'
+        gdxControllersVersion = '2.2.1'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://jitpack.io" }
+    }
 }
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+project(":desktop") {
+    apply plugin: "java-library"
 
-    implementation 'com.google.code.gson:gson:2.9.0'
-
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    dependencies {
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx-controllers:gdx-controllers-desktop:$gdxControllersVersion"
+        api "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    }
 }
 
-test {
-    useJUnitPlatform()
+project(":core") {
+    apply plugin: "java-library"
+
+    dependencies {
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
+        api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        api "com.badlogicgames.ashley:ashley:$ashleyVersion"
+
+        implementation files('../libs/com.github.businessdirt.config.jar')
+        implementation 'com.google.code.gson:gson:2.9.0'
+        implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+        implementation 'com.github.crazzyghost:alphavantage-java:1.6.2'
+    }
 }
