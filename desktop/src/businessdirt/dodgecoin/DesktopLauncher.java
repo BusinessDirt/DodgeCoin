@@ -11,6 +11,7 @@ public class DesktopLauncher {
 		config.setTitle("DodgeCoin");
 		config.useVsync(true);
 		config.setIdleFPS(5);
+		config.setWindowIcon("textures/coins/dogecoin.png");
 
 		Graphics.DisplayMode mode = Lwjgl3ApplicationConfiguration.getDisplayMode();
 		config.setFullscreenMode(mode);
