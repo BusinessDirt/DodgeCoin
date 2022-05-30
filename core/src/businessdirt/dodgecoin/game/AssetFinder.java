@@ -59,7 +59,7 @@ public class AssetFinder {
                 assetManager.load(asset.path(), descriptor.assetType);
                 if (Objects.equals(descriptor.folder, "textures/players/") || Objects.equals(descriptor.folder, "textures/backgrounds/")) {
                     if (asset.name().length() > 0) {
-                        SkinHandler.skinPrices.put(descriptor.folder + asset.name(), descriptor.folder.contains("players") ? 1000000 : 100000);
+                        SkinHandler.skinPrices.put(descriptor.folder + asset.name(), descriptor.folder.contains("players") ? 10000000 : 1000000);
                         ShopScreen.shopItems.add(descriptor.folder + asset.name());
                         SkinHandler.savePrices();
                     }

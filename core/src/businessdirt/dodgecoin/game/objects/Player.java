@@ -51,10 +51,10 @@ public class Player extends GameObject {
 
     public void move(float dt) {
         // move
-        if (Keyboard.keyDown(Input.Keys.A)) {
+        if (Keyboard.keyDown(Input.Keys.A) || Keyboard.keyDown(Input.Keys.LEFT)) {
             translateX((int) (-Constants.MOVEMENT_SPEED * dt));
             setAnimationFrame(AnimationFrame.LEFT);
-        } else if (Keyboard.keyDown(Input.Keys.D)) {
+        } else if (Keyboard.keyDown(Input.Keys.D) || Keyboard.keyDown(Input.Keys.RIGHT)){
             translateX((int) (Constants.MOVEMENT_SPEED * dt));
             setAnimationFrame(AnimationFrame.RIGHT);
         } else {
