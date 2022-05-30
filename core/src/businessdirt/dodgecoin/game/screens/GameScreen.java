@@ -13,6 +13,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -20,12 +21,14 @@ public class GameScreen extends ScreenAdapter {
     private final Player player;
     private final Background background;
     private static GameState state;
+    private long startTime;
 
     public GameScreen() {
         renderer = Renderer.newInstance();
         player = Player.get();
         background = Background.get();
         state = GameState.GAME;
+        startTime = TimeUtils.nanoTime();
     }
 
     @Override
@@ -45,6 +48,9 @@ public class GameScreen extends ScreenAdapter {
             // spawn new coin
             Coin.spawn();
         } else {
+            if (state == GameState.OVER) {
+                startTime = TimeUtils.nanoTime();
+            }
             if (Keyboard.keyTyped(Input.Keys.ESCAPE)) DodgeCoin.get().setScreen(new MenuScreen());
             if (Keyboard.keyTyped(Input.Keys.ENTER)) state = GameState.GAME;
         }
@@ -66,6 +72,9 @@ public class GameScreen extends ScreenAdapter {
             Renderer.get().drawString(String.valueOf(Config.money), 50, Constants.VIEWPORT_HEIGHT - 100, Color.WHITE);
             Renderer.get().drawString("Combo:", 50, Constants.VIEWPORT_HEIGHT - 160, Color.WHITE);
             Renderer.get().drawString(String.valueOf(Coin.getCombo()), 50, Constants.VIEWPORT_HEIGHT - 210, Color.WHITE);
+            Renderer.get().drawString(String.valueOf(Config.money), 50, Constants.VIEWPORT_HEIGHT - 100, Color.WHITE);
+
+            Renderer.get().drawString((startTime - TimeUtils.nanoTime()) / -1000000000 + "s", 50, 50);
         }
 
         // pause overlay
@@ -80,6 +89,7 @@ public class GameScreen extends ScreenAdapter {
             Gdx.gl.glClearColor(250f / 255, 104f / 255, 0f, 0f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             Renderer.get().drawCenteredString("Game Over!", Constants.CENTER_X - 250, Constants.CENTER_Y - 150, 500, 300, Color.WHITE);
+            startTime = 0L;
         }
 
         // IMPORTANT: if this is removed, nothing will be drawn to the screen
