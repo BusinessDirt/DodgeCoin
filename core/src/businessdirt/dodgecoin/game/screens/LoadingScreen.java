@@ -33,7 +33,7 @@ public class LoadingScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-
+        // if the assets finished loading it will enter the main menu
         if (DodgeCoin.assets.getAssetManager().update()) DodgeCoin.get().setScreen(new MenuScreen());
     }
 

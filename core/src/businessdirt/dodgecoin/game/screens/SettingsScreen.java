@@ -20,10 +20,7 @@ public class SettingsScreen extends ScreenAdapter {
     public void render(float delta) {
         // input
         if (Keyboard.keyTyped(Input.Keys.ESCAPE)) DodgeCoin.get().setScreen(new MenuScreen());
-        if (Keyboard.keyDown(Input.Keys.ALT_LEFT) && Keyboard.keyDown(Input.Keys.F4)) {
-            Gdx.app.exit();
-            System.exit(0);
-        }
+        Keyboard.defaultKeys();
 
         // clear the screen from the previous frame
         Gdx.gl.glClearColor(0, 0.5f, 0.5f, 1);

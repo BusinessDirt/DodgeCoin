@@ -73,10 +73,7 @@ public class ShopScreen extends ScreenAdapter {
     public void render(float delta) {
         // input
         if (Keyboard.keyTyped(Input.Keys.ESCAPE)) DodgeCoin.get().setScreen(new MenuScreen());
-        if (Keyboard.keyDown(Input.Keys.ALT_LEFT) && Keyboard.keyDown(Input.Keys.F4)) {
-            Gdx.app.exit();
-            System.exit(0);
-        }
+        Keyboard.defaultKeys();
 
         // shop pages
         if (left.isClicked()) {

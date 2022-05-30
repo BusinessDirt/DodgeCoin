@@ -31,10 +31,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         // input detection
-        if (Keyboard.keyDown(Input.Keys.ALT_LEFT) && Keyboard.keyDown(Input.Keys.F4)) {
-            Gdx.app.exit();
-            System.exit(0);
-        }
+        Keyboard.defaultKeys();
 
         if (state == GameState.GAME) {
             if (Keyboard.keyTyped(Input.Keys.ESCAPE)) state = GameState.PAUSE;

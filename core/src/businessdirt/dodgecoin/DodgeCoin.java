@@ -20,6 +20,7 @@ public class DodgeCoin extends Game {
 		setScreen(new LoadingScreen());
 	}
 
+	// logs an event with time
 	public static void logEvent(String event) {
 		SimpleDateFormat formatter= new SimpleDateFormat("HH:mm:ss.SSS");
 		Date date = new Date(System.currentTimeMillis());

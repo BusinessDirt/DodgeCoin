@@ -30,10 +30,7 @@ public class MenuScreen extends ScreenAdapter {
     public void render(float delta) {
         // input
         if (Keyboard.keyTyped(Input.Keys.ENTER)) DodgeCoin.get().setScreen(new GameScreen());
-        if (Keyboard.keyTyped(Input.Keys.ESCAPE) || (Keyboard.keyDown(Input.Keys.ALT_LEFT) && Keyboard.keyDown(Input.Keys.F4))) {
-            Gdx.app.exit();
-            System.exit(0);
-        }
+        Keyboard.defaultKeys();
 
         // buttons
         if (shopButton.isClicked()) DodgeCoin.get().setScreen(new ShopScreen());
@@ -44,6 +41,7 @@ public class MenuScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0, 0.5f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // draw the buttons
         shopButton.draw();
         settingsButton.draw();
         playButton.draw();
