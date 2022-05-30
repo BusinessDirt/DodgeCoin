@@ -18,6 +18,8 @@ public class Coin extends GameObject {
     private static long lastSpawn = 0;
     private static boolean noSpawn = true;
 
+    private static int combo = 1;
+
     private Coin(String type) {
         super(type, Constants.GAME_X_START + new Random().nextInt(Constants.GAME_WIDTH - 16 * Constants.ICON_SIZE_MULTIPLIER),
                 Constants.VIEWPORT_HEIGHT, 16 * Constants.ICON_SIZE_MULTIPLIER, 16 * Constants.ICON_SIZE_MULTIPLIER);
@@ -47,8 +49,14 @@ public class Coin extends GameObject {
                     GameScreen.setState(GameScreen.GameState.OVER);
                     iter.forEachRemaining(c -> iter.remove());
                     noSpawn = true;
+                    combo = 1;
                 } else {
-                    Config.money += APIHandler.bitcoin;
+                    combo ++;
+                    Config.money += APIHandler.bitcoin * (1 + combo / 10);
+                    Constants.COIN_SPAWN_DELAY -= combo * 1000;
+                    if (combo % 3 == 0 && combo<50) {
+                        Constants.COIN_DROP_SPEED = Constants.COIN_DROP_SPEED + combo * 3;
+                    }
                 }
 
                 DodgeCoin.config.markDirty();
@@ -59,5 +67,9 @@ public class Coin extends GameObject {
 
     public static void drawAll() {
         for (Coin coin : coins) coin.draw();
+    }
+    public static int getCombo()
+    {
+        return combo;
     }
 }
