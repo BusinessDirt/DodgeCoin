@@ -71,7 +71,7 @@ public class GameScreen extends ScreenAdapter {
             Renderer.get().drawString("Money:", 50, Constants.VIEWPORT_HEIGHT - 50, Color.WHITE);
             Renderer.get().drawString(String.valueOf(Config.money), 50, Constants.VIEWPORT_HEIGHT - 100, Color.WHITE);
 
-            Renderer.get().drawString(String.valueOf((startTime - TimeUtils.nanoTime()) / -1000000000) + "s", 50, 50);
+            Renderer.get().drawString((startTime - TimeUtils.nanoTime()) / -1000000000 + "s", 50, 50);
         }
 
         // pause overlay
@@ -86,7 +86,7 @@ public class GameScreen extends ScreenAdapter {
             Gdx.gl.glClearColor(250f / 255, 104f / 255, 0f, 0f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             Renderer.get().drawCenteredString("Game Over!", Constants.CENTER_X - 250, Constants.CENTER_Y - 150, 500, 300, Color.WHITE);
-            startTime = 0l;
+            startTime = 0L;
         }
 
         // IMPORTANT: if this is removed, nothing will be drawn to the screen
