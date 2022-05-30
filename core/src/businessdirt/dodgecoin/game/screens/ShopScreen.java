@@ -123,7 +123,7 @@ public class ShopScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0, 0.5f, 0.5f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        Renderer.get().drawCenteredString("Money: " + Config.money, 0, Constants.VIEWPORT_HEIGHT - 75, Constants.VIEWPORT_WIDTH, 50, Color.WHITE);
+        Renderer.get().drawCenteredString("Money: " + Math.round(Config.money), 0, Constants.VIEWPORT_HEIGHT - 75, Constants.VIEWPORT_WIDTH, 50, Color.WHITE);
         left.draw();
         right.draw();
 
