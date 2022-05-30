@@ -39,11 +39,26 @@ public class Config extends ConfigHandler {
     public static String backgroundSkin = "textures/backgrounds/default.png";
 
     @Property(
+            type = PropertyType.SLIDER,
+            name = "Music Volume",
+            description = "Controls the music volume.",
+            category = "Audio"
+    )
+    public static double musicVolume = 0.1D;
+
+    @Property(
+            type = PropertyType.SLIDER,
+            name = "SFX Volume",
+            description = "Controls the SFX volume.",
+            category = "Audio"
+    )
+    public static double sfxVolume = 1D;
+
+    @Property(
             type = PropertyType.SWITCH,
             name = "Hard Mode",
-            category = "Hidden",
-            description = "Adds a hard mode. Movement is faster and you can't stop.",
-            hidden = true
+            category = "Game Options",
+            description = "Adds a hard mode. Movement is faster and you can't stop."
     )
     public static boolean hardMode = false;
 

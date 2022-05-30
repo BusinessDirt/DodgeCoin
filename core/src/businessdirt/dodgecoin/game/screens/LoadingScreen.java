@@ -13,12 +13,19 @@ import com.badlogic.gdx.graphics.GL20;
 public class LoadingScreen extends ScreenAdapter {
 
     public LoadingScreen() {
+        // Log basic information
+        DodgeCoin.logEvent("Using OpenGL Version " + Gdx.graphics.getGLVersion());
+
         // Stock-market API
-        APIHandler.getStockMarketApiValues();
+        new Thread(APIHandler::getStockMarketApiValues).start();
 
         // Configuration
-        DodgeCoin.config = Config.getConfig();
-        SkinHandler.init();
+        try {
+            DodgeCoin.config = Config.getConfig();
+            SkinHandler.init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Assets
         DodgeCoin.assets = new AssetFinder(new AssetManager());

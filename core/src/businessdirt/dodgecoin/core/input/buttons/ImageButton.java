@@ -1,5 +1,6 @@
 package businessdirt.dodgecoin.core.input.buttons;
 
+import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.core.input.Mouse;
 import businessdirt.dodgecoin.core.renderer.Renderer;
 import com.badlogic.gdx.audio.Sound;
@@ -47,7 +48,7 @@ public class ImageButton {
 
     public boolean isClicked() {
         boolean tmp = Mouse.clicked(new Rectangle((int) this.position.x, (int) this.position.y, (int) this.size.x, (int) this.size.y));
-        if (clickSound != null && tmp && enabled) clickSound.play();
+        if (clickSound != null && tmp && enabled) clickSound.play((float) Config.sfxVolume);
         return tmp;
     }
 

@@ -5,6 +5,7 @@ import businessdirt.dodgecoin.core.APIHandler;
 import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.game.Constants;
 import businessdirt.dodgecoin.game.screens.GameScreen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -47,13 +48,17 @@ public class Coin extends GameObject {
                 if (coin.texturePath.contains("dogecoin.png")) {
                     Config.money += APIHandler.dogecoin;
                     GameScreen.setState(GameScreen.GameState.OVER);
+                    DodgeCoin.assets.get("sounds/death.mp3", Sound.class).play((float) Config.sfxVolume);
+
                     iter.forEachRemaining(c -> iter.remove());
                     noSpawn = true;
                     combo = 1;
                 } else {
                     combo ++;
-                    Config.money += APIHandler.bitcoin * (1 + combo / 10);
-                    Constants.COIN_SPAWN_DELAY -= combo * 1000;
+                    Config.money += APIHandler.bitcoin * (1 + combo / 10f);
+                    Constants.COIN_SPAWN_DELAY -= combo * 1000L;
+
+                    DodgeCoin.assets.get("sounds/bitcoin.mp3", Sound.class).play((float) Config.sfxVolume);
                     if (combo % 3 == 0 && combo<50) {
                         Constants.COIN_DROP_SPEED = Constants.COIN_DROP_SPEED + combo * 3;
                     }

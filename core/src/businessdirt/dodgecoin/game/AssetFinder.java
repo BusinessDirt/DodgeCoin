@@ -6,6 +6,8 @@ import businessdirt.dodgecoin.game.screens.ShopScreen;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -39,6 +41,8 @@ public class AssetFinder {
         assets.add(new AssetDescriptor("textures/gui/", Texture.class));
         assets.add(new AssetDescriptor("textures/coins/", Texture.class));
         assets.add(new AssetDescriptor("fonts/", BitmapFont.class));
+        assets.add(new AssetDescriptor("music/", Music.class));
+        assets.add(new AssetDescriptor("sounds/", Sound.class));
     }
 
     public void load() {

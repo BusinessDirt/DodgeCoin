@@ -71,10 +71,17 @@ public class SkinHandler {
         }
     }
 
-    public static void init() {
-        if (!new File(DodgeCoin.getConfigFolder() + "\\skins").mkdirs()) DodgeCoin.logEvent("Failed to create skin config folder!");
+    public static void init() throws Exception {
+        // Create the folder if it doesn't exist
+        // If it fails to create it, it will log an error and exit the program
+        File directory = new File(DodgeCoin.getConfigFolder() + "\\skins");
+        if (!directory.exists() && !directory.mkdirs()) {
+            throw new Exception("Failed to create skin config folder!");
+        }
+
         unlockedSkinFile = new File(DodgeCoin.getConfigFolder() + "\\skins", "\\unlockedSkins.json");
         skinPriceFile = new File(DodgeCoin.getConfigFolder() + "\\skins", "\\skinPrices.json");
+
         load();
     }
 }

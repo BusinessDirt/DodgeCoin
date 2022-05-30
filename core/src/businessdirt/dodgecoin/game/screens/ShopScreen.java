@@ -13,6 +13,7 @@ import businessdirt.dodgecoin.game.objects.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 
@@ -35,12 +36,19 @@ public class ShopScreen extends ScreenAdapter {
     public ShopScreen() {
 
         renderer = Renderer.newInstance();
+
+        // Buttons
         left = new ImageButton("textures/gui/arrow_left.png", 50, Constants.CENTER_Y - 50, 100, 100);
+        left.setSound(DodgeCoin.assets.get("sounds/button.mp3", Sound.class));
+
         right = new ImageButton("textures/gui/arrow_right.png", Constants.VIEWPORT_WIDTH - 150, Constants.CENTER_Y - 50, 100, 100);
+        right.setSound(DodgeCoin.assets.get("sounds/button.mp3", Sound.class));
 
         shop = new ShopButton[6];
+
         page = 1;
         pages = (int) Math.ceil((double) shopItems.size() / 6);
+
         int x = Constants.VIEWPORT_WIDTH / 5;
         int y = Constants.VIEWPORT_HEIGHT / 4;
 
@@ -57,6 +65,7 @@ public class ShopScreen extends ScreenAdapter {
 
             shop[i] = new ShopButton("", xPos, yPos, x, x);
             shop[i].setBackgroundColor(Color.DARK_GRAY);
+            shop[i].setSound(DodgeCoin.assets.get("sounds/button.mp3", Sound.class));
         }
 
         for (int i = 0; i < shopItems.size(); i++) {
@@ -91,6 +100,7 @@ public class ShopScreen extends ScreenAdapter {
         for (int i = 0; i < shop.length; i++) {
             if (shop[i].isClicked()) {
                 String skinName = shopItems.get(i + (page - 1) * shop.length);
+
                 int price = 0;
                 if (SkinHandler.skinPrices.containsKey(skinName)) price = SkinHandler.skinPrices.get(skinName);
 
