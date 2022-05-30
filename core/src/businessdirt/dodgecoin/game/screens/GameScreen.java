@@ -63,7 +63,7 @@ public class GameScreen extends ScreenAdapter {
 
             // draw hud
             Renderer.get().drawString("Money:", 50, Constants.VIEWPORT_HEIGHT - 50, Color.WHITE);
-            Renderer.get().drawString(String.valueOf(Config.money), 50, Constants.VIEWPORT_HEIGHT - 100, Color.WHITE);
+            Renderer.get().drawString(String.valueOf(Math.round(Config.money)), 50, Constants.VIEWPORT_HEIGHT - 100, Color.WHITE);
         }
 
         // pause overlay
