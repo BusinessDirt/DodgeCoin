@@ -1,10 +1,11 @@
 package businessdirt.dodgecoin.game.screens;
 
 import businessdirt.dodgecoin.DodgeCoin;
-import businessdirt.dodgecoin.core.APIHandler;
+import businessdirt.dodgecoin.core.util.APIHandler;
 import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.core.SkinHandler;
-import businessdirt.dodgecoin.game.AssetFinder;
+import businessdirt.dodgecoin.core.util.AssetLoader;
+import businessdirt.dodgecoin.core.util.Util;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
@@ -14,7 +15,7 @@ public class LoadingScreen extends ScreenAdapter {
 
     public LoadingScreen() {
         // Log basic information
-        DodgeCoin.logEvent("Using OpenGL Version " + Gdx.graphics.getGLVersion());
+        Util.logEvent("Using OpenGL Version " + Gdx.graphics.getGLVersion());
 
         // Stock-market API
         new Thread(APIHandler::getStockMarketApiValues).start();
@@ -28,9 +29,8 @@ public class LoadingScreen extends ScreenAdapter {
         }
 
         // Assets
-        DodgeCoin.assets = new AssetFinder(new AssetManager());
+        DodgeCoin.assets = new AssetLoader();
         DodgeCoin.assets.load();
-        DodgeCoin.assets.getAssetManager().finishLoading();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class LoadingScreen extends ScreenAdapter {
 
 
         // if the assets finished loading it will enter the main menu
-        if (DodgeCoin.assets.getAssetManager().update()) DodgeCoin.get().setScreen(new MenuScreen());
+        if (DodgeCoin.assets.update()) DodgeCoin.get().setScreen(new MenuScreen());
     }
 
     @Override

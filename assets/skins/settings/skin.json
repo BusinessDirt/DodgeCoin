@@ -1,0 +1,132 @@
+{
+  BitmapFont: {
+    default: { file: ../../fonts/bit-16.fnt }
+  },
+  Color: {
+    white: { r: 1, g: 1, b: 1, a: 1 },
+    gray: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
+    black: { r: 0, g: 0, b: 0, a: 1 },
+
+    up: { r: 0.6, g: 0.6, b: 0.6, a: 1 },
+    over: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
+    down: { a: 1.0, b: 0.84705883, g: 0.9843137, r: 1.0 },
+    checked: { r: 0, g: 0.3, b: 0.5, a: 1 },
+    checkedOver: { r: 0, g: 0.4, b: 0.6, a: 1 },
+    disabled: { r: 0.1, g: 0.1, b: 0.1, a: 1 },
+    background: { r: 0.8, g: 0.8, b: 0.8, a: 1 },
+    selection: { r: 0, g: 0.3, b: 0.5, a: 1 },
+    semiTransparent: { r: 0, g: 0, b: 0, a: 0.6 },
+    fontColor: {r: 1, g: 1, b: 1, a: 0.9}
+    darkFontColor: { a: 1.0, b: 0.35686275, g: 0.35686275, r: 0.35686275 }
+
+    font: fontColor
+    fontOver: down
+    fontDown: gray
+    fontChecked: checked
+    fontCheckedOver: checkedOver
+    fontDisabled: gray
+  },
+  TintedDrawable: {
+    buttonUp: { name: base, color: up },
+    buttonOver: { name: base, color: over },
+    buttonDown: { name: base-press, color: down },
+    buttonDisabled: { name: base, color: disabled },
+    buttonChecked: { name: base, color: checked },
+    buttonCheckedOver: { name: base, color: checkedOver },
+
+    checkBoxOn: { name: check-on, color: up },
+    checkBoxOff: { name: check-off, color: up },
+    checkBoxOnOver: { name: check-on, color: over },
+    checkBoxOver: { name: check-off, color: over },
+    checkBoxOnDisabled: { name: check-on, color: disabled },
+    checkBoxOffDisabled: { name: check-off, color: disabled },
+    checkBoxSquare: { name: check-square, color: up },
+    checkBoxSquareOver: { name: check-square, color: over },
+    checkBoxSquareDisabled: { name: check-square, color: disabled },
+
+    radioOn: { name: radio-on, color: up },
+    radioOff: { name: radio-off, color: up },
+    radioOver: { name: radio-off, color: over },
+    radioOnDisabled: { name: radio-on, color: disabled },
+    radioOffDisabled: { name: radio-off, color: disabled },
+
+    cross: { name: x, color: font },
+    selection: { name: dot, color: selection },
+    underlineSelection: { name: underline, color: selection },
+    list: { name: outline-press, color: background },
+
+    scrollHorizontal: { name: scroll, color: up },
+    scrollVertical: { name: scroll-v, color: up },
+    scrollPane: { name: outline-press, color: background },
+
+    selectBox: { name: select, color: up },
+    selectOver: { name: select, color: over },
+    selectDown: { name: select-press, color: up },
+    selectDisabled: { name: select, color: disabled },
+    selectList: { name: select-list, color: up },
+
+    splitPane: { name: square, color: down },
+
+    sliderHorizontal: { name: slider, color: up },
+    sliderKnob: { name: knob, color: up },
+    sliderKnobOver: { name: knob, color: over },
+    sliderKnobDown: { name: knob, color: down },
+    sliderKnobDisabled: { name: knob, color: disabled },
+    sliderVertical: { name: slider-v, color: up },
+    sliderVerticalKnob: { name: check-square, color: up },
+    sliderVerticalKnobOver: { name: check-square, color: over },
+    sliderVerticalKnobDown: { name: check-square, color: down },
+    sliderVerticalKnobDisabled: { name: check-square, color: disabled },
+
+    textField: { name: field, color: up },
+    textFieldDown: { name: field, color: background },
+    textFieldDisabled: { name: field, color: disabled },
+    textFieldCursor: { name: cursor, color: font },
+    darkTextFieldCursor: { name: cursor, color: darkFontColor },
+
+    tooltip: { name: outline-press, color: background }
+  },
+  ButtonStyle: {
+    blank: { up: buttonChecked, over: buttonChecked, down: buttonChecked, disabled: buttonChecked }
+  },
+  CheckBoxStyle: {
+    square: { checkboxOn: checkBoxSquare, checkboxOff: checkBoxOff, checkboxOver: checkBoxOver, checkboxOnOver: checkBoxSquareOver, checkboxOnDisabled: checkBoxSquareDisabled,
+      checkboxOffDisabled: checkBoxOffDisabled, font: default, fontColor: font, overFontColor: fontOver, downFontColor: fontDown,
+      checkedFontColor: fontChecked, checkedOverFontColor: fontCheckedOver, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 }
+  },
+  LabelStyle: {
+    default: { font: default, fontColor: font }
+  },
+  ScrollPaneStyle: {
+    default: { hScrollKnob: scrollHorizontal, vScrollKnob: scrollVertical },
+    background: { background: scrollPane, hScrollKnob: scrollHorizontal, vScrollKnob: scrollVertical }
+  },
+  SelectBoxStyle: {
+    default: {
+      font: default, fontColor: font, disabledFontColor: fontDisabled, background: selectBox, backgroundOver: selectOver,
+      backgroundOpen: selectDown, backgroundDisabled: selectDisabled, scrollStyle: default, listStyle: {
+        background: selectList, fontColorUnselected: font, selection: selection, fontColorSelected: font, font: default
+      }
+    }
+  },
+  SliderStyle: {
+    default-horizontal: { background: sliderHorizontal, knob: sliderKnob, knobOver: sliderKnobOver, knobDown: sliderKnobDown,
+      disabledKnob: sliderKnobDisabled }
+  },
+  TextButtonStyle: {
+    default: { up: buttonUp, over: buttonOver, down: buttonDown, disabled: buttonDisabled, font: default, fontColor: font,
+      overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 },
+    backButton: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, font: default, fontColor: font,
+      overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 }
+  },
+  TextFieldStyle: {
+    default: {
+      font: default, messageFont: default, fontColor: darkFontColor, focusedFontColor: darkFontColor, disabledFontColor: fontDisabled,
+      messageFontColor: fontDown, background: textField, focusedBackground: textFieldDown, disabledBackground: textFieldDisabled,
+      cursor: darkTextFieldCursor, selection: selection
+    }
+  },
+  TextTooltipStyle: {
+    default: { label: default, background: tooltip }
+  }
+}

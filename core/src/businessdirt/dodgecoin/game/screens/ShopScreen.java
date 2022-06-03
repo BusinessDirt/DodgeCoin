@@ -1,209 +1,181 @@
 package businessdirt.dodgecoin.game.screens;
 
 import businessdirt.dodgecoin.DodgeCoin;
-import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.core.SkinHandler;
-import businessdirt.dodgecoin.core.input.buttons.ShopButton;
-import businessdirt.dodgecoin.game.Constants;
-import businessdirt.dodgecoin.core.input.Keyboard;
-import businessdirt.dodgecoin.core.input.buttons.ImageButton;
-import businessdirt.dodgecoin.core.renderer.Renderer;
-import businessdirt.dodgecoin.game.objects.Background;
-import businessdirt.dodgecoin.game.objects.Player;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.audio.Sound;
+import businessdirt.dodgecoin.core.util.Util;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 
+import javax.swing.text.NumberFormatter;
+import java.awt.*;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Locale;
 
-public class ShopScreen extends ScreenAdapter {
+public class ShopScreen extends AbstractScreen {
 
-    private final Renderer renderer;
-    private final ImageButton left, right;
-    private final ShopButton[] shop;
+    private ScrollPane pane;
+    private List<ShopItem> shopItemButtons;
 
-    // used for the actual shop
-    public static List<String> shopItems = new ArrayList<>();
-    private final int pages;
-    private int page;
+    protected ShopScreen() {
+        super(DodgeCoin.assets.getSkin("skins/shop/skin.json"), Color.TEAL);
+        this.shopItemButtons = new ArrayList<>();
+    }
 
-    @SuppressWarnings("all")
-    public ShopScreen() {
+    @Override
+    public void show() {
+        // Shop Label
+        Label shopLabel = new Label("Shop", skin);
+        shopLabel.setAlignment(Align.center);
+        shopLabel.setBounds(0, 940f, 1920f, 140f);
+        shopLabel.setFontScale(2f);
+        this.stage.addActor(shopLabel);
 
-        renderer = Renderer.newInstance();
-
-        // Buttons
-        left = new ImageButton("textures/gui/arrow_left.png", 50, Constants.CENTER_Y - 50, 100, 100);
-        left.setSound(DodgeCoin.assets.get("sounds/button.mp3", Sound.class));
-
-        right = new ImageButton("textures/gui/arrow_right.png", Constants.VIEWPORT_WIDTH - 150, Constants.CENTER_Y - 50, 100, 100);
-        right.setSound(DodgeCoin.assets.get("sounds/button.mp3", Sound.class));
-
-        shop = new ShopButton[6];
-
-        page = 1;
-        pages = (int) Math.ceil((double) shopItems.size() / 6);
-
-        int x = Constants.VIEWPORT_WIDTH / 5;
-        int y = Constants.VIEWPORT_HEIGHT / 4;
-
-        for (int i = 0; i < shop.length; i++) {
-            int xPos;
-            int yPos;
-            if (i < 3) {
-                xPos = x * (i + 1) - 15 + 15 * i;
-                yPos = Constants.VIEWPORT_HEIGHT - (x * 2 - y + 20);
-            } else {
-                xPos = x  * (i - 2) - 15 + 15 * (i - 3);
-                yPos = Constants.VIEWPORT_HEIGHT - (x + y * 2 + 10);
+        // Back Button
+        TextButton backButton = new TextButton("Back", skin.get("backButton", TextButton.TextButtonStyle.class));
+        backButton.setBounds(960f - 175f, 40f, 350f, 100f);
+        backButton.getLabel().setFontScale(2f);
+        backButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                DodgeCoin.get().setScreen(new MenuScreen());
             }
+        });
+        this.stage.addActor(backButton);
 
-            shop[i] = new ShopButton("", xPos, yPos, x, x);
-            shop[i].setBackgroundColor(Color.DARK_GRAY);
-            shop[i].setSound(DodgeCoin.assets.get("sounds/button.mp3", Sound.class));
+        // container for the scroll pane
+        Table container = new Table();
+        container.setBounds(0f, 0f, 1920f, 1080f);
+
+        // table for all the shop items
+        Table table = new Table();
+        table.align(Align.top);
+        createShopButtons(table, 760f);
+
+        // scroll pane for scrolling
+        this.pane = new ScrollPane(table, skin.get("background", ScrollPane.ScrollPaneStyle.class));
+        this.pane.setSmoothScrolling(true);
+        this.pane.setScrollingDisabled(false, true);
+        this.pane.setFadeScrollBars(true);
+        this.pane.layout();
+
+        // add the scroll pane to the container
+        container.add(this.pane).pad(140f, 200f, 180f, 200f).width(1520f).height(760f);
+        this.stage.addActor(container);
+        this.stage.setScrollFocus(this.pane);
+    }
+
+    private void createShopButtons(Table table, float height) {
+        List<String> shopItems = DodgeCoin.assets.getShopItems();
+        int lowerCount = shopItems.size() >> 1;
+        int upperCount = shopItems.size() - lowerCount;
+
+        for (int i = 0; i < upperCount; i++) {
+            ShopItem item = new ShopItem(skin, shopItems.get(i), (height - 35) / 2f);
+            float padRight = i == shopItems.size() - 1 ? 5f : 0f;
+            table.add(item.getGroup()).width(item.width).height(item.height).pad(5f, 5f, 5f, padRight);
         }
 
-        for (int i = 0; i < shopItems.size(); i++) {
-            String skinName = shopItems.get(i + (page - 1) * shop.length);
-            if (!SkinHandler.unlockedSkins.containsKey(skinName)) {
-                SkinHandler.unlockedSkins.put(skinName, skinName.contains("default.png"));
-                SkinHandler.save();
-            }
+        table.row();
+        for (int i = upperCount; i < shopItems.size(); i++) {
+            ShopItem item = new ShopItem(skin, shopItems.get(i), (height - 35) / 2f);
+            float padRight = i == shopItems.size() - 1 ? 5f : 0f;
+            table.add(item.getGroup()).width(item.width).height(item.height).pad(0f, 5f, 5f, padRight);
         }
-        updateButtonUI();
     }
 
     @Override
     public void render(float delta) {
-        // input
-        if (Keyboard.keyTyped(Input.Keys.ESCAPE)) DodgeCoin.get().setScreen(new MenuScreen());
-        Keyboard.defaultKeys();
-
-        // shop pages
-        if (left.isClicked()) {
-            page -= 1;
-            if (page <= 0) page = pages;
-            updateButtonUI();
-        }
-        if (right.isClicked()) {
-            page += 1;
-            if (page > pages) page = 1;
-            updateButtonUI();
-        }
-
-        // shop items
-        for (int i = 0; i < shop.length; i++) {
-            if (shop[i].isClicked()) {
-                String skinName = shopItems.get(i + (page - 1) * shop.length);
-
-                int price = 0;
-                if (SkinHandler.skinPrices.containsKey(skinName)) price = SkinHandler.skinPrices.get(skinName);
-
-                if (Config.money >= price && !SkinHandler.unlockedSkins.get(skinName)) {
-                    setSkin(skinName);
-
-                    Config.money -= price;
-                    Config.getConfig().markDirty();
-                    Config.getConfig().writeData();
-
-                    SkinHandler.unlockedSkins.put(skinName, true);
-                    SkinHandler.save();
-
-                    updateButtonUI();
-                } else if (SkinHandler.unlockedSkins.get(skinName)) {
-                    setSkin(skinName);
-
-                    Config.getConfig().markDirty();
-                    Config.getConfig().writeData();
-
-                    updateButtonUI();
-                } else DodgeCoin.logEvent("Could not equip / buy the skin");
-            }
-        }
-
-        // clear the screen from the previous frame
-        Gdx.gl.glClearColor(0, 0.5f, 0.5f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        Renderer.get().drawCenteredString("Money: " + Math.round(Config.money), 0, Constants.VIEWPORT_HEIGHT - 75, Constants.VIEWPORT_WIDTH, 50, Color.WHITE);
-        left.draw();
-        right.draw();
-
-        int x = Constants.VIEWPORT_WIDTH / 5;
-        int y = Constants.VIEWPORT_HEIGHT / 4;
-        for (int i = 0; i < shop.length; i++) {
-            int xPos;
-            int yPos;
-            if (i < 3) {
-                xPos = x * (i + 1) - 15 + 15 * i;
-                yPos = Constants.VIEWPORT_HEIGHT - (x - y - 20);
-            } else {
-                xPos = x  * (i - 2) - 15 + 15 * (i - 3);
-                yPos = Constants.VIEWPORT_HEIGHT - (x + y * 2 + 20);
-            }
-
-            shop[i].draw();
-
-            int skinIndex = i + (page - 1) * shop.length;
-            String skin = skinIndex < shopItems.size() ? shopItems.get(skinIndex) : "";
-            if (SkinHandler.unlockedSkins.containsKey(skin)) {
-                if (!SkinHandler.unlockedSkins.get(skin)) {
-                    Renderer.get().drawString(String.valueOf(SkinHandler.skinPrices.get(skin)), xPos, yPos);
-                } else if (Objects.equals(Config.playerSkin, skin) || Objects.equals(Config.backgroundSkin, skin)) {
-                    Renderer.get().drawString("Equipped!", xPos, yPos);
-                } else {
-                    Renderer.get().drawString("Bought!", xPos, yPos);
-                }
-            }
-        }
-
-        // IMPORTANT: if this is removed, nothing will be drawn to the screen
-        renderer.render();
-    }
-
-    private void setSkin(String skin) {
-        if (skin.startsWith("textures/players")) Player.get().setTexture(skin);
-        else if (skin.startsWith("textures/backgrounds")) Background.get().setTexture(skin);
-
-
-        if (skin.startsWith("textures/players/")) {
-            Config.playerSkin = skin;
-        } else {
-            Config.backgroundSkin = skin;
-        }
-
-        DodgeCoin.logEvent("Changed skin to " + skin);
-    }
-
-    private void updateButtonUI() {
-        for (int i = 0; i < shop.length; i++) {
-            // textures
-            int index = i + (page - 1) * 6;
-            if (index < shopItems.size()) {
-                shop[i].setTexture(shopItems.get(index));
-                shop[i].setEnabled(true);
-            } else {
-                shop[i].setTexture("");
-                shop[i].setEnabled(false);
-            }
-
-            // borders
-
-        }
+        super.render(delta);
+        this.pane.setScrollbarsVisible(true);
     }
 
     @Override
-    public void hide() {
-        this.dispose();
+    public void pause() {
+
     }
 
     @Override
-    public void dispose() {
-        renderer.dispose();
+    public void resume() {
+
+    }
+
+    private static class ShopItem {
+
+        private final Group group;
+        private final float width;
+        private final float height;
+
+        public ShopItem(Skin skin, String texture, float height) {
+            TextureRegion region = new TextureRegion(DodgeCoin.assets.getTexture(texture));
+            if (texture.contains("players")) {
+                region.setRegion(0, 0, 16, 32);
+            }
+
+            this.width = (1520f) / 3f - 9;
+            this.height = height;
+
+            this.group = new Group();
+            this.group.setSize(this.width, height);
+
+            Button button = new Button(skin.get("default", Button.ButtonStyle.class));
+            button.setTransform(true);
+            button.setTouchable(Touchable.enabled);
+            button.setSize(width, height);
+
+            String[] skinName = texture.split("/");
+            String skinNameNoExtension = skinName[skinName.length - 1].replaceAll("[.][a-z]*", "");
+            Label name = new Label(Util.title(skinNameNoExtension), skin.get("background", Label.LabelStyle.class));
+            name.setAlignment(Align.center, Align.bottom);
+            name.setTouchable(Touchable.disabled);
+            name.setBounds(75f, this.height - 75f, this.width - 150f, 50f);
+
+            int skinPrice = SkinHandler.skinPrices.get(texture);
+            Label price = new Label(NumberFormat.getInstance(Locale.getDefault()).format(skinPrice), skin.get("price", Label.LabelStyle.class));
+            price.setAlignment(Align.center, Align.bottom);
+            price.setTouchable(Touchable.disabled);
+            price.setBounds(25f, 25f, this.width - 50f, 50f);
+
+            Image image = new Image(region);
+            image.setTouchable(Touchable.disabled);
+            float widthScaled = image.getWidth() * ((this.height - 170f) / image.getHeight());
+            System.out.println(widthScaled);
+            image.setSize(widthScaled, this.height - 170f);
+            image.setPosition((this.width - image.getWidth()) / 2, 85f);
+
+            this.group.addActor(button);
+            this.group.addActor(image);
+            this.group.addActor(price);
+            this.group.addActor(name);
+        }
+
+        public Group getGroup() {
+            return group;
+        }
+
+        public float getWidth() {
+            return width;
+        }
+
+        public float getHeight() {
+            return height;
+        }
     }
 }

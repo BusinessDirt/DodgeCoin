@@ -1,7 +1,7 @@
 package businessdirt.dodgecoin.game.objects;
 
 import businessdirt.dodgecoin.DodgeCoin;
-import businessdirt.dodgecoin.core.APIHandler;
+import businessdirt.dodgecoin.core.util.APIHandler;
 import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.game.Constants;
 import businessdirt.dodgecoin.game.screens.GameScreen;

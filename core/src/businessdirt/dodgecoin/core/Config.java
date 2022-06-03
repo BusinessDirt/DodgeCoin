@@ -1,9 +1,10 @@
 package businessdirt.dodgecoin.core;
 
 import businessdirt.dodgecoin.DodgeCoin;
-import com.github.businessdirt.config.ConfigHandler;
-import com.github.businessdirt.config.data.Property;
-import com.github.businessdirt.config.data.PropertyType;
+import businessdirt.dodgecoin.core.config.ConfigHandler;
+import businessdirt.dodgecoin.core.config.data.Property;
+import businessdirt.dodgecoin.core.config.data.PropertyType;
+import businessdirt.dodgecoin.core.util.Util;
 
 import java.io.File;
 
@@ -42,17 +43,19 @@ public class Config extends ConfigHandler {
             type = PropertyType.SLIDER,
             name = "Music Volume",
             description = "Controls the music volume.",
-            category = "Audio"
+            category = "Audio",
+            max = 100
     )
-    public static double musicVolume = 0.1D;
+    public static Integer musicVolume = 10;
 
     @Property(
             type = PropertyType.SLIDER,
             name = "SFX Volume",
             description = "Controls the SFX volume.",
-            category = "Audio"
+            category = "Audio",
+            max = 100
     )
-    public static double sfxVolume = 1D;
+    public static Integer sfxVolume = 10;
 
     @Property(
             type = PropertyType.SWITCH,
@@ -63,9 +66,9 @@ public class Config extends ConfigHandler {
     public static boolean hardMode = false;
 
     public Config() {
-        super(new File(DodgeCoin.getConfigFolder(), "\\config.toml"));
+        super(new File(Util.getConfigFolder(), "\\config.toml"));
         initialize();
-        DodgeCoin.logEvent("Configuration loaded! " + DodgeCoin.getConfigFolder());
+        Util.logEvent("Configuration loaded! " + Util.getConfigFolder());
     }
 
     public static Config getConfig() {

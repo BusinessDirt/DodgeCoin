@@ -1,83 +1,70 @@
 package businessdirt.dodgecoin.game.screens;
 
 import businessdirt.dodgecoin.DodgeCoin;
-import businessdirt.dodgecoin.core.Config;
-import businessdirt.dodgecoin.game.AssetFinder;
-import businessdirt.dodgecoin.game.Constants;
-import businessdirt.dodgecoin.core.input.buttons.ImageButton;
-import businessdirt.dodgecoin.core.input.Keyboard;
-import businessdirt.dodgecoin.core.input.buttons.TextButton;
-import businessdirt.dodgecoin.core.renderer.Renderer;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 
-public class MenuScreen extends ScreenAdapter {
-
-    private final Renderer renderer;
-    private final ImageButton shopButton, settingsButton;
-    private final TextButton playButton;
+public class MenuScreen extends AbstractScreen {
 
     public MenuScreen() {
-        renderer = Renderer.newInstance();
-
-        // Buttons
-        shopButton = new ImageButton("textures/gui/shop.png", 75, 75, 100, 100);
-        shopButton.setSound(DodgeCoin.assets.get("sounds/button.mp3", Sound.class));
-
-        settingsButton = new ImageButton("textures/gui/settings.png", (int) (Renderer.get().getWidth() - 225), 75, 100, 100);
-        settingsButton.setSound(DodgeCoin.assets.get("sounds/button.mp3", Sound.class));
-
-        playButton = new TextButton("PLAY", Constants.CENTER_X - 300, 50, 600, 150);
-        playButton.setSound(DodgeCoin.assets.get("sounds/button.mp3", Sound.class));
-        playButton.setBackgroundColor(Color.RED);
-
-        // Sounds
-        Music backgroundMusic = DodgeCoin.assets.get("music/background2.mp3", Music.class);
-        backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume((float) Config.musicVolume);
-        if (!backgroundMusic.isPlaying()) backgroundMusic.play();
+        super(DodgeCoin.assets.getSkin("skins/menu/skin.json"), Color.TEAL);
     }
 
     @Override
-    public void render(float delta) {
-        // input
-        Keyboard.defaultKeys();
-        if (Keyboard.keyTyped(Input.Keys.ENTER)) DodgeCoin.get().setScreen(new GameScreen());
-        if (Keyboard.keyTyped(Input.Keys.ESCAPE)) {
-            Gdx.app.exit();
-            System.exit(0);
-        }
+    public void show() {
+        // Container to align the buttons
+        Table menuContainer = new Table();
+        menuContainer.setBounds(50f, 50f, 350f, 980f);
+        menuContainer.align(Align.top);
 
-        // buttons
-        if (shopButton.isClicked()) DodgeCoin.get().setScreen(new ShopScreen());
-        if (settingsButton.isClicked()) DodgeCoin.get().setScreen(new SettingsScreen());
-        if (playButton.isClicked()) DodgeCoin.get().setScreen(new GameScreen());
+        // Settings Button
+        TextButton settingsButton = new TextButton("Settings", this.skin.get("settingsButton", TextButton.TextButtonStyle.class));
+        settingsButton.getLabel().setFontScale(2f);
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                DodgeCoin.get().setScreen(new SettingsScreen());
+            }
+        });
+        menuContainer.add(settingsButton).width(350f).height(100f).padBottom(5f);
+        menuContainer.row();
 
-        // clear the screen from the previous frame
-        Gdx.gl.glClearColor(0, 0.5f, 0.5f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        // Shop Button
+        TextButton shopButton = new TextButton("Shop", this.skin.get("shopButton", TextButton.TextButtonStyle.class));
+        shopButton.getLabel().setFontScale(2f);
+        shopButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                DodgeCoin.get().setScreen(new ShopScreen());
+            }
+        });
+        menuContainer.add(shopButton).width(350f).height(100f).padBottom(5f);
+        menuContainer.row();
 
-        // draw the buttons
-        shopButton.draw();
-        settingsButton.draw();
-        playButton.draw();
+        // Play Button
+        TextButton playButton = new TextButton("Play", this.skin.get("playButton", TextButton.TextButtonStyle.class));
+        playButton.getLabel().setFontScale(2f);
+        playButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                DodgeCoin.get().setScreen(new GameScreen());
+            }
+        });
+        menuContainer.add(playButton).width(350f).height(100f).padBottom(5f);
+        menuContainer.row();
 
-        // IMPORTANT: if this is removed, nothing will be drawn to the screen
-        renderer.render();
+        this.stage.addActor(menuContainer);
     }
 
     @Override
-    public void hide() {
-        this.dispose();
+    public void pause() {
     }
 
     @Override
-    public void dispose() {
-        renderer.dispose();
+    public void resume() {
     }
 }
