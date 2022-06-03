@@ -5,6 +5,7 @@ import businessdirt.dodgecoin.core.util.AssetLoader;
 import businessdirt.dodgecoin.game.screens.LoadingScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.audio.Music;
 
 import java.awt.*;
 

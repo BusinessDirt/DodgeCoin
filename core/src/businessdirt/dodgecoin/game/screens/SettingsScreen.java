@@ -1,6 +1,7 @@
 package businessdirt.dodgecoin.game.screens;
 
 import businessdirt.dodgecoin.DodgeCoin;
+import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.core.config.gui.SettingsGui;
 import businessdirt.dodgecoin.core.input.Keyboard;
 import businessdirt.dodgecoin.core.renderer.Renderer;
@@ -64,6 +65,7 @@ public class SettingsScreen extends AbstractScreen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                DodgeCoin.assets.getSound("sounds/button.mp3").play(Config.sfxVolume / 100f);
                 DodgeCoin.get().setScreen(new MenuScreen());
             }
         });

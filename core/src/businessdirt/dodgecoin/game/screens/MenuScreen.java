@@ -1,6 +1,7 @@
 package businessdirt.dodgecoin.game.screens;
 
 import businessdirt.dodgecoin.DodgeCoin;
+import businessdirt.dodgecoin.core.Config;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -27,6 +28,7 @@ public class MenuScreen extends AbstractScreen {
         settingsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                DodgeCoin.assets.getSound("sounds/button.mp3").play(Config.sfxVolume / 100f);
                 DodgeCoin.get().setScreen(new SettingsScreen());
             }
         });
@@ -39,6 +41,7 @@ public class MenuScreen extends AbstractScreen {
         shopButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                DodgeCoin.assets.getSound("sounds/button.mp3").play(Config.sfxVolume / 100f);
                 DodgeCoin.get().setScreen(new ShopScreen());
             }
         });
@@ -51,6 +54,7 @@ public class MenuScreen extends AbstractScreen {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                DodgeCoin.assets.getSound("sounds/button.mp3").play(Config.sfxVolume / 100f);
                 DodgeCoin.get().setScreen(new GameScreen());
             }
         });

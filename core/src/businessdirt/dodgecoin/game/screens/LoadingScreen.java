@@ -1,15 +1,24 @@
 package businessdirt.dodgecoin.game.screens;
 
 import businessdirt.dodgecoin.DodgeCoin;
+import businessdirt.dodgecoin.core.config.data.Property;
+import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.util.APIHandler;
 import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.core.SkinHandler;
 import businessdirt.dodgecoin.core.util.AssetLoader;
+import businessdirt.dodgecoin.core.util.MusicPlayer;
 import businessdirt.dodgecoin.core.util.Util;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class LoadingScreen extends ScreenAdapter {
 
@@ -41,7 +50,10 @@ public class LoadingScreen extends ScreenAdapter {
 
 
         // if the assets finished loading it will enter the main menu
-        if (DodgeCoin.assets.update()) DodgeCoin.get().setScreen(new MenuScreen());
+        if (DodgeCoin.assets.update()) {
+            new MusicPlayer("music/background2.mp3");
+            DodgeCoin.get().setScreen(new MenuScreen());
+        }
     }
 
     @Override

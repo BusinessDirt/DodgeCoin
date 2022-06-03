@@ -48,7 +48,7 @@ public class Coin extends GameObject {
                 if (coin.texturePath.contains("dogecoin.png")) {
                     Config.money += APIHandler.dogecoin;
                     GameScreen.setState(GameScreen.GameState.OVER);
-                    DodgeCoin.assets.get("sounds/death.mp3", Sound.class).play((float) Config.sfxVolume);
+                    DodgeCoin.assets.get("sounds/death.mp3", Sound.class).play(Config.sfxVolume / 100f);
 
                     iter.forEachRemaining(c -> iter.remove());
                     noSpawn = true;
@@ -58,7 +58,7 @@ public class Coin extends GameObject {
                     Config.money += APIHandler.bitcoin * (1 + combo / 10f);
                     Constants.COIN_SPAWN_DELAY -= combo * 1000L;
 
-                    DodgeCoin.assets.get("sounds/bitcoin.mp3", Sound.class).play((float) Config.sfxVolume);
+                    DodgeCoin.assets.get("sounds/bitcoin.mp3", Sound.class).play(Config.sfxVolume / 100f);
                     if (combo % 3 == 0 && combo<50) {
                         Constants.COIN_DROP_SPEED = Constants.COIN_DROP_SPEED + combo * 3;
                     }

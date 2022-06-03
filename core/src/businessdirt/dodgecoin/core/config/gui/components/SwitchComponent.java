@@ -1,5 +1,6 @@
 package businessdirt.dodgecoin.core.config.gui.components;
 
+import businessdirt.dodgecoin.DodgeCoin;
 import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.Config;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -20,6 +21,7 @@ public class SwitchComponent extends GuiComponent {
         checkBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                DodgeCoin.assets.getSound("sounds/button.mp3").play(Config.sfxVolume / 100f);
                 property.setValue(!property.getAsBoolean());
                 Config.getConfig().writeData();
             }

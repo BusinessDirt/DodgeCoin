@@ -6,6 +6,7 @@ import businessdirt.dodgecoin.core.config.data.PropertyData;
 import com.electronwill.nightconfig.core.file.FileConfig;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,14 +19,7 @@ public class ConfigHandler {
 
     public ConfigHandler(File file) {
         Field[] declaredFields = this.getClass().getDeclaredFields();
-        List<Field> filteredFields = new ArrayList<>();
-
-        for (Field declaredField : declaredFields) {
-            if (declaredField.isAnnotationPresent(Property.class)) {
-                filteredFields.add(declaredField);
-            }
-        }
-
+        List<Field> filteredFields = Arrays.stream(declaredFields).filter(field -> field.isAnnotationPresent(Property.class)).collect(Collectors.toList());
         List<PropertyData> dataList = new ArrayList<>();
 
         for (Field item : filteredFields) {

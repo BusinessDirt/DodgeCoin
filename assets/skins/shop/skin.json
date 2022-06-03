@@ -4,6 +4,9 @@
   },
   Color: {
     white: { r: 1, g: 1, b: 1, a: 1 },
+    green: { a: 1.0, b: 0.0, g: 1.0, r: 0.0 },
+    orange: { a: 1.0, b: 0.0, g: 0.5, r: 1.0 },
+    red: { a: 1.0, b: 0.11764706, g: 0.0, r: 1.0 },
     gray: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
     darkGray: { a: 1.0, b: 0.25, g: 0.25, r: 0.25 },
     middleGray: { a: 1.0, b: 0.33, g: 0.33, r: 0.33 },
@@ -48,7 +51,10 @@
   LabelStyle: {
     default: { font: default, fontColor: font },
     background: { font: default, fontColor: font, background: labelBackground },
-    price: { font: default, fontColor: font, background: pricePaneBackground }
+    priceGreen: { font: default, fontColor: green, background: pricePaneBackground },
+    priceOrange: { font: default, fontColor: orange, background: pricePaneBackground },
+    priceRed: { font: default, fontColor: red, background: pricePaneBackground },
+    priceWhite: { font: default, fontColor: white, background: pricePaneBackground }
   },
   TextButtonStyle: {
     backButton: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, font: default, fontColor: font,

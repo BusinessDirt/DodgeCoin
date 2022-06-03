@@ -96,18 +96,8 @@ public class GameScreen extends ScreenAdapter {
     }
 
     @Override
-    public void resize(int width, int height) {
-        Renderer.get().resize(width, height);
-    }
-
-    @Override
     public void hide() {
         this.dispose();
-    }
-
-    @Override
-    public void dispose() {
-        renderer.dispose();
     }
 
     public enum GameState {
