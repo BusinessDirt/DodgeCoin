@@ -1,5 +1,6 @@
 package businessdirt.dodgecoin.core.config.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Category {
@@ -13,10 +14,16 @@ public class Category {
     }
 
     public String toString() {
-        return "Category \"" + this.name + "\"\n" + String.join("\n", (CharSequence) this.items);
+        List<String> string = new ArrayList<>();
+        this.items.forEach(data -> string.add(data.toString()));
+        return "Category \"" + this.name + "\"\n" + String.join("\n", string);
     }
 
     public final List<PropertyData> getItems() {
         return this.items;
+    }
+
+    public String getName() {
+        return name;
     }
 }

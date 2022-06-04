@@ -87,7 +87,9 @@
     tooltip: { name: outline-press, color: background }
   },
   ButtonStyle: {
-    blank: { up: buttonChecked, over: buttonChecked, down: buttonChecked, disabled: buttonChecked }
+    blank: { up: buttonChecked, over: buttonChecked, down: buttonChecked, disabled: buttonChecked },
+    divider: { up: buttonDisabled, over: buttonDisabled, down: buttonDisabled, disabled: buttonDisabled },
+    category: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, pressedOffsetY: -1, pressedOffsetX: 1 }
   },
   CheckBoxStyle: {
     square: { checkboxOn: checkBoxSquare, checkboxOff: checkBoxOff, checkboxOver: checkBoxOver, checkboxOnOver: checkBoxSquareOver, checkboxOnDisabled: checkBoxSquareDisabled,

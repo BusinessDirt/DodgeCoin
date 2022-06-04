@@ -18,26 +18,43 @@ public class ConfigHandler {
     private boolean dirty;
 
     public ConfigHandler(File file) {
+        this.configFile = FileConfig.of(file);
         Field[] declaredFields = this.getClass().getDeclaredFields();
         List<Field> filteredFields = Arrays.stream(declaredFields).filter(field -> field.isAnnotationPresent(Property.class)).collect(Collectors.toList());
-        List<PropertyData> dataList = new ArrayList<>();
 
+        this.properties = new ArrayList<>();
         for (Field item : filteredFields) {
             Property property = item.getAnnotation(Property.class);
             item.setAccessible(true);
-
             PropertyData data = PropertyData.fromField(property, item, this);
-            dataList.add(data);
+            this.properties.add(data);
         }
-
-        this.properties = dataList;
-        this.configFile = FileConfig.of(file);
     }
 
     public void initialize() {
         this.readData();
         new Timer("", false).scheduleAtFixedRate(new InitializationTimerTask(this), 0L, 30000L);
         Runtime.getRuntime().addShutdownHook(new Thread(ConfigHandler.this::writeData));
+    }
+
+    public final List<Category> getCategories() {
+        List<PropertyData> filtered = this.properties.stream().filter(data -> !data.getProperty().hidden()).collect(Collectors.toList());
+        Map<String, List<PropertyData>> categoryMap = new LinkedHashMap<>();
+
+        for (PropertyData item : filtered) {
+            String category = item.getProperty().category();
+            List<PropertyData> dataList = categoryMap.get(category);
+            if (dataList == null) dataList = new ArrayList<>();
+            dataList.add(item);
+            categoryMap.put(category, dataList);
+        }
+
+        List<Category> result = new ArrayList<>(categoryMap.size());
+        categoryMap.forEach((key, value) -> {
+            value.sort(new SubcategoryComparator());
+            result.add(new Category(key, value));
+        });
+        return result;
     }
 
     private void readData() {
@@ -63,11 +80,6 @@ public class ConfigHandler {
 
         this.configFile.save();
         this.dirty = false;
-    }
-
-    public Category getCategoryItems(String category) {
-        List<PropertyData> propertyDataList = this.properties.stream().filter(property -> Objects.equals(property.getProperty().category(), category)).collect(Collectors.toList());
-        return new Category(category, propertyDataList);
     }
 
     private static String fullPropertyPath(Property fullPropertyPath) {
@@ -101,6 +113,14 @@ public class ConfigHandler {
         @Override
         public void run() {
             this.instance.writeData();
+        }
+    }
+
+    private static class SubcategoryComparator implements Comparator<PropertyData> {
+
+        @Override
+        public int compare(PropertyData o1, PropertyData o2) {
+            return o1.getProperty().subcategory().compareTo(o2.getProperty().subcategory());
         }
     }
 }
