@@ -66,5 +66,6 @@ project(":core") {
 
         implementation 'com.electronwill.night-config:core:3.6.3'
         implementation 'com.electronwill.night-config:toml:3.6.3'
+        implementation 'com.google.guava:guava:31.1-jre'
     }
 }

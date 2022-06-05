@@ -5,6 +5,7 @@ import businessdirt.dodgecoin.core.config.ConfigHandler;
 import businessdirt.dodgecoin.core.config.data.Property;
 import businessdirt.dodgecoin.core.config.data.PropertyType;
 import businessdirt.dodgecoin.core.util.Util;
+import com.badlogic.gdx.graphics.Color;
 
 import java.io.File;
 

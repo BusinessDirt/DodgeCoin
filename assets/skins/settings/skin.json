@@ -16,6 +16,7 @@
     background: { r: 0.8, g: 0.8, b: 0.8, a: 1 },
     selection: { r: 0, g: 0.3, b: 0.5, a: 1 },
     semiTransparent: { r: 0, g: 0, b: 0, a: 0.6 },
+    transparent: { r: 0, g: 0, b: 0, a: 0 },
     fontColor: {r: 1, g: 1, b: 1, a: 0.9}
     darkFontColor: { a: 1.0, b: 0.35686275, g: 0.35686275, r: 0.35686275 }
 
@@ -78,18 +79,28 @@
     sliderVerticalKnobDown: { name: check-square, color: down },
     sliderVerticalKnobDisabled: { name: check-square, color: disabled },
 
+    progressVertical: { name: progress-v, color: up },
+    progressVerticalKnob: { name: progress-v-on, color: semiTransparent },
+    progressVerticalDisabled: { name: progress-v, color: disabled },
+    progressVerticalKnobDisabled: { name: progress-v-on, color: disabled },
+
+    verticalAlphaBackground: { name: verticalAlpha, color: semiTransparent },
+
     textField: { name: field, color: up },
     textFieldDown: { name: field, color: background },
     textFieldDisabled: { name: field, color: disabled },
     textFieldCursor: { name: cursor, color: font },
     darkTextFieldCursor: { name: cursor, color: darkFontColor },
 
-    tooltip: { name: outline-press, color: background }
+    tooltip: { name: outline-press, color: background },
+
+    pickerBlack: { name: picker, color: black }
   },
   ButtonStyle: {
     blank: { up: buttonChecked, over: buttonChecked, down: buttonChecked, disabled: buttonChecked },
     divider: { up: buttonDisabled, over: buttonDisabled, down: buttonDisabled, disabled: buttonDisabled },
-    category: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, pressedOffsetY: -1, pressedOffsetX: 1 }
+    category: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, pressedOffsetY: -1, pressedOffsetX: 1 },
+    color: {up: buttonUp, over: buttonOver, down: buttonOver, disabled: buttonDisabled}
   },
   CheckBoxStyle: {
     square: { checkboxOn: checkBoxSquare, checkboxOff: checkBoxOff, checkboxOver: checkBoxOver, checkboxOnOver: checkBoxSquareOver, checkboxOnDisabled: checkBoxSquareDisabled,
@@ -113,7 +124,9 @@
   },
   SliderStyle: {
     default-horizontal: { background: sliderHorizontal, knob: sliderKnob, knobOver: sliderKnobOver, knobDown: sliderKnobDown,
-      disabledKnob: sliderKnobDisabled }
+      disabledKnob: sliderKnobDisabled },
+    default-vertical: { background: progressVertical, knobBefore: progressVerticalKnob,
+      disabledBackground: progressVerticalDisabled, disabledKnobBefore: progressVerticalKnobDisabled }
   },
   TextButtonStyle: {
     default: { up: buttonUp, over: buttonOver, down: buttonDown, disabled: buttonDisabled, font: default, fontColor: font,

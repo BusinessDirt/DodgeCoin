@@ -17,10 +17,13 @@ public @interface Property {
     String category();
     String subcategory() default "";
 
+    // Range of numbers for Sliders
     int min() default 0;
     int max() default 0;
 
+    // Options for Selectors
     String[] options() default {};
 
+    // Hides the Property from the GUI
     boolean hidden() default false;
 }
