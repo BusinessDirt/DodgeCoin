@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
+import java.awt.*;
+
 public abstract class AbstractScreen implements Screen {
     protected final Stage stage;
     protected final ScalingViewport viewport;
@@ -46,7 +48,7 @@ public abstract class AbstractScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        Vector2 size = Scaling.fit.apply(1920, 1080, width, height);
+        Vector2 size = Scaling.fit.apply(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, width, height);
         this.viewport.update((int) size.x, (int) size.y, true);
         this.stage.setViewport(this.viewport);
     }
