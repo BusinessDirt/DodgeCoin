@@ -23,6 +23,14 @@ public class Config extends ConfigHandler {
     public static double money = 0;
 
     @Property(
+            type = PropertyType.COLOR,
+            name = "Test",
+            category = "Audio",
+            description = "ree"
+    )
+    public static Color color = new Color();
+
+    @Property(
             type = PropertyType.TEXT,
             name = "Player Skin",
             category = "Hidden",

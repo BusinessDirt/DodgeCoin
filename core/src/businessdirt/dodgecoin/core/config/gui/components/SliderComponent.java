@@ -1,5 +1,6 @@
 package businessdirt.dodgecoin.core.config.gui.components;
 
+import businessdirt.dodgecoin.DodgeCoin;
 import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.core.config.gui.SettingsGui;
@@ -38,6 +39,7 @@ public class SliderComponent extends GuiComponent {
         this.label = new Label(property.getValue().getValue(Config.getConfig()).toString(), skin);
         this.label.setAlignment(Align.center);
         this.label.setTouchable(Touchable.disabled);
+        this.label.setFontScale(DodgeCoin.fullscreen.height / 1080f);
         this.label.setPosition(width - 50f - this.actor.getWidth() * this.actor.getScaleX(), height - height / 2 - this.actor.getHeight() * this.actor.getScaleY() * 0.5f - 15f);
         this.label.setWidth(this.actor.getWidth());
     }

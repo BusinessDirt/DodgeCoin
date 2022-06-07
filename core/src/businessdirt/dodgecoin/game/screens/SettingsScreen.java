@@ -27,12 +27,22 @@ public class SettingsScreen extends AbstractScreen {
 
     @Override
     public void show() {
+        // sizes
         float containerOffset = 5f;
+        float containerWidth = DodgeCoin.fullscreen.width / 1.263f;
+        float containerHeight = DodgeCoin.fullscreen.height / 1.42f;
+        float padX = (DodgeCoin.fullscreen.width - containerWidth) / 2;
+        float padY = (DodgeCoin.fullscreen.height - containerHeight) / 2;
+
+        float categoryWidth = containerWidth / 5f;
+        float propertyWidth = containerWidth - categoryWidth;
+        float itemWidth = DodgeCoin.fullscreen.width / 5.5f;
+
 
         // container for the scroll pane
         Table container = new Table(skin);
         container.setBackground("scrollPane");
-        container.setBounds(200f - containerOffset, 180f - containerOffset, 1520f + 2 * containerOffset, 760f + 2 * containerOffset);
+        container.setBounds(padX - containerOffset, padY - containerOffset, containerWidth + 2 * containerOffset, containerHeight + 2 * containerOffset);
 
         // table for all the config values
         Table propertyTable = new Table();
@@ -42,7 +52,7 @@ public class SettingsScreen extends AbstractScreen {
         Table categoryTable = new Table();
         categoryTable.align(Align.top);
 
-        SettingsGui.newInstance(categoryTable, propertyTable, 300f, 1220f);
+        SettingsGui.newInstance(categoryTable, propertyTable, categoryWidth, propertyWidth);
 
         // scroll pane for the config values
         this.valuesPane = new ScrollPane(propertyTable, skin.get("default", ScrollPane.ScrollPaneStyle.class));
@@ -60,8 +70,8 @@ public class SettingsScreen extends AbstractScreen {
         this.categoriesPane.layout();
 
         // add everything to the container
-        container.add(this.categoriesPane).width(300f).height(760f).pad(containerOffset, containerOffset, containerOffset, 0f);
-        container.add(this.valuesPane).width(1220f).height(760f).pad(containerOffset, 0f, containerOffset, containerOffset);
+        container.add(this.categoriesPane).width(categoryWidth).height(containerHeight).pad(containerOffset, containerOffset, containerOffset, 0f);
+        container.add(this.valuesPane).width(propertyWidth).height(containerHeight).pad(containerOffset, 0f, containerOffset, containerOffset);
         SettingsGui.get().setScrollPane(this.valuesPane);
         this.stage.addActor(container);
         this.stage.setScrollFocus(this.valuesPane);
@@ -69,28 +79,29 @@ public class SettingsScreen extends AbstractScreen {
         // Settings Label
         Label settingsLabel = new Label("Settings", skin);
         settingsLabel.setAlignment(Align.bottomLeft);
-        settingsLabel.setBounds(200f, 960f, 760f, 140f);
-        settingsLabel.setFontScale(2f);
+        settingsLabel.setBounds(padX, DodgeCoin.fullscreen.height - padY / 2 - itemWidth / 14f, itemWidth, itemWidth / 7f);
+        settingsLabel.setFontScale(DodgeCoin.fullscreen.height / 540f);
         this.stage.addActor(settingsLabel);
 
         // Search Field
         TextField search = new TextField("", skin);
-        search.setBounds(1720f - 350f, 950f, 350f, 50f);
+        search.setBounds(DodgeCoin.fullscreen.width - padX - itemWidth, DodgeCoin.fullscreen.height - padY / 2 - itemWidth / 14f, itemWidth, itemWidth / 7f);
         search.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                SettingsGui.get().setSearchQuery(propertyTable, 1220f, search.getText());
+                SettingsGui.get().setSearchQuery(propertyTable, propertyWidth, search.getText());
             }
         });
         this.stage.addActor(search);
 
         // Back Button
         TextButton backButton = new TextButton("Back", skin.get("backButton", TextButton.TextButtonStyle.class));
-        backButton.setBounds(960f - 175f, 40f, 350f, 100f);
-        backButton.getLabel().setFontScale(2f);
+        backButton.setBounds(DodgeCoin.fullscreen.width / 2f - itemWidth / 2f, padY / 2f - itemWidth / 7f, itemWidth, itemWidth / 3.5f);
+        backButton.getLabel().setFontScale(DodgeCoin.fullscreen.height / 540f);
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                DodgeCoin.assets.getSound("sounds/button.mp3").play(Config.sfxVolume / 100f);
                 DodgeCoin.get().setScreen(new MenuScreen());
             }
         });

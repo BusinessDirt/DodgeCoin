@@ -1,5 +1,6 @@
 package businessdirt.dodgecoin.core.config.gui.components;
 
+import businessdirt.dodgecoin.DodgeCoin;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -18,7 +19,7 @@ public class SubcategoryComponent extends GuiComponent {
         line.setTouchable(Touchable.disabled);
 
         Label label = new Label(subcategory, skin);
-        label.setFontScale(1.75f);
+        label.setFontScale(DodgeCoin.fullscreen.height / 720f);
         label.setPosition(35f, 22f);
         label.setColor(skin.getColor("fontChecked"));
 

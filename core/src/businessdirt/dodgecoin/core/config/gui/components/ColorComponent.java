@@ -28,7 +28,7 @@ public class ColorComponent extends GuiComponent {
         this.actor = new Button(skin.get("color", Button.ButtonStyle.class));
         Button button = (Button) this.actor;
         button.setTransform(true);
-        button.setSize(76f, 76f);
+        button.setSize(height - 50f, height - 50f);
         button.setPosition(width - 50f - (GuiComponent.width + this.actor.getWidth() * this.actor.getScaleX()) / 2, height - this.actor.getHeight() * this.actor.getScaleY() / 2 - height / 2);
         button.addListener(new ChangeListener() {
             @Override
@@ -38,7 +38,7 @@ public class ColorComponent extends GuiComponent {
         });
 
         setColor(property.getAsColor());
-        button.add(this.color).width(56).height(56).pad(10f);
+        button.add(this.color).width(height - 70f).height(height - 70f).pad(10f);
     }
 
     public void setColor(Color color) {
@@ -66,14 +66,18 @@ public class ColorComponent extends GuiComponent {
         private final Image colorWheelPicker;
 
         private ColorPicker(Skin skin) {
+            float size = DodgeCoin.fullscreen.height / 2f;
+            float x = DodgeCoin.fullscreen.width / 2f - size / 2f;
+            float y = DodgeCoin.fullscreen.height / 2f - size / 2f;
+
             this.actor = new Group();
-            this.actor.setSize(1920f, 1080);
+            this.actor.setSize(DodgeCoin.fullscreen.width, DodgeCoin.fullscreen.height);
             this.actor.setVisible(false);
 
             Group group = (Group) this.actor;
             group.setPosition(0, 0);
 
-            Pixmap pixmap = new Pixmap(1920, 1080, Pixmap.Format.RGBA8888);
+            Pixmap pixmap = new Pixmap(DodgeCoin.fullscreen.width, DodgeCoin.fullscreen.height, Pixmap.Format.RGBA8888);
             pixmap.setColor(new Color(0f, 0f, 0f, 0.4f));
             pixmap.fill();
 
@@ -83,11 +87,11 @@ public class ColorComponent extends GuiComponent {
             group.addActor(drawableImage);
 
             Button button = new Button(skin.get("blank", Button.ButtonStyle.class));
-            button.setBounds(710f, 290f, 500f, 500f);
+            button.setBounds(x, y, size, size);
 
             // color code in hex
             this.hexCode = new TextField("", skin);
-            this.hexCode.setBounds(735f, 315f, 450f, 50f);
+            this.hexCode.setBounds(x + size * 0.05f, y + size * 0.05f, size * 0.9f, size * 0.1f);
             this.hexCode.setAlignment(Align.center);
             this.hexCode.addListener(new ChangeListener() {
                 @Override
@@ -134,7 +138,7 @@ public class ColorComponent extends GuiComponent {
 
             // Slider for Transparency
             this.alpha = new Slider(0, 255, 1, true, skin);
-            this.alpha.setBounds(1135f, 390f, 50f, 375f);
+            this.alpha.setBounds(x + size * (0.1f + (4f/6f)), y + size * 0.2f, size * 0.1f, size * (4f/6f));
             this.alpha.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -149,12 +153,12 @@ public class ColorComponent extends GuiComponent {
 
             // Image for color picking
             this.colorWheel = new Image(DodgeCoin.assets.getTexture("textures/gui/settings/colorwheel.png"));
-            this.colorWheel.setBounds(735f, 390f, 375f, 375f);
+            this.colorWheel.setBounds(x + size * 0.05f, y + size * 0.2f, size * (4f/6f), size * (4f/6f));
             this.colorWheel.addListener(new ColorWheelClickListener());
 
             // Picker
             this.colorWheelPicker = new Image(skin, "pickerBlack");
-            this.colorWheelPicker.setBounds(800f, 500f, 16f, 16f);
+            this.colorWheelPicker.setBounds(colorWheel.getX() + colorWheel.getWidth() / 2f, colorWheel.getY() + colorWheel.getHeight() / 2f, 16f, 16f);
 
             group.addActor(button);
             group.addActor(this.hexCode);
@@ -191,7 +195,7 @@ public class ColorComponent extends GuiComponent {
                 for (int y = 0; y < pixmap.getHeight(); y++) {
                     Color pixelColor = new Color(pixmap.getPixel(x, y));
                     if (pixelColor.r == color.r && pixelColor.g == color.g && pixelColor.b == color.b) {
-                        colorWheelPicker.setPosition(735f + x * scale - 8, 390f + (colorWheel.getHeight() - y * scale) - 8);
+                        colorWheelPicker.setPosition(colorWheel.getX() + x * scale - 8, colorWheel.getY() + (colorWheel.getHeight() - y * scale) - 8);
                     }
                 }
             }

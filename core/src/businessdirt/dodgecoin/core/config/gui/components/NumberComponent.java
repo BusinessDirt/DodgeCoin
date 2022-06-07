@@ -1,5 +1,6 @@
 package businessdirt.dodgecoin.core.config.gui.components;
 
+import businessdirt.dodgecoin.DodgeCoin;
 import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.Config;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,12 +15,13 @@ public class NumberComponent extends GuiComponent {
     public NumberComponent(PropertyData property, Skin skin, float width, float height) {
         String previousEntry = String.valueOf(property.getAsDouble());
         this.actor = new TextField(previousEntry, skin);
-        this.actor.setSize(GuiComponent.width, GuiComponent.height);
-        this.actor.setPosition(width - 50f - (GuiComponent.width + this.actor.getWidth() * this.actor.getScaleX()) / 2, height - this.actor.getHeight() * this.actor.getScaleY() / 2 - height / 2);
-        this.actor.addListener(new ChangeListener() {
+        TextField field = (TextField) this.actor;
+
+        field.setSize(GuiComponent.width, GuiComponent.height);
+        field.setPosition(width - 50f - (GuiComponent.width + this.actor.getWidth() * this.actor.getScaleX()) / 2, height - this.actor.getHeight() * this.actor.getScaleY() / 2 - height / 2);
+        field.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                TextField field = (TextField) actor;
                 int cursorPosition = field.getCursorPosition();
                 field.setText(field.getText().replaceAll("[^\\d.]", ""));
                 System.out.println(field.getText());

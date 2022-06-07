@@ -38,7 +38,7 @@ public class SettingsGui {
             label.setWrap(true);
             label.setTouchable(Touchable.disabled);
             label.setWidth(categoryWidth - 60f);
-            label.setFontScale(1.1f);
+            label.setFontScale(DodgeCoin.fullscreen.width / 1745.45f);
             label.setAlignment(Align.center, Align.bottom);
             label.layout();
 
@@ -78,11 +78,16 @@ public class SettingsGui {
         boolean first = true;
         String previousSubcategory = "";
 
-        List<PropertyData> filteredProperties = Config.getConfig().getCategories().get(this.currentCategory).getItems().stream().filter(data -> {
-            if (Objects.equals(this.searchQuery, "")) return true;
-            return data.getProperty().name().contains(this.searchQuery) || data.getProperty().description().contains(this.searchQuery) ||
-                    data.getProperty().category().contains(this.searchQuery) || data.getProperty().subcategory().contains(this.searchQuery);
-        }).collect(Collectors.toList());
+        List<PropertyData> filteredProperties;
+        if (searchQuery.equals("")) {
+            filteredProperties = Config.getConfig().getCategories().get(this.currentCategory).getItems();
+        } else {
+            filteredProperties = Config.getConfig().getProperties().stream().filter(data -> {
+                if (Objects.equals(this.searchQuery, "")) return true;
+                return data.getProperty().name().contains(this.searchQuery) || data.getProperty().description().contains(this.searchQuery) ||
+                        data.getProperty().category().contains(this.searchQuery) || data.getProperty().subcategory().contains(this.searchQuery);
+            }).collect(Collectors.toList());
+        }
 
         for (PropertyData property : filteredProperties) {
             if (!property.getProperty().hidden()) {
@@ -100,17 +105,17 @@ public class SettingsGui {
 
                 Label name = new Label(property.getProperty().name(), skin);
                 name.setTouchable(Touchable.disabled);
-                name.setFontScale(1.5f);
+                name.setFontScale(DodgeCoin.fullscreen.height / 720f);
                 name.layout();
 
                 Label desc = new Label(property.getProperty().description(), skin);
                 desc.setTouchable(Touchable.disabled);
                 desc.setWrap(true);
-                desc.setWidth(900f);
-                desc.setFontScale(1.1f);
+                desc.setWidth(propertyWidth * 0.7f);
+                desc.setFontScale(DodgeCoin.fullscreen.width / 1745.45f);
                 desc.layout();
 
-                float h = Math.max(83f + name.getGlyphLayout().height + desc.getGlyphLayout().height, 125f);
+                float h = 50f + name.getGlyphLayout().height * 3 + desc.getGlyphLayout().height;
 
                 name.setPosition(35f, h - 25f - name.getGlyphLayout().height);
                 desc.setPosition(45f, 25f + desc.getGlyphLayout().height / 2f);
