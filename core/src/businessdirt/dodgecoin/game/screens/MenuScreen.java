@@ -61,6 +61,19 @@ public class MenuScreen extends AbstractScreen {
         menuContainer.add(playButton).width(DodgeCoin.fullscreen.width / 5.5f).height(DodgeCoin.fullscreen.height / 10.8f).padBottom(5f);
         menuContainer.row();
 
+        //Quit Button
+        TextButton quitButton = new TextButton("Quit", this.skin.get("quitButton", TextButton.TextButtonStyle.class));
+        quitButton.getLabel().setFontScale(DodgeCoin.fullscreen.height / 540f);
+        quitButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                DodgeCoin.assets.getSound("sounds/button.mp3").play(Config.sfxVolume / 100f);
+                System.exit(0);
+            }
+        });
+        menuContainer.add(quitButton).width(DodgeCoin.fullscreen.width / 5.5f).height(DodgeCoin.fullscreen.height / 10.8f).padBottom(5f);
+        menuContainer.row();
+
         this.stage.addActor(menuContainer);
     }
 
