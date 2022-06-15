@@ -11,6 +11,8 @@
     down: { a: 1.0, b: 0.84705883, g: 0.9843137, r: 1.0 },
     checked: { r: 0, g: 0.3, b: 0.5, a: 1 },
     checkedOver: { r: 0, g: 0.4, b: 0.6, a: 1 },
+    checkedRed: { r: 0.6, g: 0.0, b: 0.0, a: 1 },
+    checkedOverRed: { r: 0.7, g: 0.0, b: 0.0, a: 1 } ,
     disabled: { r: 0.1, g: 0.1, b: 0.1, a: 1 },
     fontColor: {r: 1, g: 1, b: 1, a: 0.9}
 
@@ -28,6 +30,9 @@
     buttonDisabled: { name: base, color: disabled },
     buttonChecked: { name: base, color: checked },
     buttonCheckedOver: { name: base, color: checkedOver },
+
+    buttonCheckedRed: {name: base, color: checkedRed},
+    buttonCheckedOverRed: {name: base, color: checkedOverRed}
   },
   TextButtonStyle: {
     settingsButton: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, font: default, fontColor: font,
@@ -36,7 +41,7 @@
       overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 },
     playButton: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, font: default, fontColor: font,
       overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 },
-    quitButton: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, font: default, fontColor: font,
+    quitButton: { up: buttonCheckedRed, over: buttonCheckedOverRed, down: buttonCheckedRed, disabled: buttonDisabled, font: default, fontColor: font,
       overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 }
   }
 }

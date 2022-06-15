@@ -2,6 +2,7 @@ package businessdirt.dodgecoin.game.screens;
 
 import businessdirt.dodgecoin.DodgeCoin;
 import businessdirt.dodgecoin.core.Config;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -61,13 +62,14 @@ public class MenuScreen extends AbstractScreen {
         menuContainer.add(playButton).width(DodgeCoin.fullscreen.width / 5.5f).height(DodgeCoin.fullscreen.height / 10.8f).padBottom(5f);
         menuContainer.row();
 
-        //Quit Button
+        // Quit Button
         TextButton quitButton = new TextButton("Quit", this.skin.get("quitButton", TextButton.TextButtonStyle.class));
         quitButton.getLabel().setFontScale(DodgeCoin.fullscreen.height / 540f);
         quitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 DodgeCoin.assets.getSound("sounds/button.mp3").play(Config.sfxVolume / 100f);
+                Gdx.app.exit();
                 System.exit(0);
             }
         });
