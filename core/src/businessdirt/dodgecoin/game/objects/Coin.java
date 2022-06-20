@@ -61,6 +61,7 @@ public class Coin extends GameObject {
                     DodgeCoin.assets.get("sounds/bitcoin.mp3", Sound.class).play(Config.sfxVolume / 100f);
                     if (combo % 3 == 0 && combo<50) {
                         Constants.COIN_DROP_SPEED = Constants.COIN_DROP_SPEED + combo * 3;
+                        Constants.COIN_SPAWN_DELAY = Constants.COIN_SPAWN_DELAY-100;
                     }
                 }
 

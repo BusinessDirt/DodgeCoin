@@ -1,15 +1,16 @@
 # DodgeCoin
+## A game with the goal of dodging Dogecoins and collecting Bitcoins
+This game is built using the LibGDX framework and has the following features:
+- A shop where you can buy skins for the character and the background
+- A settings menu
+- The game itself with animated textures
 
-A simple game with the goal of collecting as many Bitcoins as possible 
-and avoiding all the Dogecoins. The value of the coins is based on real market data and
-the money you obtain can be used to purchase skins from the shop.
 
-
-## Usage
+## Installation / Usage
 
 1. Go to [releases](https://github.com/BusinessDirt/DodgeCoin/releases)
-2. Download the newest version
-3. Execute the downloaded file
+2. Download the newest version (none available yet)
+3. Execute the downloaded jar file 
 
 
 ## Contributing
@@ -20,6 +21,8 @@ the money you obtain can be used to purchase skins from the shop.
  2. Commit your Changes `(git commit -am 'Add some feature')`
  3. [Open a Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
 
+## Known issues (WIP)
+- none 
 
 ## Authors
 
