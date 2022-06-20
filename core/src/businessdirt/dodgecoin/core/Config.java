@@ -4,7 +4,9 @@ import businessdirt.dodgecoin.DodgeCoin;
 import businessdirt.dodgecoin.core.config.ConfigHandler;
 import businessdirt.dodgecoin.core.config.data.Property;
 import businessdirt.dodgecoin.core.config.data.PropertyType;
+import businessdirt.dodgecoin.core.config.data.types.Key;
 import businessdirt.dodgecoin.core.util.Util;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 
 import java.io.File;
@@ -65,6 +67,24 @@ public class Config extends ConfigHandler {
             description = "Adds a hard mode. Movement is faster and you can't stop."
     )
     public static boolean hardMode = false;
+
+    @Property(
+            type = PropertyType.KEY,
+            name = "Move left",
+            category = "Controls",
+            subcategory = "Movement",
+            description = "Keys for moving the player left"
+    )
+    public static Key moveLeft = new Key(Input.Keys.A, Input.Keys.LEFT);
+
+    @Property(
+            type = PropertyType.KEY,
+            name = "Move right",
+            category = "Controls",
+            subcategory = "Movement",
+            description = "Keys for moving the player right"
+    )
+    public static Key moveRight = new Key(Input.Keys.D, Input.Keys.RIGHT);
 
     public Config() {
         super(new File(Util.getConfigFolder(), "\\config.toml"));

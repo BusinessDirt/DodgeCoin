@@ -6,8 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public abstract class GuiComponent {
 
     protected Actor actor;
-    public static final float width = DodgeCoin.fullscreen.width / 13.7f;
-    public static final float height = DodgeCoin.fullscreen.height / 30.85f;
+
+    protected static final float scale = DodgeCoin.fullscreen.height / 1080f;
+    public static final float width = 140f * scale, height = 35f * scale;
 
     public Actor getActor() {
         return this.actor;

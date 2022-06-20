@@ -19,11 +19,11 @@ public class Category {
         return "Category \"" + this.name + "\"\n" + String.join("\n", string);
     }
 
-    public final List<PropertyData> getItems() {
+    public List<PropertyData> getItems() {
         return this.items;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 }

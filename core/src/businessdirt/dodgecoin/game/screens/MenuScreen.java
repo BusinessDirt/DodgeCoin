@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Align;
 public class MenuScreen extends AbstractScreen {
 
     public MenuScreen() {
-        super(DodgeCoin.assets.getSkin("skins/menu/skin.json"), Color.TEAL);
+        super(DodgeCoin.assets.getSkin("skins/ui/skin.json"), Color.TEAL);
     }
 
     @Override

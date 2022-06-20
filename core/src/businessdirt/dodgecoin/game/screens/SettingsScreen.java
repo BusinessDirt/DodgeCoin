@@ -4,6 +4,7 @@ import businessdirt.dodgecoin.DodgeCoin;
 import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.core.config.gui.SettingsGui;
 import businessdirt.dodgecoin.core.config.gui.components.ColorComponent;
+import businessdirt.dodgecoin.core.config.gui.components.KeyComponent;
 import businessdirt.dodgecoin.core.input.Keyboard;
 import businessdirt.dodgecoin.core.renderer.Renderer;
 import com.badlogic.gdx.Gdx;
@@ -108,6 +109,7 @@ public class SettingsScreen extends AbstractScreen {
         this.stage.addActor(backButton);
 
         this.stage.addActor(ColorComponent.ColorPicker.newInstance(skin).getActor());
+        this.stage.addActor(KeyComponent.KeyInputHandler.newInstance(skin).getActor());
     }
 
     @Override

@@ -4,12 +4,13 @@ import businessdirt.dodgecoin.core.config.data.Category;
 import businessdirt.dodgecoin.core.config.data.Property;
 import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.config.data.PropertyType;
+import businessdirt.dodgecoin.core.config.data.types.Colors;
+import businessdirt.dodgecoin.core.config.data.types.Key;
 import com.badlogic.gdx.graphics.Color;
 import com.electronwill.nightconfig.core.file.FileConfig;
 import com.google.common.primitives.Floats;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,15 +23,16 @@ public class ConfigHandler {
 
     public ConfigHandler(File file) {
         this.configFile = FileConfig.of(file);
+        this.properties = new ArrayList<>();
+
         Field[] declaredFields = this.getClass().getDeclaredFields();
         List<Field> filteredFields = Arrays.stream(declaredFields).filter(field -> field.isAnnotationPresent(Property.class)).collect(Collectors.toList());
 
-        this.properties = new ArrayList<>();
-        for (Field item : filteredFields) {
-            Property property = item.getAnnotation(Property.class);
-            item.setAccessible(true);
-            PropertyData data = PropertyData.fromField(property, item, this);
-            this.properties.add(data);
+        for (Field field : filteredFields) {
+            Property property = field.getAnnotation(Property.class);
+            field.setAccessible(true);
+            PropertyData propertyData = PropertyData.fromField(property, field, this);
+            this.properties.add(propertyData);
         }
     }
 
@@ -41,14 +43,16 @@ public class ConfigHandler {
     }
 
     public final List<Category> getCategories() {
-        List<PropertyData> filtered = this.properties.stream().filter(data -> !data.getProperty().hidden()).collect(Collectors.toList());
+        List<PropertyData> filteredProperties = this.properties.stream().filter(data -> !data.getProperty().hidden()).collect(Collectors.toList());
         Map<String, List<PropertyData>> categoryMap = new LinkedHashMap<>();
 
-        for (PropertyData item : filtered) {
-            String category = item.getProperty().category();
+        for (PropertyData propertyData : filteredProperties) {
+            String category = propertyData.getProperty().category();
+
             List<PropertyData> dataList = categoryMap.get(category);
             if (dataList == null) dataList = new ArrayList<>();
-            dataList.add(item);
+            dataList.add(propertyData);
+
             categoryMap.put(category, dataList);
         }
 
@@ -63,20 +67,17 @@ public class ConfigHandler {
     private void readData() {
         this.configFile.load();
 
-        for (PropertyData property : this.properties) {
-            String fullPath = ConfigHandler.fullPropertyPath(property.getProperty());
-            Object configObject = this.configFile.get(fullPath);
+        for (PropertyData propertyData : this.properties) {
+            String propertyPath = ConfigHandler.fullPropertyPath(propertyData.getProperty());
+            Object configObject = this.configFile.get(propertyPath);
 
-            if (property.getProperty().type() == PropertyType.COLOR) {
-                if (configObject == null) {
-                    configObject = property.getAsColor().toFloatBits();
-                } else {
-                    float[] color = Floats.toArray((List<Double>) configObject) ;
-                    property.setValue(new Color(color[0], color[1], color[2], color[3]));
-                }
+            if (propertyData.getProperty().type() == PropertyType.KEY) {
+                Key.read(configObject, propertyData);
+            } else if (propertyData.getProperty().type() == PropertyType.COLOR) {
+                Colors.read(configObject, propertyData);
             } else {
-                if (configObject == null) configObject = property.getAsAny();
-                property.setValue(configObject);
+                if (configObject == null) configObject = propertyData.getAsAny();
+                propertyData.setValue(configObject);
             }
         }
     }
@@ -84,14 +85,17 @@ public class ConfigHandler {
     public void writeData() {
         if (!this.dirty) return;
 
-        for (PropertyData property : this.properties) {
-            String fullPath = ConfigHandler.fullPropertyPath(property.getProperty());
-            Object propertyValue = property.getValue().getValue(property.getInstance());
+        for (PropertyData propertyData : this.properties) {
+            String propertyPath = ConfigHandler.fullPropertyPath(propertyData.getProperty());
+            Object propertyValue = propertyData.getPropertyValue().getValue(propertyData.getInstance());
 
-            if (property.getProperty().type() == PropertyType.COLOR)
-                propertyValue = Arrays.asList(property.getAsColor().r, property.getAsColor().g, property.getAsColor().b, property.getAsColor().a);
+            if (propertyData.getProperty().type() == PropertyType.KEY) {
+                propertyValue = Key.write(propertyData);
+            } else if (propertyData.getProperty().type() == PropertyType.COLOR) {
+                propertyValue = Colors.write(propertyData);
+            }
 
-            this.configFile.set(fullPath, propertyValue);
+            this.configFile.set(propertyPath, propertyValue);
         }
 
         this.configFile.save();

@@ -1,6 +1,6 @@
 package businessdirt.dodgecoin.core.config.gui.components;
 
-import businessdirt.dodgecoin.DodgeCoin;
+import businessdirt.dodgecoin.core.config.gui.components.GuiComponent;
 import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.Config;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -16,12 +16,11 @@ public class SwitchComponent extends GuiComponent {
 
         checkBox.setChecked(property.getAsBoolean());
         checkBox.setTransform(true);
-        checkBox.setScale((height - 50f) / this.actor.getHeight());
-        checkBox.setPosition(width - 50f - (GuiComponent.width + this.actor.getWidth() * this.actor.getScaleX()) / 2, 25f);
+        checkBox.setScale((75f * scale) / this.actor.getHeight());
+        checkBox.setPosition(width - 50f * scale - (GuiComponent.width + this.actor.getWidth() * this.actor.getScaleX()) / 2, height - this.actor.getHeight() * this.actor.getScaleY() / 2 - height / 2);
         checkBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                DodgeCoin.assets.getSound("sounds/button.mp3").play(Config.sfxVolume / 100f);
                 property.setValue(!property.getAsBoolean());
                 Config.getConfig().writeData();
             }

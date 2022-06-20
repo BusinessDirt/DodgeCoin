@@ -1,6 +1,8 @@
 package businessdirt.dodgecoin.core.util;
 
 
+import com.badlogic.gdx.Input;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,5 +47,9 @@ public class Util {
         });
 
         return resultPlaceHolder.toString().trim();
+    }
+
+    public static String getKeyCharFromCode(int code) {
+        return Input.Keys.toString(code);
     }
 }

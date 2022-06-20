@@ -1,6 +1,7 @@
 package businessdirt.dodgecoin.core.config.data;
 
 import businessdirt.dodgecoin.core.config.ConfigHandler;
+import businessdirt.dodgecoin.core.config.data.types.Key;
 import com.badlogic.gdx.graphics.Color;
 
 import java.lang.reflect.Field;
@@ -10,16 +11,16 @@ public class PropertyData {
 
     private final ConfigHandler instance;
     private final Property property;
-    private final PropertyValue value;
+    private final businessdirt.dodgecoin.core.config.data.PropertyValue value;
 
-    public PropertyData(Property property, PropertyValue value, ConfigHandler instance) {
+    public PropertyData(Property property, businessdirt.dodgecoin.core.config.data.PropertyValue value, ConfigHandler instance) {
         this.property = property;
         this.value = value;
         this.instance = instance;
     }
 
     public Object getValue(Object object) {
-        return this.getValue().getValue(this.getInstance());
+        return this.getPropertyValue().getValue(this.getInstance());
     }
 
     public Object getAsAny() {
@@ -27,27 +28,27 @@ public class PropertyData {
     }
 
     public boolean getAsBoolean() {
-        return (Boolean) this.getValue().getValue(this.getInstance());
+        return (Boolean) this.getPropertyValue().getValue(this.getInstance());
     }
 
     public String getAsString() {
-        return (String) this.getValue().getValue(this.getInstance());
+        return (String) this.getPropertyValue().getValue(this.getInstance());
     }
 
     public double getAsDouble() {
-        return (Double) this.getValue().getValue(this.getInstance());
+        return (Double) this.getPropertyValue().getValue(this.getInstance());
     }
 
-    public double getAsInt() {
-        return (Integer) this.getValue().getValue(this.getInstance());
+    public int getAsInt() {
+        return (Integer) this.getPropertyValue().getValue(this.getInstance());
     }
 
     public Color getAsColor() {
-        return (Color) this.getValue().getValue(this.getInstance());
+        return (Color) this.getPropertyValue().getValue(this.getInstance());
     }
 
-    public Object getAs(Class<?> c) {
-        return c.cast(this.getAsAny());
+    public Key getAsKey() {
+        return (Key) this.getPropertyValue().getValue(this.getInstance());
     }
 
     public void setValue(Object value) {
@@ -59,7 +60,7 @@ public class PropertyData {
         return this.property;
     }
 
-    public PropertyValue getValue() {
+    public PropertyValue getPropertyValue() {
         return this.value;
     }
 

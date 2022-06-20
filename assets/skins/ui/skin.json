@@ -6,6 +6,11 @@
     white: { r: 1, g: 1, b: 1, a: 1 },
     gray: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
     black: { r: 0, g: 0, b: 0, a: 1 },
+    green: { a: 1.0, b: 0.0, g: 1.0, r: 0.0 },
+    orange: { a: 1.0, b: 0.0, g: 0.5, r: 1.0 },
+    red: { a: 1.0, b: 0.11764706, g: 0.0, r: 1.0 },
+    darkGray: { a: 1.0, b: 0.25, g: 0.25, r: 0.25 },
+    middleGray: { a: 1.0, b: 0.33, g: 0.33, r: 0.33 },
 
     up: { r: 0.6, g: 0.6, b: 0.6, a: 1 },
     over: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
@@ -15,16 +20,18 @@
     disabled: { r: 0.1, g: 0.1, b: 0.1, a: 1 },
     background: { r: 0.8, g: 0.8, b: 0.8, a: 1 },
     selection: { r: 0, g: 0.3, b: 0.5, a: 1 },
+    checkedRed: { r: 0.6, g: 0.0, b: 0.0, a: 1 },
+    checkedOverRed: { r: 0.7, g: 0.0, b: 0.0, a: 1 } ,
     semiTransparent: { r: 0, g: 0, b: 0, a: 0.6 },
     transparent: { r: 0, g: 0, b: 0, a: 0 },
-    fontColor: {r: 1, g: 1, b: 1, a: 0.9}
-    darkFontColor: { a: 1.0, b: 0.35686275, g: 0.35686275, r: 0.35686275 }
+    fontColor: {r: 1, g: 1, b: 1, a: 0.9},
+    darkFontColor: { a: 1.0, b: 0.35686275, g: 0.35686275, r: 0.35686275 },
 
-    font: fontColor
-    fontOver: down
-    fontDown: gray
-    fontChecked: checked
-    fontCheckedOver: checkedOver
+    font: fontColor,
+    fontOver: down,
+    fontDown: gray,
+    fontChecked: checked,
+    fontCheckedOver: checkedOver,
     fontDisabled: gray
   },
   TintedDrawable: {
@@ -55,10 +62,6 @@
     selection: { name: dot, color: selection },
     underlineSelection: { name: underline, color: selection },
     list: { name: outline-press, color: background },
-
-    scrollHorizontal: { name: scroll, color: up },
-    scrollVertical: { name: scroll-v, color: up },
-    scrollPane: { name: outline-press, color: background },
 
     selectBox: { name: select, color: up },
     selectOver: { name: select, color: over },
@@ -94,13 +97,25 @@
 
     tooltip: { name: outline-press, color: background },
 
-    pickerBlack: { name: picker, color: black }
+    pickerBlack: { name: picker, color: black },
+
+    buttonCheckedRed: {name: base, color: checkedRed},
+    buttonCheckedOverRed: {name: base, color: checkedOverRed},
+    scrollHorizontal: { name: scroll, color: up },
+    scrollVertical: { name: scroll-v, color: up },
+    scrollPane: { name: outline-press, color: background },
+
+    labelBackground: { name: outline-press, color: middleGray },
+    pricePaneBackground: { name: outline-press, color: darkGray }
   },
   ButtonStyle: {
+    default: { up: buttonChecked, over: buttonCheckedOver, down: buttonOver, disabled: buttonChecked },
     blank: { up: buttonChecked, over: buttonChecked, down: buttonChecked, disabled: buttonChecked },
     divider: { up: buttonDisabled, over: buttonDisabled, down: buttonDisabled, disabled: buttonDisabled },
     category: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, pressedOffsetY: -1, pressedOffsetX: 1 },
-    color: {up: buttonUp, over: buttonOver, down: buttonOver, disabled: buttonDisabled}
+    settingsUI: {up: buttonUp, over: buttonOver, down: buttonOver, disabled: buttonDisabled},
+    shopItemButton: { up: buttonUp, over: buttonOver, down: buttonDown, disabled: buttonDisabled },
+
   },
   CheckBoxStyle: {
     square: { checkboxOn: checkBoxSquare, checkboxOff: checkBoxOff, checkboxOver: checkBoxOver, checkboxOnOver: checkBoxSquareOver, checkboxOnDisabled: checkBoxSquareDisabled,
@@ -108,7 +123,12 @@
       checkedFontColor: fontChecked, checkedOverFontColor: fontCheckedOver, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 }
   },
   LabelStyle: {
-    default: { font: default, fontColor: font }
+    default: { font: default, fontColor: font },
+    background: { font: default, fontColor: font, background: labelBackground },
+    priceGreen: { font: default, fontColor: green, background: pricePaneBackground },
+    priceOrange: { font: default, fontColor: orange, background: pricePaneBackground },
+    priceRed: { font: default, fontColor: red, background: pricePaneBackground },
+    priceWhite: { font: default, fontColor: white, background: pricePaneBackground }
   },
   ScrollPaneStyle: {
     default: { hScrollKnob: scrollHorizontal, vScrollKnob: scrollVertical },
@@ -132,7 +152,17 @@
     default: { up: buttonUp, over: buttonOver, down: buttonDown, disabled: buttonDisabled, font: default, fontColor: font,
       overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 },
     backButton: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, font: default, fontColor: font,
-      overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 }
+      overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 },
+    settingsButton: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, font: default, fontColor: font,
+      overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 },
+    shopButton: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, font: default, fontColor: font,
+      overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 },
+    playButton: { up: buttonChecked, over: buttonCheckedOver, down: buttonChecked, disabled: buttonDisabled, font: default, fontColor: font,
+      overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 },
+    quitButton: { up: buttonCheckedRed, over: buttonCheckedOverRed, down: buttonCheckedRed, disabled: buttonDisabled, font: default, fontColor: font,
+      overFontColor: fontOver, downFontColor: fontDown, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1 },
+    settingsUI: { up: buttonUp, over: buttonOver, down: buttonOver, disabled: buttonDisabled, font: default, fontColor: font,
+      overFontColor: fontOver, downFontColor: fontOver, disabledFontColor: fontDisabled, pressedOffsetY: -1, pressedOffsetX: 1}
   },
   TextFieldStyle: {
     default: {

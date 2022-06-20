@@ -26,7 +26,7 @@ public class ShopScreen extends AbstractScreen {
     private ScrollPane pane;
 
     protected ShopScreen() {
-        super(DodgeCoin.assets.getSkin("skins/shop/skin.json"), Color.TEAL);
+        super(DodgeCoin.assets.getSkin("skins/ui/skin.json"), Color.TEAL);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package businessdirt.dodgecoin.core.config.gui.components;
 
-import businessdirt.dodgecoin.DodgeCoin;
-import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.Config;
+import businessdirt.dodgecoin.core.config.gui.components.GuiComponent;
+import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.config.gui.SettingsGui;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -20,8 +20,8 @@ public class SliderComponent extends GuiComponent {
         this.actor = new Slider(property.getProperty().min(), property.getProperty().max(), 1f, false, skin);
         Slider slider = (Slider) this.actor;
 
-        slider.setValue((float) (int) property.getValue().getValue(Config.getConfig()));
-        slider.setPosition(width - 50f - this.actor.getWidth() * this.actor.getScaleX(), height - height / 2 - this.actor.getHeight() * this.actor.getScaleY() * 0.5f + 15f);
+        slider.setValue(property.getAsInt());
+        slider.setPosition(width - 50f * scale - this.actor.getWidth() * this.actor.getScaleX(), height - height / 2 - this.actor.getHeight() * this.actor.getScaleY() * 0.5f + 15f * scale);
         slider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -36,11 +36,10 @@ public class SliderComponent extends GuiComponent {
             }
         });
 
-        this.label = new Label(property.getValue().getValue(Config.getConfig()).toString(), skin);
+        this.label = new Label(property.getPropertyValue().getValue(Config.getConfig()).toString(), skin);
         this.label.setAlignment(Align.center);
         this.label.setTouchable(Touchable.disabled);
-        this.label.setFontScale(DodgeCoin.fullscreen.height / 1080f);
-        this.label.setPosition(width - 50f - this.actor.getWidth() * this.actor.getScaleX(), height - height / 2 - this.actor.getHeight() * this.actor.getScaleY() * 0.5f - 15f);
+        this.label.setPosition(width - 50f * scale - this.actor.getWidth() * this.actor.getScaleX(), height - height / 2 - this.actor.getHeight() * this.actor.getScaleY() * 0.5f - 15f * scale);
         this.label.setWidth(this.actor.getWidth());
     }
 

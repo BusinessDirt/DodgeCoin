@@ -2,8 +2,8 @@ package businessdirt.dodgecoin.core.config.gui.components;
 
 import businessdirt.dodgecoin.DodgeCoin;
 import businessdirt.dodgecoin.core.Config;
+import businessdirt.dodgecoin.core.actors.FloatingMenu;
 import businessdirt.dodgecoin.core.config.data.PropertyData;
-import businessdirt.dodgecoin.core.config.gui.SettingsGui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -25,11 +25,11 @@ public class ColorComponent extends GuiComponent {
     public ColorComponent(PropertyData property, Skin skin, float width, float height) {
         ColorComponent instance = this;
 
-        this.actor = new Button(skin.get("color", Button.ButtonStyle.class));
+        this.actor = new Button(skin.get("settingsUI", Button.ButtonStyle.class));
         Button button = (Button) this.actor;
         button.setTransform(true);
-        button.setSize(height - 50f, height - 50f);
-        button.setPosition(width - 50f - (GuiComponent.width + this.actor.getWidth() * this.actor.getScaleX()) / 2, height - this.actor.getHeight() * this.actor.getScaleY() / 2 - height / 2);
+        button.setSize(76f * scale, 76f * scale);
+        button.setPosition(width - 50f * scale - (GuiComponent.width + this.actor.getWidth() * this.actor.getScaleX()) / 2, height - this.actor.getHeight() * this.actor.getScaleY() / 2 - height / 2);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -38,7 +38,7 @@ public class ColorComponent extends GuiComponent {
         });
 
         setColor(property.getAsColor());
-        button.add(this.color).width(height - 70f).height(height - 70f).pad(10f);
+        button.add(this.color).width(56f * scale).height(56f * scale).pad(10f * scale);
     }
 
     public void setColor(Color color) {
@@ -55,43 +55,23 @@ public class ColorComponent extends GuiComponent {
         this.color.setDrawable(new TextureRegionDrawable(new Texture(pixmap)));
     }
 
-    public static class ColorPicker extends GuiComponent {
+    public static class ColorPicker {
+
+        private final FloatingMenu picker;
 
         private static ColorPicker instance;
         private PropertyData property;
         private final TextField hexCode;
         private ColorComponent colorComponent;
         private final Slider alpha;
-        private final Image colorWheel;
-        private final Image colorWheelPicker;
+        private final Image colorWheel, colorWheelPicker;
 
         private ColorPicker(Skin skin) {
-            float size = DodgeCoin.fullscreen.height / 2f;
-            float x = DodgeCoin.fullscreen.width / 2f - size / 2f;
-            float y = DodgeCoin.fullscreen.height / 2f - size / 2f;
-
-            this.actor = new Group();
-            this.actor.setSize(DodgeCoin.fullscreen.width, DodgeCoin.fullscreen.height);
-            this.actor.setVisible(false);
-
-            Group group = (Group) this.actor;
-            group.setPosition(0, 0);
-
-            Pixmap pixmap = new Pixmap(DodgeCoin.fullscreen.width, DodgeCoin.fullscreen.height, Pixmap.Format.RGBA8888);
-            pixmap.setColor(new Color(0f, 0f, 0f, 0.4f));
-            pixmap.fill();
-
-            Drawable drawable = new TextureRegionDrawable(new Texture(pixmap));
-            Image drawableImage = new Image(drawable);
-            drawableImage.addListener(new BackgroundClickListener());
-            group.addActor(drawableImage);
-
-            Button button = new Button(skin.get("blank", Button.ButtonStyle.class));
-            button.setBounds(x, y, size, size);
+            this.picker = new FloatingMenu(skin, 500f * scale, 500f * scale);
 
             // color code in hex
             this.hexCode = new TextField("", skin);
-            this.hexCode.setBounds(x + size * 0.05f, y + size * 0.05f, size * 0.9f, size * 0.1f);
+            this.hexCode.setBounds(25f * scale, 25f * scale, 450f * scale, 50f * scale);
             this.hexCode.setAlignment(Align.center);
             this.hexCode.addListener(new ChangeListener() {
                 @Override
@@ -138,7 +118,7 @@ public class ColorComponent extends GuiComponent {
 
             // Slider for Transparency
             this.alpha = new Slider(0, 255, 1, true, skin);
-            this.alpha.setBounds(x + size * (0.1f + (4f/6f)), y + size * 0.2f, size * 0.1f, size * (4f/6f));
+            this.alpha.setBounds(425f * scale, 100f * scale, 50f * scale, 375f * scale);
             this.alpha.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
@@ -153,35 +133,29 @@ public class ColorComponent extends GuiComponent {
 
             // Image for color picking
             this.colorWheel = new Image(DodgeCoin.assets.getTexture("textures/gui/settings/colorwheel.png"));
-            this.colorWheel.setBounds(x + size * 0.05f, y + size * 0.2f, size * (4f/6f), size * (4f/6f));
+            this.colorWheel.setBounds(25f * scale, 100f * scale, 375f * scale, 375f * scale);
             this.colorWheel.addListener(new ColorWheelClickListener());
 
             // Picker
             this.colorWheelPicker = new Image(skin, "pickerBlack");
-            this.colorWheelPicker.setBounds(colorWheel.getX() + colorWheel.getWidth() / 2f, colorWheel.getY() + colorWheel.getHeight() / 2f, 16f, 16f);
+            this.colorWheelPicker.setBounds(0f, 0f, 16f * scale, 16f * scale);
 
-            group.addActor(button);
-            group.addActor(this.hexCode);
-            group.addActor(this.alpha);
-            group.addActor(this.colorWheel);
-            group.addActor(this.colorWheelPicker);
-        }
-
-        public void setVisible(boolean visible) {
-            this.actor.setVisible(visible);
+            this.picker.addActor(this.hexCode);
+            this.picker.addActor(this.alpha);
+            this.picker.addActor(this.colorWheel);
+            this.picker.addActor(this.colorWheelPicker);
         }
 
         public static void activate(ColorComponent colorComponent, PropertyData property) {
-            SettingsGui.get().getScrollPane().getStage().setScrollFocus(null);
-            ColorPicker.get().setVisible(true);
+            ColorPicker.get().picker.activate();
 
             ColorPicker.get().property = property;
             ColorPicker.get().colorComponent = colorComponent;
 
             Color color = property.getAsColor();
-            ColorPicker.get().alpha.setValue(color.a * 255);
+            ColorPicker.get().alpha.setValue(color.a * 255f);
 
-            String hex = toHex(color.r * 255) + toHex(color.g * 255) + toHex(color.b * 255) + toHex(color.a * 255);
+            String hex = toHex(color.r * 255f) + toHex(color.g * 255f) + toHex(color.b * 255f) + toHex(color.a * 255f);
             ColorPicker.get().hexCode.setText("#" + hex);
 
             // find the position of the color on the color wheel
@@ -195,7 +169,7 @@ public class ColorComponent extends GuiComponent {
                 for (int y = 0; y < pixmap.getHeight(); y++) {
                     Color pixelColor = new Color(pixmap.getPixel(x, y));
                     if (pixelColor.r == color.r && pixelColor.g == color.g && pixelColor.b == color.b) {
-                        colorWheelPicker.setPosition(colorWheel.getX() + x * scale - 8, colorWheel.getY() + (colorWheel.getHeight() - y * scale) - 8);
+                        colorWheelPicker.setPosition(735f * scale + x * scale - 8f * scale, 390f * scale + (colorWheel.getHeight() - y * scale) - 8f * scale);
                     }
                 }
             }
@@ -205,11 +179,6 @@ public class ColorComponent extends GuiComponent {
             String hex = Integer.toHexString((int) (v));
             if (hex.length() == 1) hex = "0" + hex;
             return hex;
-        }
-
-        public static void deactivate() {
-            SettingsGui.get().getScrollPane().getStage().setScrollFocus(SettingsGui.get().getScrollPane());
-            ColorPicker.get().setVisible(false);
         }
 
         public void setColor(float x, float y) {
@@ -222,7 +191,7 @@ public class ColorComponent extends GuiComponent {
 
             this.property.setValue(newColor);
             this.colorComponent.setColor(newColor);
-            this.hexCode.setText("#" + toHex(newColor.r * 255) + toHex(newColor.g * 255) + toHex(newColor.b * 255) + toHex(newColor.a * 255));
+            this.hexCode.setText("#" + toHex(newColor.r * 255f) + toHex(newColor.g * 255f) + toHex(newColor.b * 255f) + toHex(newColor.a * 255f));
             Config.getConfig().writeData();
         }
 
@@ -234,14 +203,9 @@ public class ColorComponent extends GuiComponent {
             ColorPicker.instance = new ColorPicker(skin);
             return ColorPicker.instance;
         }
-    }
 
-    private static class BackgroundClickListener extends ClickListener {
-
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-            super.clicked(event, x, y);
-            ColorPicker.deactivate();
+        public Group getActor() {
+            return this.picker.getActor();
         }
     }
 

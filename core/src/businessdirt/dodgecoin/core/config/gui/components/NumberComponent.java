@@ -1,6 +1,6 @@
 package businessdirt.dodgecoin.core.config.gui.components;
 
-import businessdirt.dodgecoin.DodgeCoin;
+import businessdirt.dodgecoin.core.config.gui.components.GuiComponent;
 import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.Config;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,16 +15,17 @@ public class NumberComponent extends GuiComponent {
     public NumberComponent(PropertyData property, Skin skin, float width, float height) {
         String previousEntry = String.valueOf(property.getAsDouble());
         this.actor = new TextField(previousEntry, skin);
-        TextField field = (TextField) this.actor;
-
-        field.setSize(GuiComponent.width, GuiComponent.height);
-        field.setPosition(width - 50f - (GuiComponent.width + this.actor.getWidth() * this.actor.getScaleX()) / 2, height - this.actor.getHeight() * this.actor.getScaleY() / 2 - height / 2);
-        field.addListener(new ChangeListener() {
+        this.actor.setSize(GuiComponent.width, GuiComponent.height);
+        this.actor.setPosition(width - 50f * scale - (GuiComponent.width + this.actor.getWidth() * this.actor.getScaleX()) / 2, height - this.actor.getHeight() * this.actor.getScaleY() / 2 - height / 2);
+        this.actor.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                TextField field = (TextField) actor;
                 int cursorPosition = field.getCursorPosition();
+
                 field.setText(field.getText().replaceAll("[^\\d.]", ""));
-                System.out.println(field.getText());
+                field.setText(filterDots(field.getText()));
+
                 field.setCursorPosition(Math.min(cursorPosition, field.getText().length()));
                 if (!Objects.equals(field.getText(), "")) {
                     property.setValue(Double.parseDouble(field.getText()));
@@ -32,5 +33,19 @@ public class NumberComponent extends GuiComponent {
                 }
             }
         });
+    }
+
+    private String filterDots(String string) {
+        char[] chars = string.toCharArray();
+        boolean dot = false;
+
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] == '.' && !dot) {
+                dot = true;
+            } else if (chars[i] == '.' && dot) {
+                chars[i] = '-';
+            }
+        }
+        return String.valueOf(chars).replaceAll("-", "");
     }
 }
