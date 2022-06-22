@@ -1,5 +1,6 @@
 package businessdirt.dodgecoin.core.util;
 
+import businessdirt.dodgecoin.core.SkinHandler;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +27,8 @@ public class AssetLoader {
 
     public AssetLoader() {
         this.manager = new AssetManager();
-        this.path = Gdx.files.getLocalStoragePath() + "assets\\";
+        this.path = ".\\assets\\";
+
 
         assetFolders.add(new AssetDescriptor<>("textures\\", Texture.class));
         assetFolders.add(new AssetDescriptor<>("sounds\\", Sound.class));
@@ -36,7 +39,7 @@ public class AssetLoader {
 
     public <T> void load() {
         for (AssetDescriptor<?> descriptor : assetFolders) {
-            FileHandle folder = Gdx.files.getFileHandle(path, Files.FileType.Internal).child(descriptor.folder);
+            FileHandle folder = Gdx.files.internal(path).child(descriptor.folder);
             if (!folder.exists()) {
                 System.out.println("Directory '" + folder.path() + "' does not exist");
             } else {
@@ -71,8 +74,22 @@ public class AssetLoader {
 
     private <T> void addSkin(FileHandle asset) {
         String relativePath = asset.path().replaceAll(".*" + this.path.replaceAll("\\\\", "/"), "");
-        if (relativePath.contains("backgrounds") || relativePath.contains("players"))
+        if (relativePath.contains("backgrounds") || relativePath.contains("players")) {
             this.shopItems.add(relativePath);
+
+            // unlocked skins
+            if (!SkinHandler.unlockedSkins.containsKey(relativePath)) {
+                SkinHandler.unlockedSkins.put(relativePath, relativePath.contains("default.png"));
+                SkinHandler.save();
+            }
+
+            // skin prices
+            if (!SkinHandler.skinPrices.containsKey(relativePath)) {
+                int price = relativePath.contains("default.png") ? 0 : -1;
+                SkinHandler.skinPrices.put(relativePath, price == -1 ? relativePath.contains("background") ? 1000000 : 10000000 : 0);
+                SkinHandler.savePrices();
+            }
+        }
     }
 
     public boolean update() {

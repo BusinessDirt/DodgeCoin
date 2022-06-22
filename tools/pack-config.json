@@ -1,0 +1,10 @@
+{
+  "platform": "windows64",
+  "jdk": "C:\\Program Files\\Eclipse Adoptium\\jdk-8.0.312.7-hotspot\\",
+  "executable": "DodgeCoin",
+  "mainclass": "businessdirt.dodgecoin.DesktopLauncher",
+  "resources": [
+    "../assets"
+  ],
+  "output": "out-windows64"
+}

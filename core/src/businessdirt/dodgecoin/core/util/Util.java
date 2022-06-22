@@ -24,7 +24,7 @@ public class Util {
     }
 
     public static File getConfigFolder() {
-        File configFolder = new File(System.getenv("Appdata"), "businessdirt\\DodgeCoin");
+        File configFolder = new File(System.getProperty("user.dir"), "config");
         if (!configFolder.exists()) {
             if (configFolder.mkdirs()) {
                 Util.logEvent("Created config folder: " + configFolder.getAbsolutePath());

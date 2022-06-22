@@ -61,14 +61,6 @@ public class Config extends ConfigHandler {
     public static Integer sfxVolume = 10;
 
     @Property(
-            type = PropertyType.SWITCH,
-            name = "Hard Mode",
-            category = "Game Options",
-            description = "Adds a hard mode. Movement is faster and you can't stop."
-    )
-    public static boolean hardMode = false;
-
-    @Property(
             type = PropertyType.KEY,
             name = "Move left",
             category = "Controls",

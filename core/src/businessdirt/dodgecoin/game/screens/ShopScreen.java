@@ -40,10 +40,18 @@ public class ShopScreen extends AbstractScreen {
 
         // Shop Label
         Label shopLabel = new Label("Shop", skin);
-        shopLabel.setAlignment(Align.center);
-        shopLabel.setBounds(0, DodgeCoin.fullscreen.height - padY, DodgeCoin.fullscreen.width, padY);
+        shopLabel.setAlignment(Align.right);
+        shopLabel.setBounds(padX, DodgeCoin.fullscreen.height - padY, DodgeCoin.fullscreen.width - 2f * padX, padY);
         shopLabel.setFontScale(DodgeCoin.fullscreen.height / 540f);
         this.stage.addActor(shopLabel);
+
+
+        // Money Label
+        Label label = new Label("Money: " + Math.round(Config.money * 100.0f) / 100.0f + "$", skin);
+        label.setBounds(padX, DodgeCoin.fullscreen.height - padY, DodgeCoin.fullscreen.width - 2f * padX, padY);
+        label.setAlignment(Align.left);
+        label.setFontScale(DodgeCoin.fullscreen.height / 540f);
+        this.stage.addActor(label);
 
         // Back Button
         TextButton backButton = new TextButton("Back", skin.get("backButton", TextButton.TextButtonStyle.class));

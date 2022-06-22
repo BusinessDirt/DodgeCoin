@@ -23,7 +23,7 @@ public class SettingsScreen extends AbstractScreen {
     private ScrollPane valuesPane, categoriesPane;
 
     public SettingsScreen() {
-        super(DodgeCoin.assets.getSkin("skins/settings/skin.json"), Color.TEAL);
+        super(DodgeCoin.assets.getSkin("skins/ui/skin.json"), Color.TEAL);
     }
 
     @Override

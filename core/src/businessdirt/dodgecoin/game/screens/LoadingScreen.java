@@ -31,8 +31,8 @@ public class LoadingScreen extends ScreenAdapter {
 
         // Configuration
         try {
-            DodgeCoin.config = Config.getConfig();
             SkinHandler.init();
+            DodgeCoin.config = Config.getConfig();
         } catch (Exception e) {
             e.printStackTrace();
         }
