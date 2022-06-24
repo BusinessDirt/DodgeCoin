@@ -50,6 +50,9 @@ public class Coin extends GameObject {
                     GameScreen.setState(GameScreen.GameState.OVER);
                     DodgeCoin.assets.get("sounds/death.mp3", Sound.class).play(Config.sfxVolume / 100f);
 
+                    Constants.COIN_DROP_SPEED = Constants.F_COIN_DROP_SPEED;
+                    Constants.COIN_SPAWN_DELAY = Constants.F_COIN_SPAWN_DELAY;
+
                     iter.forEachRemaining(c -> iter.remove());
                     noSpawn = true;
                     combo = 1;

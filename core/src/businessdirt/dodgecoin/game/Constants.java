@@ -17,7 +17,9 @@ public class Constants {
 
     // Game Constants
     public static final int MOVEMENT_SPEED = GAME_WIDTH;
+    public static final int F_COIN_DROP_SPEED = 350;
     public static int COIN_DROP_SPEED = 350;
+    public static long F_COIN_SPAWN_DELAY = 699999995L;
     public static long COIN_SPAWN_DELAY = 699999995L;
     public static final int BITCOIN_CHANCE = 25;
 }

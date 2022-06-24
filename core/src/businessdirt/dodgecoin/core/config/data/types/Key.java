@@ -1,6 +1,7 @@
 package businessdirt.dodgecoin.core.config.data.types;
 
 import businessdirt.dodgecoin.core.config.data.PropertyData;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.google.common.primitives.Ints;
 
@@ -15,6 +16,14 @@ public class Key {
     public Key(int primary, int secondary) {
         this.primary = primary;
         this.secondary = secondary;
+    }
+
+    public boolean pressed() {
+        return Gdx.input.isKeyPressed(primary) || Gdx.input.isKeyPressed(secondary);
+    }
+
+    public boolean justPressed() {
+        return Gdx.input.isKeyJustPressed(primary) || Gdx.input.isKeyJustPressed(secondary);
     }
 
     public Key() {

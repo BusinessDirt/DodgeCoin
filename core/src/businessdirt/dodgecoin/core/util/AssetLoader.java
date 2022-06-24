@@ -29,7 +29,6 @@ public class AssetLoader {
         this.manager = new AssetManager();
         this.path = ".\\assets\\";
 
-
         assetFolders.add(new AssetDescriptor<>("textures\\", Texture.class));
         assetFolders.add(new AssetDescriptor<>("sounds\\", Sound.class));
         assetFolders.add(new AssetDescriptor<>("music\\", Music.class));
