@@ -30,14 +30,14 @@ public class SettingsScreen extends AbstractScreen {
     public void show() {
         // sizes to position everything correctly
         float containerOffset = 5f;
-        float containerWidth = DodgeCoin.fullscreen.width / 1.263f;
-        float containerHeight = DodgeCoin.fullscreen.height / 1.42f;
-        float padX = (DodgeCoin.fullscreen.width - containerWidth) / 2;
-        float padY = (DodgeCoin.fullscreen.height - containerHeight) / 2;
+        float containerWidth = Gdx.graphics.getWidth() / 1.263f;
+        float containerHeight = Gdx.graphics.getHeight() / 1.42f;
+        float padX = (Gdx.graphics.getWidth() - containerWidth) / 2;
+        float padY = (Gdx.graphics.getHeight() - containerHeight) / 2;
 
         float categoryWidth = containerWidth / 5f;
         float propertyWidth = containerWidth - categoryWidth;
-        float itemWidth = DodgeCoin.fullscreen.width / 5.5f;
+        float itemWidth = Gdx.graphics.getWidth() / 5.5f;
 
 
         // container for the scroll pane
@@ -81,13 +81,13 @@ public class SettingsScreen extends AbstractScreen {
         // Settings Label
         Label settingsLabel = new Label("Settings", skin);
         settingsLabel.setAlignment(Align.bottomLeft);
-        settingsLabel.setBounds(padX, DodgeCoin.fullscreen.height - padY / 2 - itemWidth / 14f, itemWidth, itemWidth / 7f);
-        settingsLabel.setFontScale(DodgeCoin.fullscreen.height / 540f);
+        settingsLabel.setBounds(padX, Gdx.graphics.getHeight() - padY / 2 - itemWidth / 14f, itemWidth, itemWidth / 7f);
+        settingsLabel.setFontScale(Gdx.graphics.getHeight() / 540f);
         this.stage.addActor(settingsLabel);
 
         // Search Field
         TextField search = new TextField("", skin);
-        search.setBounds(DodgeCoin.fullscreen.width - padX - itemWidth, DodgeCoin.fullscreen.height - padY / 2 - itemWidth / 14f, itemWidth, itemWidth / 7f);
+        search.setBounds(Gdx.graphics.getWidth() - padX - itemWidth, Gdx.graphics.getHeight() - padY / 2 - itemWidth / 14f, itemWidth, itemWidth / 7f);
         search.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -98,8 +98,8 @@ public class SettingsScreen extends AbstractScreen {
 
         // Back Button
         TextButton backButton = new TextButton("Back", skin.get("backButton", TextButton.TextButtonStyle.class));
-        backButton.setBounds(DodgeCoin.fullscreen.width / 2f - itemWidth / 2f, padY / 2f - itemWidth / 7f, itemWidth, itemWidth / 3.5f);
-        backButton.getLabel().setFontScale(DodgeCoin.fullscreen.height / 540f);
+        backButton.setBounds(Gdx.graphics.getWidth() / 2f - itemWidth / 2f, padY / 2f - itemWidth / 7f, itemWidth, itemWidth / 3.5f);
+        backButton.getLabel().setFontScale(Gdx.graphics.getHeight() / 540f);
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

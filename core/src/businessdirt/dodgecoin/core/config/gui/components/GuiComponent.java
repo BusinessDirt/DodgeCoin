@@ -1,6 +1,6 @@
 package businessdirt.dodgecoin.core.config.gui.components;
 
-import businessdirt.dodgecoin.DodgeCoin;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class GuiComponent {
@@ -14,7 +14,7 @@ public abstract class GuiComponent {
      * The scale of the component.
      * This is to properly position everything on every resolution.
      */
-    protected static final float scale = DodgeCoin.fullscreen.height / 1080f;
+    protected static final float scale = Gdx.graphics.getHeight() / 1080f;
 
     /**
      * Width and Height of the Component to make everything uniform.

@@ -6,6 +6,7 @@ import businessdirt.dodgecoin.core.SkinHandler;
 import businessdirt.dodgecoin.core.util.Util;
 import businessdirt.dodgecoin.game.objects.Background;
 import businessdirt.dodgecoin.game.objects.Player;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -35,31 +36,31 @@ public class ShopScreen extends AbstractScreen {
     @Override
     public void show() {
         // sizing for the containers to scale with lower resolutions
-        float containerWidth = DodgeCoin.fullscreen.width / 1.263f;
-        float containerHeight = DodgeCoin.fullscreen.height / 1.42f;
-        float padX = (DodgeCoin.fullscreen.width - containerWidth) / 2;
-        float padY = (DodgeCoin.fullscreen.height - containerHeight) / 2;
-        float itemWidth = DodgeCoin.fullscreen.width / 5.5f;
+        float containerWidth = Gdx.graphics.getWidth() / 1.263f;
+        float containerHeight = Gdx.graphics.getHeight() / 1.42f;
+        float padX = (Gdx.graphics.getWidth() - containerWidth) / 2;
+        float padY = (Gdx.graphics.getHeight() - containerHeight) / 2;
+        float itemWidth = Gdx.graphics.getWidth() / 5.5f;
 
         // Shop Label
         Label shopLabel = new Label("Shop", skin);
         shopLabel.setAlignment(Align.right);
-        shopLabel.setBounds(padX, DodgeCoin.fullscreen.height - padY, DodgeCoin.fullscreen.width - 2f * padX, padY);
-        shopLabel.setFontScale(DodgeCoin.fullscreen.height / 540f);
+        shopLabel.setBounds(padX, Gdx.graphics.getHeight() - padY, Gdx.graphics.getWidth() - 2f * padX, padY);
+        shopLabel.setFontScale(Gdx.graphics.getHeight() / 540f);
         this.stage.addActor(shopLabel);
 
 
         // Money Label
         Label label = new Label("Money: " + Math.round(Config.money * 100.0f) / 100.0f + "$", skin);
-        label.setBounds(padX, DodgeCoin.fullscreen.height - padY, DodgeCoin.fullscreen.width - 2f * padX, padY);
+        label.setBounds(padX, Gdx.graphics.getHeight() - padY, Gdx.graphics.getWidth() - 2f * padX, padY);
         label.setAlignment(Align.left);
-        label.setFontScale(DodgeCoin.fullscreen.height / 540f);
+        label.setFontScale(Gdx.graphics.getHeight() / 540f);
         this.stage.addActor(label);
 
         // Back Button
         TextButton backButton = new TextButton("Back", skin.get("backButton", TextButton.TextButtonStyle.class));
-        backButton.setBounds(DodgeCoin.fullscreen.width / 2f - itemWidth / 2f, padY / 2f - itemWidth / 7f, itemWidth, itemWidth / 3.5f);
-        backButton.getLabel().setFontScale(DodgeCoin.fullscreen.height / 540f);
+        backButton.setBounds(Gdx.graphics.getWidth() / 2f - itemWidth / 2f, padY / 2f - itemWidth / 7f, itemWidth, itemWidth / 3.5f);
+        backButton.getLabel().setFontScale(Gdx.graphics.getHeight() / 540f);
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -71,7 +72,7 @@ public class ShopScreen extends AbstractScreen {
 
         // container for the scroll pane
         Table container = new Table();
-        container.setBounds(0f, 0f, DodgeCoin.fullscreen.width, DodgeCoin.fullscreen.height);
+        container.setBounds(0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         // table for all the shop items
         Table table = new Table();
@@ -158,7 +159,7 @@ public class ShopScreen extends AbstractScreen {
 
         public ShopItem(Skin skin, String texture, float width, float height) {
             // scale of the entire ui
-            float scale = DodgeCoin.fullscreen.height / 1080f;
+            float scale = Gdx.graphics.getHeight() / 1080f;
 
             // ui skin
             this.skin = skin;
@@ -242,7 +243,7 @@ public class ShopScreen extends AbstractScreen {
             Label price = new Label(NumberFormat.getInstance(Locale.getDefault()).format(skinPrice), skin.get("priceWhite", Label.LabelStyle.class));
             price.setAlignment(Align.center, Align.bottom);
             price.setTouchable(Touchable.disabled);
-            price.setFontScale(DodgeCoin.fullscreen.height / 1080f);
+            price.setFontScale(Gdx.graphics.getHeight() / 1080f);
             price.setBounds(25f * scale, 25f * scale, this.width - 50f * scale, 50f * scale);
 
             // a preview of the skin scaled down

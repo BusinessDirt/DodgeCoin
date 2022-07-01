@@ -22,7 +22,7 @@ This game is built using the LibGDX framework and has the following features:
  3. [Open a Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
 
 ## Known issues (WIP)
-- When not in fullscreen and changing menus the scaling doesn't work
+- none
 
 ## Authors
 

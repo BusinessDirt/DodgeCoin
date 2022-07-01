@@ -1,6 +1,7 @@
 package businessdirt.dodgecoin.core.actors;
 
 import businessdirt.dodgecoin.DodgeCoin;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,7 +39,7 @@ public class FloatingMenu {
         this.height = height;
 
         this.menu = new Group();
-        this.menu.setBounds(0f, 0f, DodgeCoin.fullscreen.width, DodgeCoin.fullscreen.height);
+        this.menu.setBounds(0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.actors = new LinkedList<>();
 
         setBackgroundOpacity(0.4f);
@@ -55,7 +56,7 @@ public class FloatingMenu {
     }
 
     public FloatingMenu(Skin skin, float width, float height) {
-        this(skin, (DodgeCoin.fullscreen.width - width) / 2, (DodgeCoin.fullscreen.height - height) / 2, width, height);
+        this(skin, (Gdx.graphics.getWidth() - width) / 2, (Gdx.graphics.getHeight() - height) / 2, width, height);
     }
 
     public void setBackgroundOpacity(float opacity) {
@@ -64,7 +65,7 @@ public class FloatingMenu {
         if (background != null) menu.removeActor(background);
 
         // generate a new pixmap with the given opacity
-        Pixmap pixmap = new Pixmap(DodgeCoin.fullscreen.width, DodgeCoin.fullscreen.height, Pixmap.Format.RGBA8888);
+        Pixmap pixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Pixmap.Format.RGBA8888);
         pixmap.setColor(new Color(0f, 0f, 0f, opacity));
         pixmap.fill();
 

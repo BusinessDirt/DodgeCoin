@@ -5,6 +5,7 @@ import businessdirt.dodgecoin.core.Config;
 import businessdirt.dodgecoin.core.config.data.Category;
 import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.config.gui.components.*;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -30,7 +31,7 @@ public class SettingsGui {
     private SettingsGui(Table categoryTable, Table propertyTable, float categoryWidth, float propertyWidth) {
         this.searchQuery = "";
         this.skin = DodgeCoin.assets.getSkin("skins/ui/skin.json");
-        float scale = DodgeCoin.fullscreen.height / 1080f;
+        float scale = Gdx.graphics.getHeight() / 1080f;
 
         List<Category> categories = Config.getConfig().getCategories();
         this.currentCategory = 0;
@@ -86,7 +87,7 @@ public class SettingsGui {
         propertyTable.clear();
         boolean first = true;
         String previousSubcategory = "";
-        float scale = DodgeCoin.fullscreen.height / 1080f;
+        float scale = Gdx.graphics.getHeight() / 1080f;
 
         // properties filtered by the search query
         List<PropertyData> filteredProperties = Config.getConfig().getProperties().stream().filter(data -> {
