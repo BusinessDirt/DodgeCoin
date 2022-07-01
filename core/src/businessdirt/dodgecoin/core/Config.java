@@ -13,7 +13,10 @@ import java.io.File;
 
 public class Config extends ConfigHandler {
 
+    // instance
     private static Config instance;
+
+    // ------- CONFIG PROPERTIES ------- //
 
     @Property(
             type = PropertyType.NUMBER,
@@ -79,11 +82,17 @@ public class Config extends ConfigHandler {
     public static Key moveRight = new Key(Input.Keys.D, Input.Keys.RIGHT);
 
     public Config() {
+        // initialize the config handler
         super(new File(Util.getConfigFolder(), "\\config.toml"));
+
+        // read the data and create data write hooks
         initialize();
+
+        // log the successful loading of the config file
         Util.logEvent("Configuration loaded! " + Util.getConfigFolder());
     }
 
+    // instantiation
     public static Config getConfig() {
         if (Config.instance == null) Config.instance = new Config();
         return Config.instance;

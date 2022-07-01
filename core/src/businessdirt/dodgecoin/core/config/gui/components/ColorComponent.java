@@ -20,6 +20,9 @@ import com.badlogic.gdx.utils.Align;
 
 public class ColorComponent extends GuiComponent {
 
+    /**
+     * The displayed color
+     */
     private Image color;
 
     public ColorComponent(PropertyData property, Skin skin, float width, float height) {
@@ -33,28 +36,37 @@ public class ColorComponent extends GuiComponent {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                // activate the color picker
                 ColorPicker.activate(instance, property);
             }
         });
 
+        // set the color of the button
         setColor(property.getAsColor());
+        // add the image to the button
         button.add(this.color).width(56f * scale).height(56f * scale).pad(10f * scale);
     }
 
     public void setColor(Color color) {
+        // 1x1 pixels Pixmap filled with the color
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(color);
         pixmap.fill();
 
+        // first creation of the image
         if (this.color == null) {
             Drawable drawable = new TextureRegionDrawable(new Texture(pixmap));
             this.color = new Image(drawable);
             return;
         }
 
+        // set the color
         this.color.setDrawable(new TextureRegionDrawable(new Texture(pixmap)));
     }
 
+    /**
+     * ColorPicker is single instance
+     */
     public static class ColorPicker {
 
         private final FloatingMenu picker;
@@ -122,11 +134,16 @@ public class ColorComponent extends GuiComponent {
             this.alpha.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    // set the alpha value of the color to the value of the slider
                     Color color = property.getAsColor();
                     color.a = alpha.getValue() / 255f;
+
+                    // update the config value and the color of the ColorComponent
                     property.setValue(color);
                     Config.getConfig().writeData();
                     colorComponent.setColor(property.getAsColor());
+
+                    // update the hexCode text
                     if (hexCode.getText().length() > 7) hexCode.setText(hexCode.getText().subSequence(0, 7) + toHex(alpha.getValue()));
                 }
             });
@@ -146,7 +163,13 @@ public class ColorComponent extends GuiComponent {
             this.picker.addActor(this.colorWheelPicker);
         }
 
+        /**
+         * Activates the Color Picker.
+         * @param colorComponent the Component it was activated from
+         * @param property the property of which the color should be changed
+         */
         public static void activate(ColorComponent colorComponent, PropertyData property) {
+            // activate the FloatingMenu
             ColorPicker.get().picker.activate();
 
             ColorPicker.get().property = property;
@@ -162,53 +185,93 @@ public class ColorComponent extends GuiComponent {
             ColorPicker.get().movePicker(color);
         }
 
+        /**
+         * Move the picker that indicates the color on the wheel to the given color.
+         * @param color the color the picker shall be moved to.
+         */
         private void movePicker(Color color) {
+            // convert the color wheel to a pixmap and scale it to the positon on screen
             Pixmap pixmap = new Pixmap(Gdx.files.internal("textures/gui/settings/colorwheel.png"));
             float scale = colorWheel.getWidth() / pixmap.getWidth();
+
+            // loop through all pixels
             for (int x = 0; x < pixmap.getWidth(); x++) {
                 for (int y = 0; y < pixmap.getHeight(); y++) {
+                    // get the color of the current pixel
                     Color pixelColor = new Color(pixmap.getPixel(x, y));
+
+                    // check if the parsed color matches the color of the pixel
                     if (pixelColor.r == color.r && pixelColor.g == color.g && pixelColor.b == color.b) {
+                        // set the position of the picker to this pixel
                         colorWheelPicker.setPosition(735f * scale + x * scale - 8f * scale, 390f * scale + (colorWheel.getHeight() - y * scale) - 8f * scale);
                     }
                 }
             }
         }
 
+        /**
+         * Converts a float value to a hex number.
+         * Appends a 0 at the start if the length of the hex String is 1.
+         * @param v the float value to be converted
+         * @return the converted hex value
+         */
         private static String toHex(float v) {
             String hex = Integer.toHexString((int) (v));
             if (hex.length() == 1) hex = "0" + hex;
             return hex;
         }
 
+        /**
+         * Maps the position of the picker to a color on the wheel.
+         * Saves its rgb values to the config.
+         * @param x the x position on the color wheel
+         * @param y the y position on the color wheel
+         */
         public void setColor(float x, float y) {
+            // convert the color wheel to a pixmap and scale it to the positon on screen
             Pixmap map = new Pixmap(Gdx.files.internal("assets/textures/gui/settings/colorwheel.png"));
             float scale = colorWheel.getWidth() / map.getWidth();
 
+            // get the value of the selected color
             int color = map.getPixel((int) (x / scale), map.getHeight() - (int) (y / scale));
             Color newColor = new Color(color);
             newColor.a = this.property.getAsColor().a;
 
+            // save the color and change other components (i.e. hexCode, etc.)
             this.property.setValue(newColor);
             this.colorComponent.setColor(newColor);
             this.hexCode.setText("#" + toHex(newColor.r * 255f) + toHex(newColor.g * 255f) + toHex(newColor.b * 255f) + toHex(newColor.a * 255f));
             Config.getConfig().writeData();
         }
 
+        /**
+         * @return the current instance
+         */
         public static ColorPicker get() {
             return ColorPicker.instance;
         }
 
+        /**
+         * Re-instantiates the ColorPicker
+         * @param skin the skin used by the ui elements
+         * @return the new instance
+         */
         public static ColorPicker newInstance(Skin skin) {
             ColorPicker.instance = new ColorPicker(skin);
             return ColorPicker.instance;
         }
 
+        /**
+         * @return The color pickers main {@link Actor}
+         */
         public Group getActor() {
             return this.picker.getActor();
         }
     }
 
+    /**
+     * Detects clicks on the color wheel and maps the position to a color
+     */
     private static class ColorWheelClickListener extends ClickListener {
 
         @Override
@@ -231,12 +294,26 @@ public class ColorComponent extends GuiComponent {
             }
         }
 
+        /**
+         * Checks if the position is in bounds of the color wheel.
+         * @param x the x position
+         * @param y the y position
+         * @return true if the clicked Position is inside the color wheel
+         */
         private boolean inBounds(float x, float y) {
             if (x < 0 || x > ColorPicker.get().colorWheel.getWidth()) return false;
             if (y < 0 || y > ColorPicker.get().colorWheel.getHeight()) return false;
             return inRadius(x, y, ColorPicker.get().colorWheel.getWidth() / 2);
         }
 
+        /**
+         * Checks if the clicked position is inside a circle with the given radius.
+         * The position origin is assumed to be the corner of a square circumscribing the circle.
+         * @param x the x position
+         * @param y the y position
+         * @param radius the radius of the circle
+         * @return true if the position is inside the circle
+         */
         private boolean inRadius(float x, float y, float radius) {
             float xPos = radius - x;
             float yPos = radius - y;

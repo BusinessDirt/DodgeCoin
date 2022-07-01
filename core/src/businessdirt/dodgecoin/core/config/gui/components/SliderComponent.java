@@ -1,7 +1,6 @@
 package businessdirt.dodgecoin.core.config.gui.components;
 
 import businessdirt.dodgecoin.core.Config;
-import businessdirt.dodgecoin.core.config.gui.components.GuiComponent;
 import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.config.gui.SettingsGui;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -14,6 +13,9 @@ import com.badlogic.gdx.utils.Align;
 
 public class SliderComponent extends GuiComponent {
 
+    /**
+     * Label used to display the slider value
+     */
     private final Label label;
 
     public SliderComponent(PropertyData property, Skin skin, float width, float height) {
@@ -25,13 +27,16 @@ public class SliderComponent extends GuiComponent {
         slider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (SettingsGui.get().getScrollPane() != null && actor.isTouchFocusTarget()) {
-                    actor.getStage().unfocus(SettingsGui.get().getScrollPane());
+                // un-focus / focus the properties ScrollPane
+                if (SettingsGui.get().getPropertyScrollPane() != null && actor.isTouchFocusTarget()) {
+                    actor.getStage().unfocus(SettingsGui.get().getPropertyScrollPane());
+
+                    // update the config and label value
                     property.setValue((int) slider.getValue());
                     label.setText((int) slider.getValue());
                     Config.getConfig().writeData();
                 } else {
-                    actor.getStage().setScrollFocus(SettingsGui.get().getScrollPane());
+                    actor.getStage().setScrollFocus(SettingsGui.get().getPropertyScrollPane());
                 }
             }
         });

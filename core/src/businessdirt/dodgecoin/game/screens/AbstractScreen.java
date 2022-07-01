@@ -14,9 +14,17 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import java.awt.*;
 
 public abstract class AbstractScreen implements Screen {
+
+    // stage contains all ui elements
     protected final Stage stage;
+
+    // viewport to handle resizing
     protected final ScalingViewport viewport;
+
+    // skin for button style etc
     protected final Skin skin;
+
+    // background color of the window
     protected final Color backgroundColor;
 
     protected AbstractScreen(Skin skin, Color backgroundColor) {
@@ -42,12 +50,15 @@ public abstract class AbstractScreen implements Screen {
         Gdx.gl.glClearColor(this.backgroundColor.r, this.backgroundColor.g, this.backgroundColor.b, this.backgroundColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // act() updates all ui elements (e.g. if clicked)
+        // draw() draws all ui elements
         stage.act(delta);
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
+        // scale the viewport if the window is resized to not mess with ratios
         Vector2 size = Scaling.fit.apply(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, width, height);
         this.viewport.update((int) size.x, (int) size.y, true);
         this.stage.setViewport(this.viewport);

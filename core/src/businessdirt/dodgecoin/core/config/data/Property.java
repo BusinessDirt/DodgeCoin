@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Property {
 
+    // type used for the GUI
     PropertyType type();
 
     String name();
@@ -17,13 +18,13 @@ public @interface Property {
     String category();
     String subcategory() default "";
 
-    // Range of numbers for Sliders
+    // range of numbers for sliders
     int min() default 0;
     int max() default 0;
 
-    // Options for Selectors
+    // options for selectors
     String[] options() default {};
 
-    // Hides the Property from the GUI
+    // hides the property from the GUI
     boolean hidden() default false;
 }

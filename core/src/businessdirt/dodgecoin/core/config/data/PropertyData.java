@@ -11,42 +11,60 @@ public class PropertyData {
 
     private final ConfigHandler instance;
     private final Property property;
-    private final businessdirt.dodgecoin.core.config.data.PropertyValue value;
+    private final PropertyValue value;
 
-    public PropertyData(Property property, businessdirt.dodgecoin.core.config.data.PropertyValue value, ConfigHandler instance) {
+    public PropertyData(Property property, PropertyValue value, ConfigHandler instance) {
         this.property = property;
         this.value = value;
         this.instance = instance;
     }
 
-    public Object getValue(Object object) {
-        return this.getPropertyValue().getValue(this.getInstance());
+    public PropertyData(Property property, Field field, ConfigHandler instance) {
+        this(property, new PropertyValue(field), instance);
     }
 
     public Object getAsAny() {
         return this.value.getValue(this.instance);
     }
 
+    /**
+     * @return the {@link PropertyValue} as a {@link Boolean}
+     */
     public boolean getAsBoolean() {
         return (Boolean) this.getPropertyValue().getValue(this.getInstance());
     }
 
+    /**
+     * @return the {@link PropertyValue} as a {@link String}
+     */
     public String getAsString() {
         return (String) this.getPropertyValue().getValue(this.getInstance());
     }
 
+    /**
+     * @return the {@link PropertyValue} as a {@link Double}
+     */
     public double getAsDouble() {
         return (Double) this.getPropertyValue().getValue(this.getInstance());
     }
 
+    /**
+     * @return the {@link PropertyValue} as a {@link Integer}
+     */
     public int getAsInt() {
         return (Integer) this.getPropertyValue().getValue(this.getInstance());
     }
 
+    /**
+     * @return the {@link PropertyValue} as a {@link Color}
+     */
     public Color getAsColor() {
         return (Color) this.getPropertyValue().getValue(this.getInstance());
     }
 
+    /**
+     * @return the {@link PropertyValue} as a {@link Key}
+     */
     public Key getAsKey() {
         return (Key) this.getPropertyValue().getValue(this.getInstance());
     }
@@ -66,10 +84,6 @@ public class PropertyData {
 
     public ConfigHandler getInstance() {
         return this.instance;
-    }
-
-    public static PropertyData fromField(Property property, Field field, ConfigHandler instance) {
-        return new PropertyData(property, new PropertyValue(field), instance);
     }
 
     public PropertyData copy(Property property, PropertyValue value, ConfigHandler instance) {

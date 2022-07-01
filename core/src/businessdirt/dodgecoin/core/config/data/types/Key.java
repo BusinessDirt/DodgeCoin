@@ -46,10 +46,19 @@ public class Key {
         this.secondary = secondary;
     }
 
+    /**
+     * @param propertyData the property that needs to be saved
+     * @return the value of the property (assumed to be a {@link Key}) converted to a {@link List}
+     */
     public static Object write(PropertyData propertyData) {
         return Arrays.asList(propertyData.getAsKey().getPrimary(), propertyData.getAsKey().getSecondary());
     }
 
+    /**
+     * Converts the {@link List} saved in the file to a {@link Key}
+     * @param configObject the object read from the file
+     * @param propertyData the property the color shall be saved to
+     */
     public static void read(Object configObject, PropertyData propertyData) {
         if (configObject == null) {
             propertyData.setValue(propertyData.getAsKey());

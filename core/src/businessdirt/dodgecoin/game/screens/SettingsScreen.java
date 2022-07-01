@@ -28,7 +28,7 @@ public class SettingsScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        // sizes
+        // sizes to position everything correctly
         float containerOffset = 5f;
         float containerWidth = DodgeCoin.fullscreen.width / 1.263f;
         float containerHeight = DodgeCoin.fullscreen.height / 1.42f;
@@ -53,6 +53,7 @@ public class SettingsScreen extends AbstractScreen {
         Table categoryTable = new Table();
         categoryTable.align(Align.top);
 
+        // re-instantiate the SettingsGui
         SettingsGui.newInstance(categoryTable, propertyTable, categoryWidth, propertyWidth);
 
         // scroll pane for the config values
@@ -108,6 +109,7 @@ public class SettingsScreen extends AbstractScreen {
         });
         this.stage.addActor(backButton);
 
+        // special components
         this.stage.addActor(ColorComponent.ColorPicker.newInstance(skin).getActor());
         this.stage.addActor(KeyComponent.KeyInputHandler.newInstance(skin).getActor());
     }

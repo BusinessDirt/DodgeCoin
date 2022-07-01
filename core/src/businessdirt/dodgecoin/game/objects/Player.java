@@ -2,35 +2,36 @@ package businessdirt.dodgecoin.game.objects;
 
 import businessdirt.dodgecoin.DodgeCoin;
 import businessdirt.dodgecoin.core.Config;
-import businessdirt.dodgecoin.game.Constants;
-import businessdirt.dodgecoin.core.input.Keyboard;
 import businessdirt.dodgecoin.core.renderer.Renderer;
-import com.badlogic.gdx.Input;
+import businessdirt.dodgecoin.game.Constants;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Player extends GameObject {
 
+    // only one player -> single instance
     private static Player instance;
+
+    // region of the sprite that is being drawn
     private final TextureRegion animationFrame;
 
     public enum AnimationFrame {
         LEFT, NONE, RIGHT
     }
 
-    private Player(boolean animated) {
+    private Player() {
         super(Config.playerSkin, Constants.CENTER_X - 8 * Constants.PLAYER_SIZE_MULTIPLIER, Constants.PLAYER_Y_START,
                 16 * Constants.PLAYER_SIZE_MULTIPLIER, 32 * Constants.PLAYER_SIZE_MULTIPLIER);
 
-        // whether the player texture is animated or not
-
         // initialize the animation
         this.animationFrame = new TextureRegion(DodgeCoin.assets.get(this.texturePath, Texture.class));
-        if (animated) {
-            setAnimationFrame(AnimationFrame.NONE);
-        }
+        setAnimationFrame(AnimationFrame.NONE);
     }
 
+    /**
+     * Sets the animation frame. Updates the coordinates of the {@link TextureRegion}
+     * @param frame the predefined animation frame
+     */
     public void setAnimationFrame(AnimationFrame frame) {
         switch (frame) {
             case NONE:
@@ -45,12 +46,24 @@ public class Player extends GameObject {
         }
     }
 
+    /**
+     * Moves the player along the x-Axis
+     * @param x delta x
+     */
     private void translateX(int x) {
         this.x += x;
     }
 
+    /**
+     * Movement / Controls.
+     * Moves the player left if {@code Config.moveLeft} is pressed.
+     * Moves the player right if {@code Config.moveRight} is pressed.
+     * @param dt time between frames
+     */
     public void move(float dt) {
-        // move
+        // detect input
+        // translate the player accounting for the MOVEMENT_SPEED
+        // change the animation frame
         if (Config.moveLeft.pressed()) {
             translateX((int) (-Constants.MOVEMENT_SPEED * dt));
             setAnimationFrame(AnimationFrame.LEFT);
@@ -61,7 +74,7 @@ public class Player extends GameObject {
             setAnimationFrame(AnimationFrame.NONE);
         }
 
-        // contain in bounds
+        // contain the player in the bounds of the game
         if (this.x < Constants.GAME_X_START) {
             this.x = Constants.GAME_X_START;
         }
@@ -70,6 +83,9 @@ public class Player extends GameObject {
         }
     }
 
+    /**
+     * Draws the player at its position with its size.
+     */
     @Override
     public void draw() {
         Renderer.get().drawImage(this.animationFrame, this.x, this.y, this.width, this.height);
@@ -79,8 +95,12 @@ public class Player extends GameObject {
         this.animationFrame.setTexture(DodgeCoin.assets.get(path, Texture.class));
     }
 
+    /**
+     * Creates the instance if it is null.
+     * @return the instance
+     */
     public static Player get() {
-        if (Player.instance == null) Player.instance = new Player(true);
+        if (Player.instance == null) Player.instance = new Player();
         return Player.instance;
     }
 }

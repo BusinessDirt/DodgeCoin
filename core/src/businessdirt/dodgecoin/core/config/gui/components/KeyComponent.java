@@ -1,11 +1,10 @@
 package businessdirt.dodgecoin.core.config.gui.components;
 
-import businessdirt.dodgecoin.core.config.gui.components.GuiComponent;
 import businessdirt.dodgecoin.DodgeCoin;
+import businessdirt.dodgecoin.core.actors.FloatingMenu;
 import businessdirt.dodgecoin.core.config.data.PropertyData;
 import businessdirt.dodgecoin.core.config.data.types.Key;
 import businessdirt.dodgecoin.core.util.Util;
-import businessdirt.dodgecoin.core.actors.FloatingMenu;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -30,9 +29,11 @@ public class KeyComponent extends GuiComponent {
         this.actor.setPosition(width - 50f * scale - GuiComponent.width, 0f);
         Group group = (Group) this.actor;
 
+        // primary key code as string
         String primaryChar = Util.getKeyCharFromCode(key.getPrimary());
         if (primaryChar.length() == 1) primaryChar = " ".concat(primaryChar).concat(" ");
 
+        // primary key
         this.primary = new TextButton(primaryChar, skin.get("settingsUI", TextButton.TextButtonStyle.class));
         this.primary.setSize(GuiComponent.width, GuiComponent.height);
         this.primary.setPosition(0f, height - yOff - GuiComponent.height);
@@ -45,9 +46,11 @@ public class KeyComponent extends GuiComponent {
             }
         });
 
+        // secondary key code as string
         String secondaryChar = Util.getKeyCharFromCode(key.getSecondary());
         if (secondaryChar.length() == 1) secondaryChar = " ".concat(secondaryChar).concat(" ");
 
+        // secondary key
         this.secondary = new TextButton(secondaryChar, skin.get("settingsUI", TextButton.TextButtonStyle.class));
         this.secondary.setSize(GuiComponent.width, GuiComponent.height);
         this.secondary.setPosition(0f, yOff);
@@ -64,6 +67,9 @@ public class KeyComponent extends GuiComponent {
         group.addActor(this.secondary);
     }
 
+    /**
+     * Handles the change of a key in the Settings Menu
+     */
     public static class KeyInputHandler {
 
         private final FloatingMenu menu;
@@ -85,25 +91,35 @@ public class KeyComponent extends GuiComponent {
             this.label.addListener(new InputListener() {
                 @Override
                 public boolean keyTyped(InputEvent event, char character) {
+                    // only change a key if this menu is opened
                     if (menu.getActor().isVisible()) {
                         Key key = property.getAsKey();
+
+                        // check if the primary or secondary key is being changed
                         if (type == 'p') {
+                            // set the primary key
                             key.setPrimary(event.getKeyCode());
 
+                            // set the text of the label
                             String primaryChar = Util.getKeyCharFromCode(key.getPrimary());
                             if (primaryChar.length() == 1) primaryChar = " ".concat(primaryChar).concat(" ");
                             component.primary.setText(primaryChar);
                         } else if (type == 's') {
+                            // set the secondary key
                             key.setSecondary(event.getKeyCode());
 
+                            // set the text of the label
                             String secondaryChar = Util.getKeyCharFromCode(key.getSecondary());
                             if (secondaryChar.length() == 1) secondaryChar = " ".concat(secondaryChar).concat(" ");
                             component.secondary.setText(secondaryChar);
                         }
 
+                        // update the property and save it
                         property.setValue(key);
-                        menu.deactivate();
                         DodgeCoin.config.writeData();
+
+                        // deactivate the menu
+                        menu.deactivate();
                     }
 
                     return super.keyTyped(event, character);
@@ -115,6 +131,12 @@ public class KeyComponent extends GuiComponent {
             this.menu.addActor(this.label);
         }
 
+        /**
+         * Activates the KeyInputHandler
+         * @param component the component the menu is being activated from
+         * @param property the property of which the key shall be changed
+         * @param type either 'p' for the primary key or 's' for the secondary key
+         */
         public void activate(KeyComponent component, PropertyData property, char type) {
             menu.getActor().getStage().setKeyboardFocus(label);
             this.menu.activate();
@@ -124,15 +146,26 @@ public class KeyComponent extends GuiComponent {
             this.type = type;
         }
 
+        /**
+         * @return the main {@link Actor} of the KeyInputHandler
+         */
         public Group getActor() {
             return this.menu.getActor();
         }
 
+        /**
+         * Re-instantiates the KeyInputHandler
+         * @param skin the skin used for ui elements
+         * @return the new instance
+         */
         public static KeyInputHandler newInstance(Skin skin) {
             KeyInputHandler.instance = new KeyInputHandler(skin);
             return KeyInputHandler.instance;
         }
 
+        /**
+         * @return the current instance
+         */
         public static KeyInputHandler get() {
             return KeyInputHandler.instance;
         }

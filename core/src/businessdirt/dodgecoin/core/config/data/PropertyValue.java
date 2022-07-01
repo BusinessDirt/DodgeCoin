@@ -4,6 +4,9 @@ import businessdirt.dodgecoin.core.config.ConfigHandler;
 
 import java.lang.reflect.Field;
 
+/**
+ * Manages the field of the property
+ */
 public class PropertyValue {
 
     private final Field field;

@@ -95,7 +95,8 @@ public class Renderer {
         strings.clear();
     }
 
-    public void resize (int width, int height) {
+
+    public void resize(int width, int height) {
         Vector2 size = Scaling.fit.apply(1920, 1080, width, height);
         int viewportX = (int)(width - size.x) / 2;
         int viewportY = (int)(height - size.y) / 2;

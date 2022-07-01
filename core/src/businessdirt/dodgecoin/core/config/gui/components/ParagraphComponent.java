@@ -20,6 +20,8 @@ public class ParagraphComponent extends GuiComponent {
             public void changed(ChangeEvent event, Actor actor) {
                 TextField field = (TextField) actor;
                 int cursorPosition = field.getCursorPosition();
+
+                // only accepts characters from a-z and A-Z
                 field.setText(field.getText().replaceAll("[^a-zA-Z]", ""));
                 field.setCursorPosition(Math.min(cursorPosition, field.getText().length()));
                 property.setValue(field.getText());

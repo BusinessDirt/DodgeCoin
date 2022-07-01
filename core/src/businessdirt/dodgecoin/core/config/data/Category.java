@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Category {
 
+    // name and assigned properties
     private final String name;
     private final List<PropertyData> items;
 

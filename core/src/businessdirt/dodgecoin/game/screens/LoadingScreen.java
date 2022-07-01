@@ -22,16 +22,22 @@ import java.util.stream.Collectors;
 
 public class LoadingScreen extends ScreenAdapter {
 
+    // Here all resources will be loaded
+    // When a resource is not loaded it can't be rendered
+    // Therefore a loading screen is necessary
     public LoadingScreen() {
         // Log basic information
-        Util.logEvent("Using OpenGL Version " + Gdx.graphics.getGLVersion());
+        Util.logEvent("Using OpenGL Version " + Gdx.graphics.getGLVersion().getDebugVersionString());
 
         // Stock-market API
+        // new Thread to accelerate the loading speed
         new Thread(APIHandler::getStockMarketApiValues).start();
 
         // Configuration
         try {
+            // load unlocked skins from file
             SkinHandler.init();
+            // load the config from file
             DodgeCoin.config = Config.getConfig();
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +57,10 @@ public class LoadingScreen extends ScreenAdapter {
 
         // if the assets finished loading it will enter the main menu
         if (DodgeCoin.assets.update()) {
+            // background music
             new MusicPlayer("music/background2.mp3");
+
+            // enter the main menu
             DodgeCoin.get().setScreen(new MenuScreen());
         }
     }

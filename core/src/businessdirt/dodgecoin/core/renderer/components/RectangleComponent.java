@@ -3,6 +3,9 @@ package businessdirt.dodgecoin.core.renderer.components;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Holds values of rectangles that shall be drawn.
+ */
 public class RectangleComponent {
 
     private final Vector2 position;

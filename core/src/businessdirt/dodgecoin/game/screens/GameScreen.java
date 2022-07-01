@@ -21,6 +21,8 @@ public class GameScreen extends ScreenAdapter {
     private final Player player;
     private final Background background;
     private static GameState state;
+
+    // time the current game started (resets on player death)
     private long startTime;
 
     public GameScreen() {
@@ -37,17 +39,23 @@ public class GameScreen extends ScreenAdapter {
         Keyboard.defaultKeys();
 
         if (state == GameState.GAME) {
+            // start timer
+            if (startTime == -1L) startTime = TimeUtils.nanoTime();
+
+            // pause the game if ESCAPE is pressed
             if (Keyboard.keyTyped(Input.Keys.ESCAPE)) state = GameState.PAUSE;
 
+            // move the player and all coins
             player.move(delta);
             Coin.move(delta);
 
             // spawn new coin
             Coin.spawn();
         } else {
-            if (state == GameState.OVER) {
-                startTime = TimeUtils.nanoTime();
-            }
+            // reset the startTime
+            if (state == GameState.OVER) startTime = -1L;
+
+            // GameState navigation
             if (Keyboard.keyTyped(Input.Keys.ESCAPE)) DodgeCoin.get().setScreen(new MenuScreen());
             if (Keyboard.keyTyped(Input.Keys.ENTER)) state = GameState.GAME;
         }
@@ -64,13 +72,15 @@ public class GameScreen extends ScreenAdapter {
             player.draw();
             Coin.drawAll();
 
-            // draw hud
+            // draw money
             Renderer.get().drawString("Money:", 50, Constants.VIEWPORT_HEIGHT - 50, Color.WHITE);
             Renderer.get().drawString(String.valueOf(Math.round(Config.money)), 50, Constants.VIEWPORT_HEIGHT - 100, Color.WHITE);
 
+            // draw combo
             Renderer.get().drawString("Combo:", 50, Constants.VIEWPORT_HEIGHT - 160, Color.WHITE);
             Renderer.get().drawString(String.valueOf(Coin.getCombo()), 50, Constants.VIEWPORT_HEIGHT - 210, Color.WHITE);
 
+            // draw timer
             Renderer.get().drawString("Timer:", 50, Constants.VIEWPORT_HEIGHT - 270, Color.WHITE);
             Renderer.get().drawString((startTime - TimeUtils.nanoTime()) / -1000000000 + "s", 50, Constants.VIEWPORT_HEIGHT - 320, Color.WHITE);
         }

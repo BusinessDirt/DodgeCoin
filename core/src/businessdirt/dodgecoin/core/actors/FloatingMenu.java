@@ -18,6 +18,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Basically a pop-up menu.
+ */
 public class FloatingMenu {
 
     private final Skin skin;
@@ -40,6 +43,7 @@ public class FloatingMenu {
 
         setBackgroundOpacity(0.4f);
 
+        // the menu
         Button button = new Button(skin.get("blank", Button.ButtonStyle.class));
         button.setZIndex(1);
         button.setName("menu");
@@ -103,6 +107,10 @@ public class FloatingMenu {
         return this.menu;
     }
 
+    /**
+     * Listens to clicks on the background of a {@link FloatingMenu}.
+     * If it is clicked the menu will deactivate.
+     */
     private static class BackgroundClickListener extends ClickListener {
 
         private final FloatingMenu floatingMenu;

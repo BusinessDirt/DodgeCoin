@@ -29,9 +29,12 @@ public class ShopScreen extends AbstractScreen {
         super(DodgeCoin.assets.getSkin("skins/ui/skin.json"), Color.TEAL);
     }
 
+    /**
+     * Creates all the shop-ui elements.
+     */
     @Override
     public void show() {
-
+        // sizing for the containers to scale with lower resolutions
         float containerWidth = DodgeCoin.fullscreen.width / 1.263f;
         float containerHeight = DodgeCoin.fullscreen.height / 1.42f;
         float padX = (DodgeCoin.fullscreen.width - containerWidth) / 2;
@@ -88,18 +91,28 @@ public class ShopScreen extends AbstractScreen {
         this.stage.setScrollFocus(this.pane);
     }
 
+    /**
+     * Creates a button for every shop item.
+     * @param table the table all shop items are added to
+     * @param width the width of the item
+     * @param height the height of the item
+     */
     private void createShopButtons(Table table, float width, float height) {
         List<String> shopItems = DodgeCoin.assets.getShopItems();
         int lowerCount = shopItems.size() >> 1;
         int upperCount = shopItems.size() - lowerCount;
 
+        // create upper row
         for (int i = 0; i < upperCount; i++) {
             ShopItem item = new ShopItem(skin, shopItems.get(i), width, (height - 35) / 2f);
             float padRight = i == shopItems.size() - 1 ? 5f : 0f;
             table.add(item.getGroup()).width(item.width).height(item.height).pad(5f, 5f, 5f, padRight);
         }
 
+        // swap to the next row
         table.row();
+
+        // create lower row
         for (int i = upperCount; i < shopItems.size(); i++) {
             ShopItem item = new ShopItem(skin, shopItems.get(i), width, (height - 35) / 2f);
             float padRight = i == shopItems.size() - 1 ? 5f : 0f;
@@ -132,6 +145,7 @@ public class ShopScreen extends AbstractScreen {
 
     private static class ShopItem {
 
+        // all shop items
         public static final List<ShopItem> items = new ArrayList<>();
 
         private final Group group;
@@ -143,20 +157,31 @@ public class ShopScreen extends AbstractScreen {
         private final float height;
 
         public ShopItem(Skin skin, String texture, float width, float height) {
+            // scale of the entire ui
             float scale = DodgeCoin.fullscreen.height / 1080f;
+
+            // ui skin
             this.skin = skin;
+
+            // game skin that is going to be displayed
             this.texturePath = texture;
             TextureRegion region = new TextureRegion(DodgeCoin.assets.getTexture(texture));
+
+            // set the region to the default frame if it is a player
+            // if this would not be done it would show all the animation frames next to each other
             if (texture.contains("players")) {
                 region.setRegion(0, 0, 16, 32);
             }
 
+            // size of a singular shop item
             this.width = (width) / 3f - 9;
             this.height = height;
 
+            // group containing all ui elements
             this.group = new Group();
-            this.group.setSize(this.width, height);
+            this.group.setSize(this.width, this.height);
 
+            // this button acts as a background and for click detection
             Button button = new Button(skin.get("default", Button.ButtonStyle.class));
             button.setTransform(true);
             button.setTouchable(Touchable.enabled);
@@ -164,19 +189,34 @@ public class ShopScreen extends AbstractScreen {
             button.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
+                    // play sound
                     DodgeCoin.assets.getSound("sounds/button.mp3").play(Config.sfxVolume / 100f);
+
+                    // get the skin price
                     int price = 0;
                     if (SkinHandler.skinPrices.containsKey(texture)) price = SkinHandler.skinPrices.get(texture);
 
+                    // check if the skin is unlocked
+                    // or if the player has enough money to buy the skin
                     if (Config.money >= price && !SkinHandler.unlockedSkins.get(texture)) {
+                        // set the skin to the one that was clicked (i.e. this shop item)
                         setSkin(texture);
+
+                        // remove the money from the players balance and save it
+                        // also saves the current skin
                         Config.money -= price;
                         Config.getConfig().markDirty();
                         Config.getConfig().writeData();
+
+                        // set the unlocked state of the skin to true and save it
                         SkinHandler.unlockedSkins.put(texture, true);
                         SkinHandler.save();
-                    } else if (SkinHandler.unlockedSkins.get(texture)) {
+
+                    } else if (SkinHandler.unlockedSkins.get(texture)) { // the skin is already bought
+                        // set the skin to the one that was clicked (i.e. this shop item)
                         setSkin(texture);
+
+                        // saves the current skin
                         Config.getConfig().markDirty();
                         Config.getConfig().writeData();
                     } else Util.logEvent("Could not equip / buy the skin");
@@ -184,23 +224,32 @@ public class ShopScreen extends AbstractScreen {
                 }
             });
 
+            // Get the name of the skin from the relative path
             String[] skinName = texture.split("/");
             String skinNameNoExtension = skinName[skinName.length - 1].replaceAll("[.][a-z]*", "");
+
+            // name label
             this.name = new Label(Util.title(skinNameNoExtension), skin.get("background", Label.LabelStyle.class));
             this.name.setAlignment(Align.center, Align.bottom);
             this.name.setTouchable(Touchable.disabled);
             this.name.setFontScale(scale);
             this.name.setBounds(75f * scale, this.height - 75f * scale, this.width - 150f * scale, 50f * scale);
 
+            // skin price
             int skinPrice = SkinHandler.skinPrices.get(texture);
+
+            // price label
             Label price = new Label(NumberFormat.getInstance(Locale.getDefault()).format(skinPrice), skin.get("priceWhite", Label.LabelStyle.class));
             price.setAlignment(Align.center, Align.bottom);
             price.setTouchable(Touchable.disabled);
             price.setFontScale(DodgeCoin.fullscreen.height / 1080f);
             price.setBounds(25f * scale, 25f * scale, this.width - 50f * scale, 50f * scale);
 
+            // a preview of the skin scaled down
             Image image = new Image(region);
             image.setTouchable(Touchable.disabled);
+
+            // scaling
             float widthScaled = image.getWidth() * ((this.height - 170f * scale) / image.getHeight());
             image.setSize(widthScaled, this.height - 170f * scale);
             image.setPosition((this.width - image.getWidth()) / 2, 85f * scale);
@@ -214,6 +263,12 @@ public class ShopScreen extends AbstractScreen {
             updateUI();
         }
 
+        /**
+         * Updates the color of the price labels.
+         * green -> unlocked & equipped
+         * orange -> unlocked & unequipped
+         * red -> not unlocked
+         */
         private static void updateUI() {
             for (ShopItem item : items) {
                 if (Objects.equals(Config.playerSkin, item.texturePath) || Objects.equals(Config.backgroundSkin, item.texturePath)) {
@@ -226,14 +281,21 @@ public class ShopScreen extends AbstractScreen {
             }
         }
 
+        /**
+         * Sets either the player or the background skin.
+         * @param skin the relative path to the skin
+         */
         private void setSkin(String skin) {
-            if (skin.startsWith("textures/players")) Player.get().setTexture(skin);
-            else if (skin.startsWith("textures/backgrounds")) Background.get().setTexture(skin);
-            if (skin.startsWith("textures/players/")) {
+            // detect whether it is a player or a background skin
+            if (skin.startsWith("textures/players")) {
+                Player.get().setTexture(skin);
                 Config.playerSkin = skin;
-            } else {
+            } else if (skin.startsWith("textures/backgrounds")) {
+                Background.get().setTexture(skin);
                 Config.backgroundSkin = skin;
             }
+
+            // log the event
             Util.logEvent("Changed skin to " + skin);
         }
 

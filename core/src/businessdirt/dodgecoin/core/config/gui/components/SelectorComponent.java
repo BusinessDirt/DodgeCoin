@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 public class SelectorComponent extends GuiComponent {
     public SelectorComponent(PropertyData property, Skin skin, float width, float height) {
         this.actor = new SelectBox<String>(skin);
+
         @SuppressWarnings({"unchecked"})
         SelectBox<String> selectBox = (SelectBox<String>) this.actor;
 

@@ -1,3 +1,9 @@
+## Production
+
+/tools/out-windows64/
+/tools/out-windows64.zip
+
+
 ## Java
 
 *.class

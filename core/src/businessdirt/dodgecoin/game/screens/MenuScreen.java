@@ -18,7 +18,7 @@ public class MenuScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        // Container to align the buttons
+        // Container to align all the buttons
         Table menuContainer = new Table();
         menuContainer.setBounds(50f, 50f, DodgeCoin.fullscreen.width / 5.5f, DodgeCoin.fullscreen.height - 100f);
         menuContainer.align(Align.top);

@@ -23,6 +23,7 @@ public class NumberComponent extends GuiComponent {
                 TextField field = (TextField) actor;
                 int cursorPosition = field.getCursorPosition();
 
+                // only accepts numbers
                 field.setText(field.getText().replaceAll("[^\\d.]", ""));
                 field.setText(filterDots(field.getText()));
 
@@ -35,10 +36,16 @@ public class NumberComponent extends GuiComponent {
         });
     }
 
+    /**
+     * Cancels any dots that are more than one.
+     * @param string the string to be filtered
+     * @return the filtered string
+     */
     private String filterDots(String string) {
         char[] chars = string.toCharArray();
         boolean dot = false;
 
+        // filter
         for (int i = 0; i < chars.length; i++) {
             if (chars[i] == '.' && !dot) {
                 dot = true;
@@ -46,6 +53,7 @@ public class NumberComponent extends GuiComponent {
                 chars[i] = '-';
             }
         }
+
         return String.valueOf(chars).replaceAll("-", "");
     }
 }

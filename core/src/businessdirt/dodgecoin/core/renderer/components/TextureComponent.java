@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Holds values of textures that shall be drawn.
+ */
 public class TextureComponent {
 
     private final Vector2 position;

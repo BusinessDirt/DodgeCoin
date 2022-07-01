@@ -11,6 +11,9 @@ import java.io.IOException;
 public class DesktopLauncher {
 
 	public static void main (String[] arg) throws IOException {
+
+		// Configure the main application
+		// i.e. window size, frame rate, title, etc.
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setTitle("DodgeCoin");
 		config.useVsync(true);
@@ -22,6 +25,7 @@ public class DesktopLauncher {
 		Dimension windowed = new Dimension((int) (fullscreen.width * multiplier), (int) (fullscreen.height * multiplier));
 		config.setFullscreenMode(fullscreen);
 
+		// create the desktop application
 		new Lwjgl3Application(DodgeCoin.init(fullscreen, windowed), config);
 	}
 }
