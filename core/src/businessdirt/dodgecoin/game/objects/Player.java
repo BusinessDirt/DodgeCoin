@@ -33,15 +33,17 @@ public class Player extends GameObject {
      * @param frame the predefined animation frame
      */
     public void setAnimationFrame(AnimationFrame frame) {
+        float tw = this.animationFrame.getTexture().getWidth();
+        float th = this.animationFrame.getTexture().getHeight();
         switch (frame) {
             case NONE:
-                this.animationFrame.setRegion(0, 0, 16, 32);
+                this.animationFrame.setRegion(0, 0, (int) (tw / 3.0f), (int) th);
                 break;
             case LEFT:
-                this.animationFrame.setRegion(16, 0, 16, 32);
+                this.animationFrame.setRegion((int) (tw / 3.0f), 0, (int) (tw / 3.0f), (int) th);
                 break;
             case RIGHT:
-                this.animationFrame.setRegion(32, 0, 16, 32);
+                this.animationFrame.setRegion((int) (tw / 3.0f * 2.0f), 0, (int) (tw / 3.0f), (int) th);
                 break;
         }
     }

@@ -171,7 +171,9 @@ public class ShopScreen extends AbstractScreen {
             // set the region to the default frame if it is a player
             // if this would not be done it would show all the animation frames next to each other
             if (texture.contains("players")) {
-                region.setRegion(0, 0, 16, 32);
+                float tw = region.getTexture().getWidth();
+                float th = region.getTexture().getHeight();
+                region.setRegion(0, 0, (int) (tw / 3.0f), (int) th);
             }
 
             // size of a singular shop item
