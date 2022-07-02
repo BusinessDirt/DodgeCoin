@@ -1,6 +1,8 @@
 package businessdirt.dodgecoin.game.screens;
 
 import businessdirt.dodgecoin.core.input.Keyboard;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -15,16 +17,24 @@ import java.awt.*;
 
 public abstract class AbstractScreen implements Screen {
 
-    // stage contains all ui elements
+    /**
+     * The stage contains all ui elements.
+     */
     protected final Stage stage;
 
-    // viewport to handle resizing
+    /**
+     * The viewport handles resizing.
+     */
     protected final ScalingViewport viewport;
 
-    // skin for button style etc
+    /**
+     * All needed styles for ui elements are defined in a skin.
+     */
     protected final Skin skin;
 
-    // background color of the window
+    /**
+     * The background color of the window.
+     */
     protected final Color backgroundColor;
 
     protected AbstractScreen(Skin skin, Color backgroundColor) {
@@ -38,9 +48,12 @@ public abstract class AbstractScreen implements Screen {
         Gdx.input.setInputProcessor(this.stage);
     }
 
+    /** Called when this screen becomes the current screen for a {@link Game}. */
     @Override
     public abstract void show();
 
+    /** Called when the screen should render itself.
+     * @param delta The time in seconds since the last render. */
     @Override
     public void render(float delta) {
         // input
@@ -56,6 +69,7 @@ public abstract class AbstractScreen implements Screen {
         stage.draw();
     }
 
+    /** @see ApplicationListener#resize(int, int) */
     @Override
     public void resize(int width, int height) {
         // scale the viewport if the window is resized to not mess with ratios
@@ -64,17 +78,21 @@ public abstract class AbstractScreen implements Screen {
         this.stage.setViewport(this.viewport);
     }
 
+    /** @see ApplicationListener#pause() */
     @Override
     public abstract void pause();
 
+    /** @see ApplicationListener#resume() */
     @Override
     public abstract void resume();
 
+    /** Called when this screen is no longer the current screen for a {@link Game}. */
     @Override
     public void hide() {
         this.dispose();
     }
 
+    /** Called when this screen should release all resources. */
     @Override
     public void dispose() {
         this.stage.dispose();

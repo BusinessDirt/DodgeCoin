@@ -22,21 +22,49 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Renderer {
 
-    // instantiation
+    /**
+     * Single instance only.
+     */
     private static Renderer instance;
+
+    /**
+     * Camera.
+     */
     private final OrthographicCamera camera;
 
-    // qol constants
+    /**
+     * Tells the Renderer to use the original size of a Texture to render it.
+     */
     public static int USE_ORIGINAL_SIZE = -1;
 
-    // sub renderer objects
+    /**
+     * Render sprites.
+     */
     private final SpriteBatch spriteBatch;
+
+    /**
+     * Render shapes.
+     */
     private final ShapeRenderer shapeRenderer;
+
+    /**
+     * Render strings.
+     */
     private final BitmapFont font;
 
-    // Arrays to store the objects that shall be rendered
+    /**
+     * Contains all information about textures that should be rendered in a frame.
+     */
     private final Array<TextureComponent> textures;
+
+    /**
+     * Contains all information about rectangles that should be rendered in a frame.
+     */
     private final Array<RectangleComponent> rectangles;
+
+    /**
+     * Contains all information about strings that should be rendered in a frame.
+     */
     private final Array<StringComponent> strings;
 
     private Renderer() {
@@ -55,7 +83,6 @@ public class Renderer {
     }
 
     public void render() {
-
         // update the camera
         camera.update();
 
@@ -64,32 +91,39 @@ public class Renderer {
         shapeRenderer.begin();
         for (RectangleComponent r : rectangles) {
             if (r.isFill()) {
+                // draw the rect filled
                 shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight(), r.getColor(), r.getColor(), r.getColor(), r.getColor());
             } else {
+                // draw the rect with lines
                 shapeRenderer.set(ShapeRenderer.ShapeType.Line);
                 shapeRenderer.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight(), r.getColor(), r.getColor(), r.getColor(), r.getColor());
             }
         }
         shapeRenderer.end();
 
-        // draw Images and strings
+        // draw textures
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
         for (TextureComponent t : textures) {
             spriteBatch.draw(t.getTextureRegion(), t.getPosition().x, t.getPosition().y, t.getWidth(), t.getHeight());
         }
 
+        // draw strings
         for (StringComponent s : strings) {
             if (!s.isCentered()) {
+                // not centered
                 font.draw(spriteBatch, s.getString(), s.getX(), s.getY());
             } else {
+                // centered
                 GlyphLayout layout = new GlyphLayout(font, s.getString());
                 font.draw(spriteBatch, layout, s.getX() + (s.getSize().x - layout.width) / 2, s.getY() + (s.getSize().y + layout.height) / 2);
             }
         }
         spriteBatch.end();
 
+        // remove all information from the arrays
+        // to not render the current frame in the next frame
         textures.clear();
         rectangles.clear();
         strings.clear();
