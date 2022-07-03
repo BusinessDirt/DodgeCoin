@@ -5,6 +5,7 @@ import businessdirt.dodgecoin.core.Config;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -75,6 +76,12 @@ public class MenuScreen extends AbstractScreen {
         });
         menuContainer.add(quitButton).width(Gdx.graphics.getWidth() / 5.5f).height(Gdx.graphics.getHeight() / 10.8f).padBottom(5f);
         menuContainer.row();
+
+        // Technoblade
+        Image technoblade = new Image(DodgeCoin.assets.getTexture("textures/misc/technobladeStatue.png"));
+        technoblade.setScale((Gdx.graphics.getHeight() - 50f) / technoblade.getPrefHeight());
+        technoblade.setPosition(Gdx.graphics.getWidth() - technoblade.getWidth() * technoblade.getScaleX() - 25f, 25f);
+        this.stage.addActor(technoblade);
 
         this.stage.addActor(menuContainer);
     }

@@ -58,7 +58,7 @@ public class LoadingScreen extends ScreenAdapter {
         // if the assets finished loading it will enter the main menu
         if (DodgeCoin.assets.update()) {
             // background music
-            new MusicPlayer("music/background2.mp3");
+            new MusicPlayer("music/background.mp3");
 
             // enter the main menu
             DodgeCoin.get().setScreen(new MenuScreen());
