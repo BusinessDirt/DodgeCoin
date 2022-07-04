@@ -1,3 +1,4 @@
+//erstellt von Marcus Howell
 package businessdirt.dodgecoin.game.objects;
 
 import businessdirt.dodgecoin.DodgeCoin;

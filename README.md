@@ -26,10 +26,10 @@ This game is built using the LibGDX framework and has the following features:
 
 ## Authors
 
-- [@BusinessDirt](https://www.github.com/BusinessDirt)
-- [@Karnii](https://www.github.com/Karnii)
-- [@LuisHun](https://www.github.com/LuisHun)
-- [@LukasKing1](https://www.github.com/LukasKing1)
-- [@Marcus](https://www.github.com/Marcus-Howell)
-- [@Maximilian Kerschl](https://www.github.com/Madmaxs-dev)
-- [@Trapzzz](https://www.github.com/sheeshonaut)
+- [@BusinessDirt](https://www.github.com/BusinessDirt) (Maxi Bollschweiler): Basic structure, rendering and functionality of game
+- [@Marcus](https://www.github.com/Marcus-Howell): Game mechanics, UI
+- [@Karnii](https://www.github.com/Karnii) (Niki): Graphic Design, asset loading
+- [@LuisHun](https://www.github.com/LuisHun): Media player
+- [@LukasKing1](https://www.github.com/LukasKing1): API
+- [@Maximilian Kerschl](https://www.github.com/Madmaxs-dev): Shop, settings, UI
+- [@Trapzzz](https://www.github.com/sheeshonaut)(Lukas): Skins

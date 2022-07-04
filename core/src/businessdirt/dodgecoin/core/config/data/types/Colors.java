@@ -1,3 +1,4 @@
+//erstellt von Maxi Kerschl
 package businessdirt.dodgecoin.core.config.data.types;
 
 import businessdirt.dodgecoin.core.config.data.PropertyData;

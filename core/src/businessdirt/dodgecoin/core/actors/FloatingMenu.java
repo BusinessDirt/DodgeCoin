@@ -1,3 +1,4 @@
+//erstellt von Maxi Bollschweiler
 package businessdirt.dodgecoin.core.actors;
 
 import businessdirt.dodgecoin.DodgeCoin;

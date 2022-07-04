@@ -1,3 +1,4 @@
+//erstellt von Maxi Bollschweiler
 package businessdirt.dodgecoin.core.config.data;
 
 import businessdirt.dodgecoin.core.config.ConfigHandler;
