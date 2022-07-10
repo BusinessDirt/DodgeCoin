@@ -43,7 +43,7 @@ public class AssetLoader {
 
     public <T> void load() {
         // loop through all the descriptors and load them
-        for (AssetDescriptor<?> descriptor : assetFolders) {
+        for (AssetDescriptor<?> descriptor : new Array.ArrayIterator<>(assetFolders)) {
             // get the folder path of the descriptor
             FileHandle folder = Gdx.files.internal(path).child(descriptor.folder);
 

@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+@SuppressWarnings("GDXJavaFlushInsideLoop")
 public class Renderer {
 
     /**
@@ -83,13 +84,16 @@ public class Renderer {
     }
 
     public void render() {
+        // sort the rectangle list to optimize speed
+        rectangles.sort(new RectangleComponent.RectangleComparator());
+
         // update the camera
         camera.update();
 
         // draw Shapes
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin();
-        for (RectangleComponent r : rectangles) {
+        for (RectangleComponent r : new Array.ArrayIterator<>(rectangles)) {
             if (r.isFill()) {
                 // draw the rect filled
                 shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
@@ -105,12 +109,12 @@ public class Renderer {
         // draw textures
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
-        for (TextureComponent t : textures) {
+        for (TextureComponent t : new Array.ArrayIterator<>(textures)) {
             spriteBatch.draw(t.getTextureRegion(), t.getPosition().x, t.getPosition().y, t.getWidth(), t.getHeight());
         }
 
         // draw strings
-        for (StringComponent s : strings) {
+        for (StringComponent s : new Array.ArrayIterator<>(strings)) {
             if (!s.isCentered()) {
                 // not centered
                 font.draw(spriteBatch, s.getString(), s.getX(), s.getY());
@@ -206,7 +210,7 @@ public class Renderer {
         spriteBatch.dispose();
         shapeRenderer.dispose();
 
-        for (TextureComponent t : textures) t.dispose();
+        for (TextureComponent t : new Array.ArrayIterator<>(textures)) t.dispose();
     }
 
     public float getHeight() {

@@ -3,6 +3,8 @@ package businessdirt.dodgecoin.core.renderer.components;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.Comparator;
+
 /**
  * Holds values of rectangles that shall be drawn.
  */
@@ -48,5 +50,13 @@ public class RectangleComponent {
 
     public int getThickness() {
         return thickness;
+    }
+
+    public static class RectangleComparator implements Comparator<RectangleComponent> {
+
+        @Override
+        public int compare(RectangleComponent o1, RectangleComponent o2) {
+            return Boolean.compare(o1.fill, o2.fill);
+        }
     }
 }

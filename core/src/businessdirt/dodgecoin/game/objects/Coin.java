@@ -57,19 +57,16 @@ public class Coin extends GameObject {
      * @param delta time between frames
      */
     public static void move(float delta) {
-        for (Iterator<Coin> iter = coins.iterator(); iter.hasNext(); ) {
-            Coin coin = iter.next();
+        for (Iterator<Coin> iterator = new Array.ArrayIterator<>(coins); iterator.hasNext(); ) {
+            Coin coin = iterator.next();
 
             // move the coin down
             coin.y -= Constants.COIN_DROP_SPEED * delta;
 
-            // remove the coin below a certain y coordinate
-            if (coin.y < Constants.PLAYER_Y_START) iter.remove();
-
             // hit reg
             if (coin.intersects(Player.get())) {
                 // remove the coin
-                iter.remove();
+                iterator.remove();
 
                 // game over if it is a dogecoin
                 if (coin.texturePath.contains("dogecoin.png")) {
@@ -85,7 +82,7 @@ public class Coin extends GameObject {
                     combo = 1;
 
                     // clear the coin list
-                    iter.forEachRemaining(c -> iter.remove());
+                    iterator.forEachRemaining(c -> iterator.remove());
                 } else { // i.e. the coin is a bitcoin
                     // increase difficulty, add the money to the player wallet
                     combo ++;
@@ -103,7 +100,8 @@ public class Coin extends GameObject {
                 // update the config values and save them
                 DodgeCoin.config.markDirty();
                 DodgeCoin.config.writeData();
-            }
+            } else if (coin.y < Constants.PLAYER_Y_START) // remove the coin below a certain y coordinate
+                iterator.remove();
         }
     }
 
@@ -111,7 +109,7 @@ public class Coin extends GameObject {
      * Draws all coins to the screen at their respective position.
      */
     public static void drawAll() {
-        for (Coin coin : coins) coin.draw();
+        for (Coin coin : new Array.ArrayIterable<>(coins)) coin.draw();
     }
 
     public static int getCombo() {
